@@ -9,7 +9,7 @@ lib_pixiretro = cc.find_library('pixiretro', dirs: lib_pixiretro_dir)
 donkeykong_inc = include_directories('pixiretro/include')
 
 donkeykong_src = [
-  'src/game.cpp'
+  'source/game.cpp'
 ]
 
 executable('donkeykong', 

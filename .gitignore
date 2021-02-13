@@ -1,6 +1,5 @@
 pixiretro_v_1.0
-donkeykong/pixiretro/include/*
-donkeykong/pixiretro/bin/*
+donkeykong/pixiretro
 game/*
 donkeykong/build
 donkeykong/build/*

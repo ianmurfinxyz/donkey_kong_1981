@@ -1,3 +1,9 @@
 
 
 - implement the build script [13-02-2021]
+- find out why when I move the donkeykong game executable to the game/ dir it cannot find the
+ shared object for the engine - can I link the engine statically instead? Or can I simply copy
+ the engine .so to an appropriate dir in the game dir.
+
+ - I also want debug and release build - will need a way to specify which to build via the 
+ build.sh script.
