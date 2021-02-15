@@ -1,0 +1,226 @@
+
+Goal
+----
+
+The levels in a 2D platformer like donkey kong consist of a world that can be moved around
+and interacted with by a 2d player and other actors.
+
+My goal is to define these levels purely with data but without the need for a scripting
+language to be incorporated into the engine.
+
+I will define my levels as consisting of a few types of objects:
+
+  - world props (patforms, ladders, conveyors, trapdoors, etc etc)
+  - world actors (mario, enemies)
+  - spawners 
+  - despawners
+
+
+World Props
+-----------
+
+The world props should be definable purely within a data file. Toward this end I will define
+world props as having the following:
+
+  - attributes (position, velocity, animation, sounds)
+  - effects (on actors)
+  - states
+
+Position and Velocity:
+
+Within the xml prop description I will define position and velocity as follows:
+
+<Position loop="">
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+</Position>
+<Velocity loop="">
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+</Velocity>
+
+i.e. position and velocity will not be single fixed values but rather sets of values.
+
+The points in the set will be linearly interpolated between. All points will be coordinates
+w.r.t the world coordinate space. The duration defines the time to move between the current
+point and the next point. The duration of the last point in the set is the time to move from
+the last point to the first point (if looping). If not looping the last duration is ignored
+and the prop will come to rest once the set is complete.
+
+The velocities will apply the same as positions.
+
+This simple setup will allow me to create:
+
+  - moving platforms that can move in any pattern. Could have platforms which simply 
+    move vertically or horizontally but also those with more complex movement patterns
+    like going around in a square,
+
+            start   0 ----- > ----- 1
+                    |               |
+                    |               |
+                    ^               V
+                    |               |
+                    |               |
+                    3 ----- < ----- 2
+
+    or even diagonally.
+
+    The platforms can also speed up and slow down since the velocity can also change.
+
+  - Platform spawners without the actual spawner. In level 2 of donkey kong there are
+    platforms which move vertically up and down the level. I can easily implement those
+    by having platforms with 2 points in the positions and a constant (one point) velocity.
+
+    The platforms would simply move from point0 to point1 then jump back to point0 and 
+    repeat. I would want point1 to be some point hidden from view so the player wouldn't
+    see the jump (in level 2 this would be behind the spawner box thing and below the
+    screen). To implement the sudden jump from point1 to point0 just set the duration
+    of point1 to 0 seconds.
+
+    The good thing about this system is that by looping the movement I could just use
+    the same platform over and over again. Thus in level 2 I would simply have 3
+    platforms with different start times loop over and over as needed. No spawning or
+    despawning required.
+
+  - The spring in level 3 could easily be implemented as a prop which moves between a
+    set of points on a saw wave (the peaks) before moving to a point below the screen
+    to represent the spring falling off the platform. Note that the spring would not
+    actually need to interact with the top platform it seemingly bounces off, it would 
+    just follow the position points.
+
+  - pair with other effects such as damage effects I could also implement moving saw
+    blades and things that must be avoided.
+
+Effects
+-------
+
+Props need to have effects on actors. These effects can be categories and then props can
+be defined as having those effects on actors or not along with values for those effects.
+
+The effects I can think of that will be needed are:
+
+  - provides support?
+
+      Props which provide support can be stood on to prevent actors falling.
+
+      values:
+        height of support (where the actor should stand as a y-axis position).
+
+  - allows vertical movement?
+
+      Props which allow vertical movement act like ladders so actors can move up and
+      down.
+
+      values: 
+        speed of movement
+
+  - conveyor?
+
+      Props which act as conveyors apply velocities to actors when they interact with
+      the prop.
+
+      values: 
+        strength/value of velocity effect.
+
+  - killer?
+
+      Props which act as killers kill (apply damage) to actors upon interaction.
+
+      values:
+        damage to apply (all one shot kills?)
+
+States
+------
+
+Props can have multiple states where each state has its own set of effects and attributes.
+
+The manner in which state transitions needs to be defined.
+
+Will create different types of state transition types:
+
+  - random transitions:
+
+      Behaviour: The prop will change states randomly, choosing from any possible state
+      (i.e. those defined in the prop definition), at random every fixed duration seconds.
+
+      Will Need: a duration in seconds in which we wait before picking the next random
+      state to switch to.
+
+  - linear transitions:
+
+      Behaviour: Will transition between states in the order in which they are defined in
+      the prop definition every fixed duration in seconds.
+
+Each state should also have sounds associated with it. Should have the ability to manage sounds
+at 2 different points in the state:
+    1) on enter
+    2) on exit
+
+States will also need animations associated with them. Should have the ability to play a single
+animation throughout the duration of the state.
+
+What Can We Do With This?
+-------------------------
+
+Blowy fan obstacle?
+
+  - set the position and velocity to constants.
+  - set the effects to:
+      - no support
+      - no ladder
+      - conveyor = wind speed
+      - no killer
+  - have 2 states: a blowing state and a non-blowing state switched between randomly. Even 
+    though the duration of the random switch is fixed, because there is a chance it will
+    switch to the same state, the net duration of each state will actually be variable.
+  - when start blowing state would start playing a looping blowing sound, when stop blowing
+    would step playing a looping blowing sound.
+
+    (NOTE: TO HAVE MULTIPLE FANS IN A LEVEL AT ONCE THIS WOULD REQUIRE ME TO ADD INSTANCE
+    IDS TO PLAYING SOUNDS IN MY ENGINE SO I CAN STOP SPECIFIC SOUND INSTANCES AND NOT STOP
+    ALL BLOWING SOUNDS - ALTHOUGH I MAY ONLY WANT TO PLAY A SINGLE BLOWING SOUND AT A TIME
+    BUT THAT WILL BE A DIFFERENT NUT TO CRACK).
+
+  - each state would also have its own animations - a fan blowing with some wind effects in
+    one and a static fan with no wind effects in the other.
+
+Trapdoor obstacle?
+
+  - use 2 states, in 1 the prop provides support and in the other it does not. Have those
+    2 states change either randomly for a bit of unpredictability or at fixed times.
+  - can set it up in the level such that below the trapdoor is a great fall of a killer prop
+    or something.
+
+Moving ladders?
+
+  - just use 2 props, 1 prop for the fixed ladder and a 2nd prop for the moving ladder. Just
+    overlay the 2 props in the level. Super simple.
+
+Interactions
+------------
+
+How to know when an actor is interacting with a world prop?
+
+Interaction boxes.
+
+All props will have an AABB interaction box. All actors will also have such an interaction
+box. 
+
+Each update tick will run AABB collision tests to compose a set of lists, one for each actor, 
+which inform the actor which props it is interacting with that tick. Actors are simply 
+interacting with all props in which the prop and actor interaction boxes collide.
+
+The actor will then be passed this set of interactions in the update tick via a call to 
+    onInteractions(std::vector<GameProps>& interactions)
+
+and can then iterate through all props, enquire what their effects are on the actor, and
+act accordingly.
+
+Note that in this model the actor is enquiring about the effects and then applying those
+effects to itself. This will be done in a base game actor class. This is done so the actor
+can apply those effect based on its own state. For example it may want to ignore support
+effects if the actor is jumping or is on a ladder. Power ups may also allow the actor to
+ignore effects, e.g. a power up that allows the actor to ignore conveyors (if I wanted one).
+

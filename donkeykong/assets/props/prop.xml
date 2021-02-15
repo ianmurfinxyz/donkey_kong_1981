@@ -1,0 +1,17 @@
+<GameProp Name="TrapDoor" StateTransition="Random">
+  <State Duration="1.0">
+    <Position>
+      <Point X="" Y="" Duration=""/>
+      <Point X="" Y="" Duration=""/>
+      <Point X="" Y="" Duration=""/>
+    </Position>
+    <Velocity>
+      <Point X="" Y="" Duration=""/>
+      <Point X="" Y="" Duration=""/>
+    </Velocity>
+    <Effects>
+      <Support Height="">
+    </Effects>
+    <InteractionBox XMin="" XMax="" YMin="" YMax=""/>
+  </State>
+</GameProp>
