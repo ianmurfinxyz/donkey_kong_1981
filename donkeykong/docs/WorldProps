@@ -224,3 +224,120 @@ can apply those effect based on its own state. For example it may want to ignore
 effects if the actor is jumping or is on a ladder. Power ups may also allow the actor to
 ignore effects, e.g. a power up that allows the actor to ignore conveyors (if I wanted one).
 
+Addendum: In light of types V instances will need to define the interaction box w.r.t the
+local space of the prop.
+
+Will define the box w.r.t the local space by the data:
+    X = offset w.r.t local origin
+    Y = offset w.r.t local origin
+    width = width w.r.t local space
+    height = height w.r.t local space
+
+Thus for a moving prop the interaction box will also move since the props origin moves. I 
+will not need to define extra movement patterns for the interaction box itself beyond those
+of the prop. The box will always follow the prop.
+
+Prop Types V Prop Instances Duh!
+----------------------------------
+
+Previously I stated that props would have positions stated w.r.t the world space and defined
+within the prop definition file like:
+
+<Position loop="">
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+</Position>
+
+The problem with this of course is that if I want to instantiate the prop definition multiple
+times to create props at different positions then it is no good defining all my definition
+positions w.r.t the world space.
+
+I of course want all the data in a the prop definition defined w.r.t a local space.
+
+Thus I will do that.
+
+Instead of position in the definition file will define displacement.
+
+<Displacement loop="">
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+  <Point x="" y="" duration=""/>
+</Displacement>
+
+note: velocity can stay the same.
+
+In the level files can then add instances of props like:
+
+<GameProp Name="" X="" Y="" .../>
+
+and the position=[X,Y] will be the world space coordinate of the prop instance and the 
+prop will move such that the displacements will all be taken w.r.t said position, i.e. 
+the instance position is the origin of the local space w.r.t world space, i.e. it defines
+the transform from the instance local space to world space (no rotation or scales allowed).
+
+The Name="" xml attribute will be the type name of the prop as defined in the prop definition
+file.
+
+Note: for props which dont move like static platforms would need to define:
+
+<Displacement loop="">
+  <Point x="0" y="0" duration="0"/>
+</Displacement>
+
+Within the game code would want to handle diplacement blocks with only 1 point by disabling
+the lerp transitions.
+
+This Will Allow Me To?
+----------------------
+
+In the donkey kong arcade 1981 level 3 there is the spring. Now if you look close the springs
+actually dont all have the exact same bounce positions (or falling positions).
+
+Thus I can create multiple instances of looping springs each with a slightly different X position
+so they will all bounce and fall at slightly different X positions. There movements will all
+be the same saw wave preceding fall pattern but the pattern will be defined via offsets w.r.t
+the local origin defined at the instance position w.r.t world space.
+
+Sounds
+------
+
+It should be enough to start playing sounds upon entering a prop state only. Then simply stop
+playing any looping sounds upon exiting that state. Will not need to play sounds upon exiting
+a state as can simply play whatever sound (in most cases) upon entering the next state. This
+wont be possible if there are multiple random states but this prob wont be a problem with what
+I want to implement.
+
+Effects Details
+---------------
+
+Support:
+    
+    The support effect will have:
+
+        Height=""   - the height w.r.t the local prop origin where actors will stand if 
+                      supported by this support.
+
+Ladder:
+
+    The ladder effect will have:
+
+        Height=""   - the height of the ladder w.r.t the local prop origin. Actors can 
+                      move between the heights of the ladder position w.r.t the world
+                      space and the position+height w.r.t the world space. 
+
+                      note: if the ladder is moving will want to move the actors on the
+                      ladder too (probably or maybe not will have to think about that one).
+
+Conveyor:
+
+    The conveyor effect will have:
+
+        StrengthX=""  - the amount of X velocity to impart on any effected actors.
+        StrengthY=""  - the amount of Y velocity to impart on any effected actors.
+
+Killer:
+
+    The killer effect will have:
+
+        Damage=""  - the amount of damage to inflict upon interacting actors.

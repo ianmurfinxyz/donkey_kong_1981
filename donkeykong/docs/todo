@@ -7,3 +7,12 @@
 
  - I also want debug and release build - will need a way to specify which to build via the 
  build.sh script.
+
+ - implement the data driven prop and level systems
+
+ - design a basic level with some props (no enemies of win conditions just yet)
+
+ - get the thing built and tested.
+
+ - The initial goal is to get mario moving around a world of obstacles: platforms, ladders,
+ moving platforms, conveyors, spring things, blowers, saw blades, trapdoors etc.

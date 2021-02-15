@@ -1,17 +1,23 @@
 <GameProp Name="TrapDoor" StateTransition="Random">
   <State Duration="1.0">
-    <Position>
+    <Displacement>
       <Point X="" Y="" Duration=""/>
       <Point X="" Y="" Duration=""/>
       <Point X="" Y="" Duration=""/>
-    </Position>
+    </Displacement>
     <Velocity>
       <Point X="" Y="" Duration=""/>
       <Point X="" Y="" Duration=""/>
     </Velocity>
+    <InteractionBox X="" Y="" Width="" Height=""/>
     <Effects>
-      <Support Height="">
+      <!-- add or remove these effects to props to control their behaviour -->
+      <Support Height=""/>
+      <Ladder Height=""/>
+      <Conveyor StrengthX="" StrengthY=""/>
+      <Killer Damage=""/>
     </Effects>
-    <InteractionBox XMin="" XMax="" YMin="" YMax=""/>
+    <Sound Name="" Loop=""/> 
+    <Sprite Name="" StartFrame="" Frequency="" DrawLayer="" FrameTransition=""/>
   </State>
 </GameProp>

@@ -1,0 +1,9 @@
+
+
+levels need to:
+
+  - define the music to play
+  - define the props in the world
+  - define the win conditions (player reaches area X, all props of specific type destroyed etc).
+  - define the entry cutscene
+  - define the exit cutscene
