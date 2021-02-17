@@ -1,4 +1,4 @@
-<GameProp Name="TrapDoor" StateTransition="Random">
+<GameProp Name="TrapDoor" StateTransitionMode="Random" drawLayer="0">
   <State Duration="1.0">
     <Displacement>
       <Point X="" Y="" Duration=""/>
@@ -14,10 +14,12 @@
       <!-- add or remove these effects to props to control their behaviour -->
       <Support Height=""/>
       <Ladder Height=""/>
-      <Conveyor StrengthX="" StrengthY=""/>
+      <Conveyor velocityX="" velocityY=""/>
       <Killer Damage=""/>
     </Effects>
-    <Sound Name="" Loop=""/> 
-    <Sprite Name="" StartFrame="" Frequency="" DrawLayer="" FrameTransition=""/>
+    <Sounds>
+      <Sound Name="" Loop=""/> 
+    </Sound>
+    <Animation name=""/>
   </State>
 </GameProp>

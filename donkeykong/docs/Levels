@@ -7,3 +7,4 @@ levels need to:
   - define the win conditions (player reaches area X, all props of specific type destroyed etc).
   - define the entry cutscene
   - define the exit cutscene
+  - define the mario spawn position

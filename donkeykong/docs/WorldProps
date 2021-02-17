@@ -124,6 +124,19 @@ The effects I can think of that will be needed are:
       values: 
         strength/value of velocity effect.
 
+      note: the conveyed velocity should only apply to the tick in which it is first 
+      applied and not persist beyond that. Thus each tick it will have to be determined
+      whether to apply it again depending on if there is an interaction with the 
+      conveyor. Will want the conveyor belt interaction box to stop at the support height
+      which is the top of the conveyor belt sprite and the mario box to extend slightly
+      below marios feet. This way when mario jumps the conveyor belt velocity will only
+      apply when mario is stood on (i.e. close to) the conveyor. Whereas with wind blowers
+      can have larger interaction boxes which encapsulate an area for the wind to blow. This
+      way I dont have to take into account whether mario is jumping and conditionally apply
+      the velocity if not jumping. The act of jumping will move mario out of the belt interaction
+      box. Not applying the vel if jumping would obviously break the blower fans thus this is
+      what we need.
+
   - killer?
 
       Props which act as killers kill (apply damage) to actors upon interaction.

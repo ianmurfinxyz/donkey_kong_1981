@@ -5,23 +5,17 @@
 void GameActor::onInteraction(const std::vector<GameProp>& interactions)
 {
   for(auto& prop : interactions){
-    switch(prop.getType()){
-    case GameProp::GAME_PROP_PLATFORM:
-      GamePlatform* platform = static_cast<GamePlatform*>(&prop);
-      if(platform->getSupportHeight() > _position._y)
-        _position._y = platform->getSupportHeight();
-      _isFalling = false;
-      break;
-    case GameProp::GAME_PROP_CONVEYOR:
-      _isFalling = false;
-      break;
-    case GameProp::GAME_PROP_LADDER:
-      break;
-    case GameProp::GAME_PROP_LIFT:
-      _isFalling = false;
-      break;
-    case GameProp::GAME_PROP_RIVET:
-      break;
+    if(prop.isSupport()){
+      // move up to supported height if > current height (always move up)
+    }
+    if(prop.isLadder()){
+      // enable vertical movement
+    }
+    if(prop.isConveyor()){
+      // apply conveyor velocity
+    }
+    if(prop.isKiller()){
+      // apply damage from prop
     }
   }
 }

@@ -1,0 +1,104 @@
+Sprites
+-------
+In the engine I have the sprite concept. I am to modify this concept a little to be as follows:
+
+A sprite is an ordered bmp image. Each image is subdivided into a set of frames. Meta info
+about these frames is specified in the xml file associated with the bmp image. Each frame
+has meta data defining:
+
+  - id/number - the number of the frame in the sprite
+
+  - position  - the pixel position of the bottom-left pixel of the frame in the image.
+
+  - dimensions - the width/height of the frame in the image.
+
+  - origin - the pixel position of the origin of the frame.
+
+The significance of the frame origin is such that when a call is made to draw the frame of
+a sprite via the gfx call:
+
+    void gfx::drawSprite(Vector2i position, ResourceKey_t spriteKey, int frameid, int screenid)
+
+the position is taken as that of the frame origin. Thus if the frame origin is in the center of
+the frame then the frame is drawn centered around the position arg to the draw call.
+
+Thus depending on the origin some frames will be centered, some not etc. This design is to
+take into account animations which contain frames of differing dimensions. By specifying the
+origin of differing dimensions of the frame at their respective centers, and animation need
+only keep track of single animation position to draw all frames centered.
+
+The modification I am to make to the sprite concept is that sprites can now contain any
+unrelated set of frames. Before I conceptualised the frames within a sprite as being an
+animation set. This will change with the introduction of the animation concept.
+
+Animations
+----------
+
+I am now introducing the concept of animations.
+
+Sprites impose order/structure to bmp images, subdividing them into frames.
+
+Animations impose order/structure to sprites, subdividing them into animations.
+
+note: all animations are 2D flip book like animations.
+
+Thus animations will consist of an animation meta file which defines for each animation
+defintion:
+
+  - a frame set - a subset of the frames of a sprite which form this animations frame set. This
+                 is an ordered set such that frames are ordered by ascending number (aframe0, 
+                 aframe1, aframe2 ... aframeN) in the order they are defined in the animation.
+
+                 note: Frames are also ordered within a sprite, the sprite xml will list frames
+                 and assign them ids/numbers. These frames are then used to define the order
+                 of frames in the animations ... YOU KNOW WHAT THIS NAMING IS CONFUSING SO ...
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+        !!!!NAME CHANGE!!!!
+
+rename sprite to spritesheet
+
+rename the frames within a sprite to sprite
+
+then we have:
+
+    spritesheet divided into sprites
+
+    animations divided into frames
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+  - frequency - the rate at which frames are changed in the animation.
+
+  - start frame - the first frame to show.
+
+  - mode - how to select the sequence of frames to show. Useful modes I can think of:
+
+        - random - randomly select any frame for each frame change.
+
+        - forward - frames drawn in ascending order.
+
+        - backward - frames drawn in reverse order.
+
+Animation instances
+-------------------
+
+There should also be a dinstinction made between animations and animation instances. 
+
+Animations will contain a lot of meta data which is unique to the animation type, i.e. that
+data in the animation xml file (frame set, freq, mode etc) which it is inefficient to
+duplicate between each instance.
+
+For this reason will create an animations.xml meta file which will define all animation types/
+definitions and create an animation factory which will read this meta file and allow the
+instantiation of animation types.
+
+
+
+
+
+
+
+

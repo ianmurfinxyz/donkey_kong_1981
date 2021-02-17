@@ -16,3 +16,15 @@
 
  - The initial goal is to get mario moving around a world of obstacles: platforms, ladders,
  moving platforms, conveyors, spring things, blowers, saw blades, trapdoors etc.
+
+- may want to create a representation of a prop definition in memory so I can load the prop
+defs into this in RAM representation - a struct seperate to the instances of the prop.
+
+ - need the GameProp class to actually act as an instance of a prop.
+
+ - need the app to load all the prop definitions
+
+ - need the level to load a level file - the level should reference prop defintions already
+ loaded
+
+
