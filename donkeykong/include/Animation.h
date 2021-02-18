@@ -20,27 +20,49 @@ public:
   //
   enum class Mode { STATIC, FORWARD, BACKWARD, RANDOM };
 
-  //
-  // Default constructor is needed for some STL containers.
-  //
-  Animation();
+  Animation(const Animation& other) = delete;
+  Animation& operator=(const Animation& other) = delete;
 
-  Animation(const Animation& other) = default;
-  Animation& operator=(const Animation& other) = default;
-
-  Animation(Animation&& other) = delete;
-  Animation& operator=(Animation&& other) = delete;
+  //
+  // Allows use as an element of std::vector.
+  //
+  Animation(Animation&& other) = default;
+  Animation& operator=(Animation&& other) = default;
 
   void onUpdate(double now, float dt);
   void onDraw(Vector2i position, int screenid);
   void reset();
 
 private:
-  Animation(const AnimationDefinition* def);
+
+  //
+  // A definition defines an animation type. These definition are loaded from the
+  // animations definitions file by the animation factory.
+  //
+  struct Definition
+  {
+    std::string _name;
+    Animation::Mode _mode;
+    gfx::ResourceKey_t _spritesheetKey;
+    std::vector<gfx::SpriteID_t> _frames;
+    float _frequency;
+    float _period;
+    bool _loop;
+  };
+
+  //
+  // Accessible only by the factory.
+  //
+  Animation(const Definition* def);
 
 private:
-  iRand _randFrame;
-  const AnimationDefinition* _def;
+
+  //
+  // Defines the animation type.
+  //
+  const Definition* _def;
+
+  std::unique_ptr<iRand> _randFrame;
   int _frame;
   float _clock;
 };

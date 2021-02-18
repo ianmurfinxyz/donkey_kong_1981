@@ -13,8 +13,11 @@ Animation::Animation(const AnimationDefinition* def) :
   _def{def},
   _frame{0},
   _clock{0.f},
-  _randFrame(0, def->_frames.size() - 1)
-{}
+  _randFrame{nullptr}
+{
+  assert(def != nullptr);
+  _randFrame = std::make_unique<iRand>(0, def->_frames.size() - 1);
+}
 
 void Animation::onUpdate(double now, float dt)
 {

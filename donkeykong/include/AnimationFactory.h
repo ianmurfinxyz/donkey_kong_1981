@@ -1,10 +1,11 @@
 #ifndef _PIXIRETRO_GAME_ANIMATION_FACTORY_H_
 #define _PIXIRETRO_GAME_ANIMATION_FACTORY_H_
 
-#include "pixiretro/pxr_gfx.h"
+#include "Animation.h"
 
-class Animation;
-
+//
+//
+//
 class AnimationFactory
 {
 public:
@@ -21,41 +22,32 @@ public:
   static constexpr ANIMATION_DEFINITIONS_FILE_PATH {"assets/animations/"};
 
   //
-  // A definition defines an animation type. These definition are loaded from the
-  // animations definitions file.
-  //
-  struct AnimationDefinition
-  {
-    std::string _animationName;
-    std::string _spritesheetName;
-    gfx::ResourceKey_t _spritesheetKey;
-    Animation::Mode _animationMode;
-    std::vector<int> _frames;
-    float _frequency;
-    float _period;
-    bool _loop;
-  };
-
-public:
-  AnimationFactory() = default;
-  ~AnimationFactory() = default;
-
-  //
   // Attempts to load the animations definitions file. Returns true on a successful load
   // else false. Load errors are logged to log file.
   //
-  bool loadAnimationDefinitions();
+  // Must be called during your app initialization i.e. App::onInit() but after loading
+  // sprites.
+  //
+  static bool initializeFactory();
 
   //
   // Makes an instance of an animation type.
   //
   // If no such animation type with name 'animationName' exists the function asserts(0).
   //
-  Animation makeAnimation(const std::string& animationName);
+  static Animation makeAnimation(const std::string& animationName);
 
 private:
-  std::unorder_map<std::string, AnimationDefinition> _defs;
-};
+  static AnimationFactory* instance;
 
+private:
+  AnimationFactory() = default;
+  ~AnimationFactory() = default;
+
+  bool loadAnimationDefinitions();
+
+private:
+  std::unordered_map<std::string, Animation::Definition> _defs;
+};
 
 #endif

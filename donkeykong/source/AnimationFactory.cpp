@@ -2,10 +2,13 @@
 #include "AnimationFactory.h"
 #include "Animation.h"
 
+AnimationFactory* AnimationFactory::instance {nullptr};
 
-AnimationFactory::loadAnimationDefinitions()
+bool AnimationFactory::initialize()
 {
- // TODO
+  instance = new AnimationFactory();
+  assert(instance != nullptr);
+  return instance->loadAnimationDefinitions();
 }
 
 Animation AnimationFactory::makeAnimation(const std::string& animationName)
@@ -14,3 +17,9 @@ Animation AnimationFactory::makeAnimation(const std::string& animationName)
   assert(search != _defs.end());
   return Animation{&(search->second));
 }
+
+bool AnimationFactory::loadAnimationDefinitions()
+{
+ // TODO
+}
+
