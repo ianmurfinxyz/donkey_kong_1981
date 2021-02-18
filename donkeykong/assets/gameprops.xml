@@ -1,14 +1,14 @@
 <GameProp Name="TrapDoor" StateTransitionMode="Random" drawLayer="0">
   <State Duration="1.0">
     <Displacement>
-      <Point X="" Y="" Duration=""/>
-      <Point X="" Y="" Duration=""/>
-      <Point X="" Y="" Duration=""/>
+      <Point X="" Y=""/>
+      <Point X="" Y=""/>
+      <Point X="" Y=""/>
     </Displacement>
-    <Velocity>
-      <Point X="" Y="" Duration=""/>
-      <Point X="" Y="" Duration=""/>
-    </Velocity>
+    <Speed>
+      <Point Value="" Duration=""/>
+      <Point Value="" Duration=""/>
+    </Speed>
     <InteractionBox X="" Y="" Width="" Height=""/>
     <Effects>
       <!-- add or remove these effects to props to control their behaviour -->
