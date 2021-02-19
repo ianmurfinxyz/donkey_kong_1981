@@ -2,6 +2,7 @@
 #define PIXIRETRO_GAME_TRANSITION_H_
 
 #include <vector>
+#include <memory>
 
 #include "pixiretro/pxr_vec.h"
 
@@ -90,7 +91,8 @@ public:
 
 public:
 
-  Transition(std::vector<pxr::Vector2f> positionPoints, std::vector<SpeedPoint> speedPoints);
+  Transition(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints, 
+             std::shared_ptr<const std::vector<SpeedPoint>> speedPoints);
 
   ~Transition() = default;
 
@@ -106,9 +108,15 @@ public:
   pxr::Vector2f onUpdate(float dt);
 
   //
-  // Resets the transition to start over.
+  // Resets the transition to start at the beginning of the current paths.
   //
   void reset();
+
+  //
+  // Resets the transition to start from the begining with a new set of transition paths.
+  //
+  void reset(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints, 
+             std::shared_ptr<const std::vector<SpeedPoint>> speedPoints);
 
   //
   // Current position along the position path.
@@ -122,8 +130,12 @@ public:
 
 private:
 
-  std::vector<pxr::Vector2f> _positionPoints;
-  std::vector<SpeedPoint> _speedPoints;
+  //
+  // The transition only reads this data, it need not own it.
+  //
+  std::shared_ptr<const std::vector<pxr::Vector2f>> _positionPoints;
+  std::shared_ptr<const std::vector<SpeedPoint>> _speedPoints;
+
   pxr::Vector2f _position; 
   pxr::Vector2f _direction;
   float _speed;
@@ -134,6 +146,7 @@ private:
   int _toSpeed;
   bool _isMoving;
   bool _isAccelerating;
+
 };
 
 #endif

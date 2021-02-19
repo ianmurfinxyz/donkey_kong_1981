@@ -2,40 +2,69 @@
 #include "Transition.h"
 #include "pixiretro/pxr_mathutil.h"
 
-Transition::Transition(std::vector<pxr::Vector2f> positionPoints,
-                       std::vector<SpeedPoints> speedPoints)
-  :
-  _positionPoints{std::move(positionPoints)},
-  _speedPoints{std::move(speedPoints)}
-{
-  assert(_positionPoints.size() >= 1);
-  assert(_speedPoints.size() >= 1);
+Transition::Transition() :
+  _positionPoints{nullptr},
+  _speedPoints{nullptr},
+  _position{0.f, 0.f},
+  _direction{0.f, 0.f},
+  _speed{0.f},
+  _lerpClock{0.f},
+  _fromPosition{0},
+  _toPosition{0},
+  _fromSpeed{0},
+  _toSpeed{0},
+  _isMoving{false},
+  _isAccelerating{false}
+{}
 
-  reset();
+Transition::Transition(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints,
+                       std::shared_ptr<const std::vector<SpeedPoints>> speedPoints)
+  :
+  _positionPoints{nullptr},
+  _speedPoints{nullptr}
+{
+  reset(positionPoints, speedPoints);
 }
 
 void Transition::reset()
 {
+  if(_positionPoints == nullptr || _speedPoints == nullptr)
+    return;
+
   _isMoving = true;
   _isAccelerating = true;
 
-  if(_positionPoints.size() == 1)
+  if((*_positionPoints).size() == 1)
     _isMoving = false;
 
-  if(!_isMoving || _speedPoints.size() == 1)
+  if(!_isMoving || (*_speedPoints).size() == 1)
     _isAccelerating = false;
 
   _fromPosition = 0;
   _toPosition = _isMoving ? 1 : 0;
-  _position = _positionPoints[_fromPosition];
+  _position = (*_positionPoints)[_fromPosition];
 
-  _direction = (_positionPoints[_toPosition] - _positionPoints[_fromPosition]).normalized();
+  _direction = ((*_positionPoints)[_toPosition] - (*_positionPoints)[_fromPosition]).normalized();
 
   _fromSpeed = 0;
   _toSpeed = _isAccelerating ? 1 : 0;
-  _speed = _speedPoints[_fromSpeed]._value;
+  _speed = (*_speedPoints)[_fromSpeed]._value;
 
   _lerpClock = 0.f;
+}
+
+void Transition::reset(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints,
+                       std::shared_ptr<const std::vector<SpeedPoints>> speedPoints)
+{
+  assert((*positionPoints).size() >= 1);
+  assert((*speedPoints).size() >= 1);
+
+  for(const auto& point : (*_speedPoints))
+    assert(point._duration > 0.f);
+
+  _positionPoints = positionPoints;
+  _speedPoints = speedPoints;
+  reset();
 }
 
 pxr::Vector2f Transition::update(float dt)
@@ -45,19 +74,19 @@ pxr::Vector2f Transition::update(float dt)
 
   if(_isAccelerating){
     _lerpClock += dt;
-    float phase = _lerpClock / _speedPoints[_fromSpeed]._duration;
+    float phase = _lerpClock / (*_speedPoints)[_fromSpeed]._duration;
 
-    _speed = pxr::flerp(_speedPoints[_fromSpeed]._value, 
-                        _speedPoints[_toSpeed]._value,
+    _speed = pxr::flerp((*_speedPoints)[_fromSpeed]._value, 
+                        (*_speedPoints)[_toSpeed]._value,
                         std::clamp(phase, 0.f, 1.f));
 
     if(phase >= 1.f){
       ++_fromSpeed;
-      if(_fromSpeed >= _speedPoints.size())
+      if(_fromSpeed >= (*_speedPoints).size())
         _fromSpeed = 0;
 
       ++_toSpeed;
-      if(_toSpeed >= _speedPoints.size())
+      if(_toSpeed >= (*_speedPoints).size())
         _toSpeed = 0;
 
       _lerpClock = 0.f;
@@ -66,7 +95,7 @@ pxr::Vector2f Transition::update(float dt)
 
   float distance = _speed * dt;
   Vector2f displacement = _direction * distance;
-  Vector2f remainder = _speedPoints[_toSpeed]._value - _position;
+  Vector2f remainder = (*_speedPoints)[_toSpeed]._value - _position;
   float difference = remainder.lengthSquared() - (distance * distance);
 
   if(difference > 0.f){
@@ -79,12 +108,12 @@ pxr::Vector2f Transition::update(float dt)
 
     ++_fromPosition;
     ++_toPosition;
-    if(_toPosition >= _positionPoints.size()){
+    if(_toPosition >= (*_positionPoints).size()){
       _fromPosition = 0;
       _toPosition = 1;
     }
 
-    _direction = (_positionPoints[_toPosition] - _positionPoints[_fromPosition]).normalized();
+    _direction = ((*_positionPoints)[_toPosition] - (*_positionPoints)[_fromPosition]).normalized();
 
     difference *= -1;
     _position += std::sqrt(difference) * _direction;

@@ -7,6 +7,7 @@
 #include "pixiretor/pxr_mathutil.h"
 #include "pixiretro/pxr_collision.h"
 #include "pixiretro/pxr_sfx.h"
+#include "Transition.h"
 
 class GameProp
 {
@@ -52,30 +53,28 @@ private:
   //
   struct StateDefinition
   {
-    using Duration_t = float;
-    using fLerpSet_t = std::vector<std::pair<pxr::Vector2f, Duration_t>>;
-    using SoundSet_t = std::vector<std::string, pxr::sfx::ResourceKey_t>;
-
     //
     // Constructor to establish the following invariants:
     //
-    //     - displacement set must have size >= 1
-    //     - velocity set must have size >= 1
+    //     - position points must have size >= 1
+    //     - speed points must have size >= 1
+    //     - interaction box must have a positive area.
     //     - animation name != the empty string ""
     //
-    StateDefinition(fLerpSet_t    displacementPoints, 
-                    fLerpSet_t    velocityPoints,
-                    std::string   animationName,
-                    SoundSet_t    sound,
-                    pxr::fRect    interactionBox,
-                    float         supportHeight,
-                    float         ladderHeight,
-                    pxr::Vector2i conveyorVelocity,
-                    int           killerDamage,
-                    bool          isSupport,
-                    bool          isLadder,
-                    bool          isConveyor,
-                    bool          isKiller);
+    StateDefinition(std::vector<pxr::Vector2f>           positionPoints, 
+                    std::vector<Transition::SpeedPoint>  speedPoints,
+                    std::vector<pxr::sfx::ResourceKey_t> sound,
+                    pxr::fRect                           interactionBox,
+                    std::string                          animationName,
+                    float                                duration,
+                    float                                supportHeight,
+                    float                                ladderHeight,
+                    pxr::Vector2i                        conveyorVelocity,
+                    int                                  killerDamage,
+                    bool                                 isSupport,
+                    bool                                 isLadder,
+                    bool                                 isConveyor,
+                    bool                                 isKiller);
 
     StateDefinition(StateDefinition&&) = default;
     StateDefinition& operator=(StateDefinition&&) = default;
@@ -84,24 +83,19 @@ private:
     StateDefinition& operator=(const StateDefinition&) = delete;
 
     //
-    // Sets of points to interpolate between. First in the pair is the point value (a 
-    // displacement or velocity), second is the duration of the interpolation, i.e. time
-    // it takes to interpolate between this point and the next. For the last point in the
-    // set, the duration is the time to interpolate between said last point and the first
-    // point in the set.
+    // Transition points used to initialize this states transition.
     //
-    // All durations are in unit seconds.
+    // These shared pointers reference "original copies" of this point data; all transition
+    // objects for every instance of props with this definition will ultimately copy these
+    // shared pointers. Thus these will be the last references upon shutdown. This is reflected
+    // in the fact these are the only shared pointers to this data that are writable.
     //
-    // All state definitions required a set size >= 1. For sets of 1 point, interpolation
-    // is disabled and the corresponding value is static.
-    //
-    // Interpolations loop for the entire duration of the state.
-    //
-    fLerpSet_t _displacementPoints; 
-    fLerpSet_t _velocityPoints; 
+    std::shared_ptr<std::vector<pxr::Vector2f>> _positionPoints; 
+    std::shared_ptr<std::vector<Transition::SpeedPoint>> _speedPoints;
 
     //
-    // The set of sounds to begin playing upon state entry.
+    // The set of sounds to begin playing upon state entry; sounds do not loop but rather play
+    // once upon entry and stop.
     //
     SoundSet_t _sounds;
 
@@ -111,11 +105,41 @@ private:
     //
     pxr::fRect _interactionBox;
 
+    //
+    // Must be the name of a valid animation constructable via the animation factory. This
+    // animation will play on loop during this state.
+    //
     std::string _animationName; 
+
+    //
+    // How long this prop states persists before transitioning to the next.
+    //
+    float _duration;
+
+    //
+    // Supports provide actors a platform to stand on, the support height is where they stand.
+    //
     float _supportHeight;
+
+    //
+    // Ladders permit actors to move vertically, ladder height is how far they can move.
+    //
     float _ladderHeight;
+
+    //
+    // The velocity applied to actors upon interaction.
+    //
     pxr::Vector2i _conveyorVelocity;
+
+    //
+    // Applied to actors upon interaction if _isKiller=true. Note that a + value will remove
+    // health, whereas a - value will add health.
+    //
     int _killerDamage;
+
+    //
+    // flags which indicate what effects this prop has on actors.
+    //
     bool _isSupport;
     bool _isLadder;
     bool _isConveyor;
@@ -144,6 +168,11 @@ private:
     std::string _name;
     StateTransitionMode _stateTransitionMode;
     std::vector<StateDefinition> _states;
+
+    //
+    // Defines the order in which props should be drawn (painters algorithm). Lower values
+    // are drawn first.
+    //
     int _drawLayer;
   };
 
@@ -152,8 +181,6 @@ private:
   GameProp(pxr::Vector2i position, const Definition* def);
 
   void transitionToState(int state);
-  void lerpDisplacement(float dt);
-  void lerpVelocity(float dt);
 
 private:
 
@@ -184,52 +211,9 @@ private:
   pxr::Vector2f _position;
 
   //
-  // The current displacement of the prop w.r.t its local origin.
+  // The transition for the current state.
   //
-  pxr::Vector2f _displacement;
-
-  //
-  // The current velocity of the prop (w.r.t both world space or local space since local space
-  // is a subspace of world space, is axis aligned and of the same scale).
-  //
-  pxr::Vector2i _velocity;
-
-  //
-  // Props are registered as not moving if there is only a single displacement point in the 
-  // current state. This is a simple performance optimazation to avoid wasted work.
-  //
-  bool _isMoving;
-
-  //
-  // Indexes into the StateDefinition::_diplacementPoints vector which track the two 
-  // displacements currently being lerped between. Only used if _isMoving == true.
-  //
-  int _fromDisplacementPoint;
-  int _toDisplacementPoint;
-
-  //
-  // The clock used to track progress of linear interpolation of displacement points.
-  //
-  float _displacementLerpClock;
-
-  //
-  // Props are registered as not accelerating if there is only a single velocity point in the
-  // current state or if _isMoving == false. This is a simple performance optimization to avoid 
-  // wasted work.
-  //
-  bool _isAccelerating;
-
-  //
-  // Indexes into the StateDefinition::_velocityPoints vector which track the two 
-  // velocities currently being lerped between. Only used if _isAccelerating == true;
-  //
-  int _fromVelocityPoint;
-  int _toVelocityPoint;
-
-  //
-  // The clock used to track progress of linear interpolation of velocity points.
-  //
-  float _velocityLerpClock;
+  Transition _transition;
 };
 
 #endif

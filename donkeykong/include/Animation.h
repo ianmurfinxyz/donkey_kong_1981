@@ -4,6 +4,16 @@
 class AnimationFactory;
 struct AnimationDefinition;
 
+//
+// TODO
+//
+// i want the animation instance class to be very cheap so it can easily be recreated 
+// every time we enter a new game prop state, rather than creating a vector of them for
+// each state (trade CPU for memory).
+//
+// The issue is that rand generator. How expensive is it to create new rand generators?
+//
+
 class Animation
 {
   friend class AnimationFactory;

@@ -1,25 +1,29 @@
-<GameProp Name="TrapDoor" StateTransitionMode="Random" drawLayer="0">
-  <State Duration="1.0">
-    <Displacement>
-      <Point X="" Y=""/>
-      <Point X="" Y=""/>
-      <Point X="" Y=""/>
-    </Displacement>
-    <Speed>
-      <Point Value="" Duration=""/>
-      <Point Value="" Duration=""/>
-    </Speed>
-    <InteractionBox X="" Y="" Width="" Height=""/>
-    <Effects>
+<gameProp name="TrapDoor" stateTransitionMode="Random" drawLayer="0">
+  <state Duration="1.0">
+    <transition>
+      <positions>
+        <point index="" x="" y=""/>
+        <point index="" x="" y=""/>
+        <point index="" x="" y=""/>
+        <point index="" x="" y=""/>
+      </positions>
+      <speeds>
+        <point index="" value="" duration=""/>
+        <point index="" value="" duration=""/>
+        <point index="" value="" duration=""/>
+      </speeds>
+    </transition>
+    <interactionBox X="" Y="" Width="" Height=""/>
+    <effects>
       <!-- add or remove these effects to props to control their behaviour -->
-      <Support Height=""/>
-      <Ladder Height=""/>
-      <Conveyor velocityX="" velocityY=""/>
-      <Killer Damage=""/>
-    </Effects>
-    <Sounds>
-      <Sound Name="" Loop=""/> 
-    </Sound>
-    <Animation name=""/>
-  </State>
-</GameProp>
+      <support height=""/>
+      <ladder height=""/>
+      <conveyor velocityX="" velocityY=""/>
+      <killer damage=""/>
+    </effects>
+    <sounds>
+      <sound Name="" Loop=""/> 
+    </sound>
+    <animation name=""/>
+  </state>
+</gameProp>
