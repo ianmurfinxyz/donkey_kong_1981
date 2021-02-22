@@ -1,0 +1,153 @@
+
+<!--
+
+This file defines the required format of the game props definition file.
+
+-->
+
+<?xml version=".0"?>
+
+<!-- Element: <props>
+
+  Each child in the props element should be a prop definition which defines a single
+  prop.
+
+  The props element can contain any arbitrary number of prop definitions.
+-->
+<props>
+
+<!-- Element: <prop>
+
+  A prop defines a prop definition, i.e. a type of prop which can be instanced in 
+  a level.
+
+  A prop definition consists of any number of prop states which define each of the 
+  states a prop can exist in.
+
+  Attributes:
+
+  name = <string>
+        an arbitrary string of alphanum or underscore characters which is used
+        to refer to the prop definition. This name can be used in a level
+        definition file to instance the prop in the level.
+
+  stateTransitionmode = <string>
+        Must have value Random || Forward (cap sensitive).
+
+        Selects the mode of transitioning between prop states.  
+
+  DrawLayer = <integer>
+        An integer value (positive or negative) which defines the order relative to
+        other props that this prop should be drawn (painters algorithm).
+-->
+  <prop name="" stateTransitionMode="" drawLayer="0">
+
+<!-- Element: <state>
+
+  Defines a state of a prop. Must contain the specific set of child elements as
+  shown in this template file.
+
+  Attributes:
+
+  duration = <real>
+        The duration in seconds that this state persists before the prop will switch
+        to the next state.
+
+-->
+    <state duration="1.0">
+
+<!-- Element: <tansition>
+
+  Defines the transition points which themselves define the pattern of movement the prop
+  makes in the world.
+
+-->
+      <transition>
+
+<!-- Element: <positions>
+
+  Define the sequence of points in the world which this prop will move between in the order
+  of the point indices.
+
+-->
+        <positions>
+
+<!-- Element: <position>
+
+  A point in the world where the prop can move to (may be off screen).
+
+  Attributes:
+
+  index = <integer>
+
+  The order in which the prop should move to this point. If 2 or more points share an index 
+  the order will be undefined between those points. Indices do not need to start at 0 and
+  increase by 1; the order will be determined in ascending order of index value.
+
+  x = <real>
+
+  The x coordinate of the point in world space.
+
+  y = <real>
+
+  The y coordinate of the point in world space.
+
+-->
+          <position index="" x="" y=""/>
+          <position index="" x="" y=""/>
+          <position index="" x="" y=""/>
+          <position index="" x="" y=""/>
+        </positions>
+
+<!-- Element: <speeds>
+
+  Define the sequence of speeds in the world which this prop will accelerate between in the order
+  of the point indices.
+
+-->
+        <speeds>
+
+<!-- Element: <speed>
+
+  A speed relative to the world space in which the prop moves.
+
+  Attributes:
+
+  index = <integer>
+
+  The order in which the prop should accelerate to this speed. If 2 or more speeds share an 
+  index the order will be undefined between those speeds. Indices do not need to start at 0 
+  and increase by 1; the order will be determined in ascending order of index value.
+
+  x = <real>
+
+  The x coordinate of the speed in world space.
+
+  y = <real>
+
+  The y coordinate of the speed in world space.
+
+-->
+          <speed index="" value="" duration=""/>
+          <speed index="" value="" duration=""/>
+          <speed index="" value="" duration=""/>
+        </speeds>
+      </transition>
+
+
+      <interactionBox x="" y="" width="" height=""/>
+      <effects>
+        <support active="" height=""/>
+        <ladder active="" height=""/>
+        <conveyor active="" velocityX="" velocityY=""/>
+        <killer active="" damage=""/>
+      </effects>
+      <sounds>
+        <sound Name="" Loop=""/> 
+      </sound>
+      <animation name=""/>
+    </state>
+  </prop>
+
+
+</props>
