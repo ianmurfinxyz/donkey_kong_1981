@@ -4,16 +4,6 @@
 class AnimationFactory;
 struct AnimationDefinition;
 
-//
-// TODO
-//
-// i want the animation instance class to be very cheap so it can easily be recreated 
-// every time we enter a new game prop state, rather than creating a vector of them for
-// each state (trade CPU for memory).
-//
-// The issue is that rand generator. How expensive is it to create new rand generators?
-//
-
 class Animation
 {
   friend class AnimationFactory;
@@ -30,24 +20,45 @@ public:
   //
   enum class Mode { STATIC, FORWARD, BACKWARD, RANDOM };
 
-  Animation(const Animation& other) = delete;
-  Animation& operator=(const Animation& other) = delete;
+  // 
+  // Construct a default, but invalid animation. Such an animation must be assigned
+  // a valid animation returned from the animation factory.
+  //
+  // The point of this default is to make it easier to manage memory for animations external 
+  // of the animation factory.
+  //
+  Animation();
 
-  //
-  // Allows use as an element of std::vector.
-  //
+  ~Animation() = default;
+
+  Animation(const Animation& other) = default;
+  Animation& operator=(const Animation& other) = default;
+
   Animation(Animation&& other) = default;
   Animation& operator=(Animation&& other) = default;
 
+  //
+  // Call periodically during the update tick.
+  //
   void onUpdate(double now, float dt);
+
+  //
+  // Draws the currently active frame (a sprite) to a screen at a specified position. The
+  // position is taken as the position of the sprite origin.
+  //
   void onDraw(Vector2i position, int screenid);
+
+  //
+  // Resets the animation to start from frame 0.
+  //
   void reset();
 
 private:
 
   //
-  // A definition defines an animation type. These definition are loaded from the
-  // animations definitions file by the animation factory.
+  // A definition defines an animation type and encapsulates all type specific data shared by
+  // all instances of a given type. These definitions are loaded from the animations definitions 
+  // file by the animation factory.
   //
   struct Definition
   {
@@ -57,24 +68,19 @@ private:
     std::vector<gfx::SpriteID_t> _frames;
     float _frequency;
     float _period;
-    bool _loop;
   };
 
   //
   // Accessible only by the factory.
   //
-  Animation(const Definition* def);
+  Animation(std::shared_ptr<const Definition> def);
 
 private:
 
-  //
-  // Defines the animation type.
-  //
-  const Definition* _def;
-
-  std::unique_ptr<iRand> _randFrame;
-  int _frame;
+  std::shared_ptr<const Definition> _def;
+  int _frameNo;
   float _clock;
+  
 };
 
 #endif

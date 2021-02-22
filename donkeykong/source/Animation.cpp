@@ -4,45 +4,42 @@
 
 Animation::Animation() :
   _def{nullptr},
-  _frame{0},
-  _clock{0.f},
-  _randFrame(0, 0)
+  _frameNo{0},
+  _clock{0.f}
 {}
 
-Animation::Animation(const AnimationDefinition* def) :
+Animation::Animation(std::shared_ptr<const Definition> def) :
   _def{def},
-  _frame{0},
-  _clock{0.f},
-  _randFrame{nullptr}
+  _frameNo{0},
+  _clock{0.f}
 {
-  assert(def != nullptr);
-  _randFrame = std::make_unique<iRand>(0, def->_frames.size() - 1);
+  assert(_def != nullptr);
 }
 
 void Animation::onUpdate(double now, float dt)
 {
-  assert(def != nullptr);
+  assert(_def != nullptr);
 
-  if(def->_animationMode == Mode::STATIC)
+  if(_def->_animationMode == Mode::STATIC)
     return;
 
   _clock += dt;
-  if(_clock < def->_period)
+  if(_clock < _def->_period)
     return;
 
-  switch(def->_animationMode){
+  switch(_def->_animationMode){
   case Mode::FORWARD:
-    ++_frame;
-    if(_frame >= def->_frames.size())
-      _frame = 0;
+    ++_frameNo;
+    if(_frameNo >= _def->_frames.size())
+      _frameNo = 0;
     break;
   case Mode::BACKWARD:
-    --_frame;
-    if(_frame < 0)
-      _frame = def->_frame.size() - 1;
+    --_frameNo;
+    if(_frameNo < 0)
+      _frameNo = _def->_frames.size() - 1;
     break;
   case Mode::RANDOM:
-    _frame = _randFrame();
+    _frameNo = pxr::rand::uniformUnsignedInt(0, _def->_frames.size() - 1);
     break;
   }
     
@@ -51,13 +48,13 @@ void Animation::onUpdate(double now, float dt)
 
 void Animation::onDraw(Vector2i position, int screenid)
 {
-  assert(def != nullptr); 
-  gfx::drawSprite(position, def->_spritesheetKey, def->_frames[_frame], screenid);
+  assert(_def != nullptr); 
+  gfx::drawSprite(position, _def->_spritesheetKey, _def->_frames[_frameNo], screenid);
 }
 
 void Animation::reset()
 {
-  assert(def != nullptr);
-  _frame = 0;
+  assert(_def != nullptr);
+  _frameNo = 0;
   _clock = 0.f;
 }

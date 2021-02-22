@@ -91,6 +91,15 @@ public:
 
 public:
 
+  //
+  // Constructs a defult but invalid transition. Such a transition must be 'reset' (or
+  // initialized) with a call to reset(...) providing the transition points.
+  //
+  // The point of the default is to make it possible to construct a transition instance
+  // before the transition points are availible.
+  //
+  Transition();
+
   Transition(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints, 
              std::shared_ptr<const std::vector<SpeedPoint>> speedPoints);
 

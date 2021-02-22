@@ -17,21 +17,55 @@ private:
   
 public:
 
+  //
+  // Call periodically within the update tick.
+  //
   void onUpdate(double now, float dt);
+
+  //
+  // Draw the prop to a screen.
+  //
   void onDraw(int screenid);
 
+  //
+  // Returns knowledge of what effects this prop has on actors.
+  //
   bool isSupport() const;
   bool isLadder() const;
   bool isConveyor() const;
   bool isKiller() const;
 
-  float getSupportHeight() const;
-  float getLadderHeight() const;
+  //
+  // Returns the y-axis position w.r.t world space which this prop will support actors at,
+  // i.e. actors standing on this support stand at this height.
+  //
+  float getSupportPosition() const;
+
+  //
+  // Returns the range of y-axis position values w.r.t world space within which this prop
+  // permits vertical movement.
+  //
+  pxr::Vector2f getLadderRange() const;
+
+  //
+  // Returns the velocity imparted upon actors by this prop.
+  //
   pxr::Vector2i getConveyorVelocity() const;
+
+  //
+  // Returns the damage done to actors by this prop.
+  //
   int getKillerDamage() const;
 
+  //
+  // The collision bounds of this props interaction.
+  //
   pxr::AABB getInteractionBox() const;
 
+  //
+  // Defines the order (via painters algorithm) that this prop should be drawn relative to
+  // other props.
+  //
   int getDrawLayer() const;
 
 private:
@@ -61,20 +95,20 @@ private:
     //     - interaction box must have a positive area.
     //     - animation name != the empty string ""
     //
-    StateDefinition(std::vector<pxr::Vector2f>           positionPoints, 
-                    std::vector<Transition::SpeedPoint>  speedPoints,
-                    std::vector<pxr::sfx::ResourceKey_t> sound,
-                    pxr::fRect                           interactionBox,
-                    std::string                          animationName,
-                    float                                duration,
-                    float                                supportHeight,
-                    float                                ladderHeight,
-                    pxr::Vector2i                        conveyorVelocity,
-                    int                                  killerDamage,
-                    bool                                 isSupport,
-                    bool                                 isLadder,
-                    bool                                 isConveyor,
-                    bool                                 isKiller);
+    StateDefinition(std::shared_ptr<std::vector<pxr::Vector2f>>           positionPoints, 
+                    std::shared_ptr<std::vector<Transition::SpeedPoint>>  speedPoints,
+                    std::vector<pxr::sfx::ResourceKey_t>                  sounds,
+                    pxr::fRect                                            interactionBox,
+                    std::string                                           animationName,
+                    float                                                 duration,
+                    float                                                 supportHeight,
+                    float                                                 ladderHeight,
+                    pxr::Vector2i                                         conveyorVelocity,
+                    int                                                   killerDamage,
+                    bool                                                  isSupport,
+                    bool                                                  isLadder,
+                    bool                                                  isConveyor,
+                    bool                                                  isKiller);
 
     StateDefinition(StateDefinition&&) = default;
     StateDefinition& operator=(StateDefinition&&) = default;
@@ -156,17 +190,27 @@ private:
     //
     // Constructor to establish the following invariants.
     //
-    //    - std::string != the empty string ""
-    //    - size of vector state >= 1
+    //    - name != the empty string ""
+    //    - size of vector states >= 1
     //
     Definition(std::string                  name
                StateTransitionMode          stateTransitionMode,
                std::vector<StateDefinition> states,
                int                          drawLayer);
 
-
+    //
+    // The name of this prop type used to identify it.
+    //
     std::string _name;
+
+    //
+    // Method of choosing the next state.
+    //
     StateTransitionMode _stateTransitionMode;
+
+    //
+    // All the states of this prop. Must have size >= 1.
+    //
     std::vector<StateDefinition> _states;
 
     //
@@ -178,6 +222,9 @@ private:
 
 private:
 
+  //
+  // Accesable only by the game prop factory.
+  //
   GameProp(pxr::Vector2i position, const Definition* def);
 
   void transitionToState(int state);
@@ -188,7 +235,7 @@ private:
   // The definition which defines this props type. The lifetime of the referenced data
   // is guaranteed by the game prop factory from game init to shutdown.
   //
-  const Definition* _def;
+  std::shared_ptr<const Definition> _def;
 
   //
   // Index into the Definition::_states vector which keeps track of the currently active
@@ -197,11 +244,14 @@ private:
   int _currentState;
 
   //
-  // All the animations used by the prop; one for each different prop state. This vector
-  // is indexed by the _currentState index to access the animation for the corresponding
-  // state.
+  // Times state changes.
   //
-  std::vector<Animation> _animations;
+  float _stateClock;
+
+  //
+  // The animation being currently drawn to represent the prop.
+  //
+  Animation _animation;
 
   //
   // The position is the world space coordinate of the props local origin. This value
@@ -214,6 +264,11 @@ private:
   // The transition for the current state.
   //
   Transition _transition;
+
+  //
+  // Optimisation flag to disable state changes for props which have only a single state.
+  //
+  bool _isChangingStates;
 };
 
 #endif
