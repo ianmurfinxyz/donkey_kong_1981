@@ -85,6 +85,13 @@ public:
 
   struct SpeedPoint
   {
+    SpeedPoint() = default;
+
+    SpeedPonint(float value, float duration) :
+      _value{value},
+      _duration{duration}
+    {}
+
     float _value;     // value of speed at this point.
     float _duration;  // duration of transition from this point to the next.
   };

@@ -4,14 +4,9 @@
 #include <unordered_map>
 #include "GameProp.h"
 
-class GamePropFactory
+class GamePropFactory final
 {
 public:
-
-  //
-  //
-  //
-  static constexpr const char* PROP_DEFINITIONS_FILE_NAME {"gameprops"};
 
   //
   //
@@ -21,12 +16,36 @@ public:
   //
   //
   //
-  bool loadGamePropDefinitions();
+  static constexpr const char* PROP_DEFINITIONS_FILE_NAME {"gameprops"};
 
-  GameProp makeGameProp(const std::string& propName);
+  //
+  //
+  //
+  static bool initialize();
+
+  //
+  //
+  //
+  static void shutdown();
+
+  //
+  //
+  //
+  static GameProp makeGameProp(pxr::Vector2f position, const std::string& propName);
 
 private:
-  std::unordered_map<std::string, GameProp::Definition> _propDefs;
+
+  static std::unique_ptr<GamePropFactory> instance {nullptr};
+
+private:
+
+  GamePropFactory() = default;
+  ~GamePropFactory = default;
+
+  bool loadGamePropDefinitions();
+
+private:
+  std::unordered_map<std::string, std::shared_ptr<GameProp::Definition>> _defs;
 };
 
 

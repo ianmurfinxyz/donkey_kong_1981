@@ -1,7 +1,7 @@
 #include "GameProp.h"
 #include "AnimationFactory.h"
 
-GameProp::GameProp(pxr:Vector2i position, std::shared_ptr<const Definition> def) :
+GameProp::GameProp(pxr:Vector2f position, std::shared_ptr<const Definition> def) :
   _def{def},
   _currentState{0},
   _stateClock{0.f},
@@ -24,7 +24,7 @@ GameProp::StateDefinition(
   float                                                 duration,
   float                                                 supportHeight,
   float                                                 ladderHeight,
-  pxr::Vector2i                                         conveyorVelocity,
+  pxr::Vector2f                                         conveyorVelocity,
   int                                                   killerDamage,
   bool                                                  isSupport,
   bool                                                  isLadder,
@@ -132,12 +132,12 @@ pxr::Vector2f GameProp::getLadderRange() const
   };
 }
 
-pxr::Vector2i GameProp::getConveyorVelocity() const
+pxr::Vector2f GameProp::getConveyorVelocity() const
 {
   return _def._states[_currentState]._conveyorVelocity;
 }
 
-pxr::Vector2i GameProp::getKillerDamage() const
+int GameProp::getKillerDamage() const
 {
   return _def._states[_currentState]._killerDamage;
 }

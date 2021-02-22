@@ -1,12 +1,14 @@
 #ifndef _PIXIRETRO_GAME_ANIMATION_FACTORY_H_
 #define _PIXIRETRO_GAME_ANIMATION_FACTORY_H_
 
+#include <memory>
 #include "Animation.h"
 
 //
+// Singleton class to instantiate animations. Responsible for loading and maintaining
+// all animation definitions.
 //
-//
-class AnimationFactory
+class AnimationFactory final
 {
 public:
 
@@ -28,7 +30,12 @@ public:
   // Must be called during your app initialization i.e. App::onInit() but after loading
   // sprites.
   //
-  static bool initializeFactory();
+  static bool initialize();
+
+  //
+  // Must call to free memory used by the factory singleton instance.
+  //
+  static void shutdown();
 
   //
   // Makes an instance of an animation type.
@@ -38,7 +45,7 @@ public:
   static Animation makeAnimation(const std::string& animationName);
 
 private:
-  static AnimationFactory* instance;
+  static std::unique_ptr<AnimationFactory> instance {nullptr};
 
 private:
   AnimationFactory() = default;
@@ -47,7 +54,7 @@ private:
   bool loadAnimationDefinitions();
 
 private:
-  std::unordered_map<std::string, Animation::Definition> _defs;
+  std::unordered_map<std::string, std::shared_ptr<Animation::Definition>> _defs;
 };
 
 #endif

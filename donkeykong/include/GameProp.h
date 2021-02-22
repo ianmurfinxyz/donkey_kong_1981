@@ -50,7 +50,7 @@ public:
   //
   // Returns the velocity imparted upon actors by this prop.
   //
-  pxr::Vector2i getConveyorVelocity() const;
+  pxr::Vector2f getConveyorVelocity() const;
 
   //
   // Returns the damage done to actors by this prop.
@@ -103,7 +103,7 @@ private:
                     float                                                 duration,
                     float                                                 supportHeight,
                     float                                                 ladderHeight,
-                    pxr::Vector2i                                         conveyorVelocity,
+                    pxr::Vector2f                                         conveyorVelocity,
                     int                                                   killerDamage,
                     bool                                                  isSupport,
                     bool                                                  isLadder,
@@ -163,7 +163,7 @@ private:
     //
     // The velocity applied to actors upon interaction.
     //
-    pxr::Vector2i _conveyorVelocity;
+    pxr::Vector2f _conveyorVelocity;
 
     //
     // Applied to actors upon interaction if _isKiller=true. Note that a + value will remove
@@ -225,7 +225,7 @@ private:
   //
   // Accesable only by the game prop factory.
   //
-  GameProp(pxr::Vector2i position, const Definition* def);
+  GameProp(pxr::Vector2f position, const Definition* def);
 
   void transitionToState(int state);
 
