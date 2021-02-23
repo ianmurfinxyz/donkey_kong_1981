@@ -20,6 +20,7 @@ public:
 
   //
   //
+  // Must be called after initializing the animation factory.
   //
   static bool initialize();
 

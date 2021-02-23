@@ -17,6 +17,12 @@ private:
   
 public:
 
+  GameProp(const GameProp&) = default;
+  GameProp& operator=(const GameProp&) = default;
+
+  GameProp(GameProp&&) = default;
+  GameProp& operator=(GameProp&&) = default;
+
   //
   // Call periodically within the update tick.
   //
