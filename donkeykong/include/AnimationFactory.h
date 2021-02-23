@@ -18,7 +18,7 @@ public:
   // The expected dir (w.r.t game root dir) in which the animations definitions
   // file is expected to be found.
   //
-  static constexpr const char* ANIMATION_DEFINITIONS_FILE_PATH {"assets/animations/"};
+  static constexpr const char* ANIMATION_DEFINITIONS_FILE_PATH {"assets/"};
 
   //
   // The name of the xml file which contains all the animation definitions.

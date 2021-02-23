@@ -98,7 +98,7 @@ void GameProp::onUpdate(double now, float dt)
 
 void GameProp::onDraw(int screenid)
 {
-  _animation.onDraw(_position, screenid);
+  _animation.onDraw(_position + _transition.getPosition(), screenid);
 }
 
 bool GameProp::isSupport() const

@@ -32,7 +32,7 @@ Animation::Definition::Definition(
   _frequency{frequency}
 {
   assert(_name.size() > 0);
-  assert(_frequency > 0.f);
+  assert(_frequency >= 0.f);
   _period = 1.f / _frequency;
 }
 

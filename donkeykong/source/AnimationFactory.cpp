@@ -136,5 +136,7 @@ bool AnimationFactory::loadAnimationDefinitions()
     xmlanimation = xmlanimation->NextSiblingElement("animation");
   }
   while(xmlanimation != 0);
+
+  return true;
 }
 

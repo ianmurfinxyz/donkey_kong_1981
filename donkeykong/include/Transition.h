@@ -137,12 +137,12 @@ public:
   //
   // Current position along the position path.
   //
-  inline pxr::Vector2f getPosition() const;
+  pxr::Vector2f getPosition() const;
 
   //
   // Current speed of movement along the position path.
   //
-  inline float getSpeed() const;
+  float getSpeed() const;
 
 private:
 

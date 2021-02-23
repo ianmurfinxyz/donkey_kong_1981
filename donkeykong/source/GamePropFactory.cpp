@@ -95,7 +95,7 @@ bool GamePropFactory::loadGamePropDefinitions()
     
     const char* propName;
     if(!pxr::io::extractStringAttribute(xmlprop, "name", &propName)) return onerror();
-    if(std::strcmp(propName, "") != 0){
+    if(std::strcmp(propName, "") == 0){
       pxr::log::log(pxr::log::ERROR, msg_empty_prop_name);
       return onerror();
     };
@@ -105,7 +105,7 @@ bool GamePropFactory::loadGamePropDefinitions()
     if(!pxr::io::extractStringAttribute(xmlprop, "stateTransitionMode", &tsmode)) return onerror();
     if(std::strcmp(tsmode, "random") == 0)
       tmode = GameProp::StateTransitionMode::RANDOM;
-    else if(std::strcmp(tsmode, "forward"))
+    else if(std::strcmp(tsmode, "forward") == 0)
       tmode = GameProp::StateTransitionMode::FORWARD;
     else
       return onerror();
@@ -215,10 +215,9 @@ bool GamePropFactory::loadGamePropDefinitions()
           pxr::log::log(pxr::log::WARN, msg_empty_sound_name, propName);
           continue;
         }
-        if(std::strcmp(soundName, "NA")){
-          continue;
+        if(std::strcmp(soundName, "NA") != 0){
+          sounds.push_back(pxr::sfx::loadSound(soundName));
         }
-        sounds.push_back(pxr::sfx::loadSound(soundName));
         xmlsound = xmlsound->NextSiblingElement("sound");
       }
       while(xmlsound != 0);
@@ -274,5 +273,7 @@ bool GamePropFactory::loadGamePropDefinitions()
   while(xmlprop != 0);
 
   //// PROP LOAD END ////////////////////////////////////////////////////////////////////////////
+  
+  return true;
 }
 

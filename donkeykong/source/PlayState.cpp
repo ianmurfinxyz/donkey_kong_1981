@@ -1,3 +1,4 @@
+#include "pixiretro/pxr_gfx.h"
 #include "PlayState.h"
 
 PlayState::PlayState(pxr::App* owner) :
@@ -17,6 +18,7 @@ void PlayState::onUpdate(double now, float dt)
 
 void PlayState::onDraw(double now, float dt, int screenid)
 {
+  pxr::gfx::clearScreenShade(0, screenid);
   _level.onDraw(screenid);
 }
 

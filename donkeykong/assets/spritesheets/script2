@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for file in $(ls *.spritesheet); do
+  txt="$(cat $file)"
+  txt="${txt//<sprite>/<spritesheet>}"
+  txt="${txt//<\/sprite>/<\/spritesheet>}"
+  txt="${txt//<frame/<sprite}"
+  echo "$txt" > "$file"
+done

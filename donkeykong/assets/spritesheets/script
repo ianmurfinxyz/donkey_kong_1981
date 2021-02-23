@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for file in $(ls *.sprite); do
+  cat $file > "${file%.sprite}.spritesheet"
+done
