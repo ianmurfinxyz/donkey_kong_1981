@@ -1,19 +1,8 @@
-
-
-
-<Animation name="mario_running_right" Spritesheet="mario" FrequencyHz="0.2" Mode="Forward">
-  <Frame Sprite="0"/>
-  <Frame Sprite="1"/>
-  <Frame Sprite="2"/>
-</Animation>
-
-<Animation name="mario_running_left" Spritesheet="mario" FrequencyHz="0.2"  Mode="Forward">
-  <Frame Sprite="3"/>
-  <Frame Sprite="4"/>
-  <Frame Sprite="5"/>
-</Animation>
-
-<Animation name="mario_jumping" Spritesheet="mario" FrequencyHz="0.2" Mode="Forward">
-  <Frame Sprite="7"/>
-  <Frame Sprite="8"/>
-</Animation>
+<?xml version="1.0"?>
+<animations>
+  <animation name="mario_running_right" spritesheet="mario" frequency="0.2" mode="forward">
+    <frame spriteid="0"/>
+    <frame spriteid="1"/>
+    <frame spriteid="2"/>
+  </animation>
+</animations>

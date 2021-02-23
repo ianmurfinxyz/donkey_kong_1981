@@ -25,6 +25,11 @@ bool GamePropFactory::initialize()
 
 void GamePropFactory::shutdown()
 {
+  for(auto& pair : _defs)
+    for(auto& state : pair.second->_state)
+      for(auto& sound : state._sounds)
+        pxr::sfx::unloadSound(sound);
+
   instance.reset(nullptr);
 }
 
@@ -48,7 +53,7 @@ bool GamePropFactory::loadGamePropDefinitions()
   pxr::log::log(pxr::log::INFO, msg_load_start, xmlpath);
 
   auto onerror = [](){
-    pxr::log::log(log::ERROR, msg_load_abort);
+    pxr::log::log(log::ERROR, msg_load_abort, xmlpath);
     return false;
   };
 
@@ -252,7 +257,7 @@ bool GamePropFactory::loadGamePropDefinitions()
     _defs.emplace(std::make_pair(
       std::string{propName},
       def
-    );
+    ));
 
     xmlprop = xmlprop->NextSiblingElement("prop");
   }

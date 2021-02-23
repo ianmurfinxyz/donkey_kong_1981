@@ -1,6 +1,8 @@
 #ifndef _PIXIRETRO_GAME_ANIMATION_H_
 #define _PIXIRETRO_GAME_ANIMATION_H_
 
+#include "pixiretro/pxr_gfx.h"
+
 class AnimationFactory;
 struct AnimationDefinition;
 
@@ -53,7 +55,7 @@ public:
   //
   void reset();
 
-private:
+public:
 
   //
   // A definition defines an animation type and encapsulates all type specific data shared by
@@ -62,13 +64,29 @@ private:
   //
   struct Definition
   {
+
+    //
+    // Constructor to establish the following invariants:
+    //
+    //   - name != "" (empty string)
+    //   - frequency > 0
+    //
+    Definition(std::string                       name,
+               Mode                              mode,
+               pxr::gfx::ResourceKey_t           spritesheetKey,
+               std::vector<pxr::gfx::SpriteID_t> frames,
+               float                             frequency
+    );
+               
     std::string _name;
-    Animation::Mode _mode;
-    gfx::ResourceKey_t _spritesheetKey;
-    std::vector<gfx::SpriteID_t> _frames;
+    Mode _mode;
+    pxr::gfx::ResourceKey_t _spritesheetKey;
+    std::vector<pxr::gfx::SpriteID_t> _frames;
     float _frequency;
     float _period;
   };
+
+private:
 
   //
   // Accessible only by the factory.

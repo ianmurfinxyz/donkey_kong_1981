@@ -137,7 +137,7 @@ private:
     // The set of sounds to begin playing upon state entry; sounds do not loop but rather play
     // once upon entry and stop.
     //
-    SoundSet_t _sounds;
+    std::vector<pxr::sfx::ResourceKey_t> _sounds;
 
     //
     // A box specified w.r.t the props local coordinate space which defines the area a game

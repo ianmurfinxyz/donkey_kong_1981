@@ -56,6 +56,8 @@ bool Level::load(const std::string& file)
     if(!pxr::io::extractFloatAttribute(xmlprop, "y", &position._y)) return onerror();
 
     _props.emplace_back(std::move(GamePropFactory::makeGameProp(position, propName)));
+
+    xmlprop = xmlprop->NextSiblingElement("prop");
   }
   while(xmlprop != 0);
 
