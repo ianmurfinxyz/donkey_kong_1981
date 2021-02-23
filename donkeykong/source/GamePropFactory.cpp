@@ -1,10 +1,13 @@
 
 #include <cstring>
+#include <cassert>
 #include "GamePropFactory.h"
 #include "pixiretro/pxr_log.h"
 #include "pixiretro/pxr_xml.h"
 
-std::unique_ptr<GamePropFactory> GamePropFactory::instance;
+using namespace tinyxml2;
+
+std::unique_ptr<GamePropFactory> GamePropFactory::instance {nullptr};
 
 //
 // log strings.
@@ -12,25 +15,29 @@ std::unique_ptr<GamePropFactory> GamePropFactory::instance;
 static constexpr const char* msg_load_start = "loading prop definitions file";
 static constexpr const char* msg_load_abort = "aborting prop definitions load due to error";
 static constexpr const char* msg_empty_prop_name = "read empty prop name";
+static constexpr const char* msg_empty_sound_name = "read empty sound name";
 
 bool GamePropFactory::initialize()
 {
   if(instance != nullptr)
     return true;
 
-  instance = std::make_unique<GamePropFactory>();
+  instance = std::unique_ptr<GamePropFactory>{new GamePropFactory()};
   assert(instance != nullptr);
   return instance->loadGamePropDefinitions();
 }
 
 void GamePropFactory::shutdown()
 {
-  for(auto& pair : _defs)
-    for(auto& state : pair.second->_state)
+  if(instance == nullptr)
+    return;
+
+  for(auto& pair : instance->_defs)
+    for(auto& state : pair.second->_states)
       for(auto& sound : state._sounds)
         pxr::sfx::unloadSound(sound);
 
-  instance.reset(nullptr);
+  instance.reset();
 }
 
 GameProp GamePropFactory::makeGameProp(pxr::Vector2f position, const std::string& propName)
@@ -38,7 +45,7 @@ GameProp GamePropFactory::makeGameProp(pxr::Vector2f position, const std::string
   assert(instance != nullptr);
   auto search = instance->_defs.find(propName);
   assert(search != instance->_defs.end());
-  return GameProp{position, _search->second};
+  return GameProp{position, search->second};
 }
 
 bool GamePropFactory::loadGamePropDefinitions()
@@ -48,12 +55,12 @@ bool GamePropFactory::loadGamePropDefinitions()
   std::string xmlpath {};
   xmlpath += PROP_DEFINITIONS_FILE_PATH;
   xmlpath += PROP_DEFINITIONS_FILE_NAME;
-  xmlpath += pxr::io:XML_FILE_EXTENSION;
+  xmlpath += pxr::io::XML_FILE_EXTENSION;
 
   pxr::log::log(pxr::log::INFO, msg_load_start, xmlpath);
 
   auto onerror = [](){
-    pxr::log::log(log::ERROR, msg_load_abort, xmlpath);
+    pxr::log::log(pxr::log::ERROR, msg_load_abort);
     return false;
   };
 
@@ -89,16 +96,16 @@ bool GamePropFactory::loadGamePropDefinitions()
     const char* propName;
     if(!pxr::io::extractStringAttribute(xmlprop, "name", &propName)) return onerror();
     if(std::strcmp(propName, "") != 0){
-      pxr::log::log(log::ERROR, msg_empty_prop_name);
+      pxr::log::log(pxr::log::ERROR, msg_empty_prop_name);
       return onerror();
     };
 
-    GameProp::StateTransitionmode tmode;
+    GameProp::StateTransitionMode tmode;
     const char* tsmode;
     if(!pxr::io::extractStringAttribute(xmlprop, "stateTransitionMode", &tsmode)) return onerror();
-    if(std::strcmp(tsmode, "Random") == 0)
+    if(std::strcmp(tsmode, "random") == 0)
       tmode = GameProp::StateTransitionMode::RANDOM;
-    else if(std::strcmp(tsmode, "Forward"))
+    else if(std::strcmp(tsmode, "forward"))
       tmode = GameProp::StateTransitionMode::FORWARD;
     else
       return onerror();
@@ -124,7 +131,7 @@ bool GamePropFactory::loadGamePropDefinitions()
       //
       
       std::shared_ptr<std::vector<pxr::Vector2f>> positions = 
-        std::make_shared<std::vector<pxr::Vector2f>();
+        std::make_shared<std::vector<pxr::Vector2f>>();
 
       if(!pxr::io::extractChildElement(xmlstate, &xmltransition, "transition")) return onerror();
       if(!pxr::io::extractChildElement(xmltransition, &xmlpositions, "positions")) return onerror();
@@ -139,7 +146,7 @@ bool GamePropFactory::loadGamePropDefinitions()
       while(xmlpoint != 0);
 
       std::shared_ptr<std::vector<Transition::SpeedPoint>> speeds = 
-        std::make_shared<std::vector<Transition::SpeedPoint>();
+        std::make_shared<std::vector<Transition::SpeedPoint>>();
 
       if(!pxr::io::extractChildElement(xmltransition, &xmlspeeds, "speeds")) return onerror();
       if(!pxr::io::extractChildElement(xmlspeeds, &xmlpoint, "point")) return onerror();
@@ -169,30 +176,30 @@ bool GamePropFactory::loadGamePropDefinitions()
 
       if(!pxr::io::extractChildElement(xmlstate, &xmleffects, "effects")) return onerror();
 
-      bool isSupport;
+      int isSupport;
       float supportHeight;
       if(!pxr::io::extractChildElement(xmleffects, &xmlsupport, "support")) return onerror();
       if(!pxr::io::extractIntAttribute(xmlsupport, "active", &isSupport)) return onerror();
       if(!pxr::io::extractFloatAttribute(xmlsupport, "height", &supportHeight)) return onerror();
 
-      bool isLadder;
+      int isLadder;
       float ladderHeight;
       if(!pxr::io::extractChildElement(xmleffects, &xmlladder, "ladder")) return onerror();
       if(!pxr::io::extractIntAttribute(xmlladder, "active", &isLadder)) return onerror();
       if(!pxr::io::extractFloatAttribute(xmlladder, "height", &ladderHeight)) return onerror();
       
-      bool isConveyor;
+      int isConveyor;
       pxr::Vector2f conveyorVelocity {};
       if(!pxr::io::extractChildElement(xmleffects, &xmlconveyor, "conveyor")) return onerror();
       if(!pxr::io::extractIntAttribute(xmlconveyor, "active", &isConveyor)) return onerror();
       if(!pxr::io::extractFloatAttribute(xmlconveyor, "velocityX", &conveyorVelocity._x)) return onerror();
       if(!pxr::io::extractFloatAttribute(xmlconveyor, "velocityY", &conveyorVelocity._y)) return onerror();
 
-      bool isKiller;
+      int isKiller;
       int killerDamage;
       if(!pxr::io::extractChildElement(xmleffects, &xmlkiller, "killer")) return onerror();
       if(!pxr::io::extractIntAttribute(xmlkiller, "active", &isKiller)) return onerror();
-      if(!pxr::io::extractFloatAttribute(xmlkiller, "damage", &killerDamage)) return onerror();
+      if(!pxr::io::extractIntAttribute(xmlkiller, "damage", &killerDamage)) return onerror();
 
       //
       // Extract state sounds.
@@ -205,7 +212,10 @@ bool GamePropFactory::loadGamePropDefinitions()
         const char* soundName;
         if(!pxr::io::extractStringAttribute(xmlsound, "name", &soundName)) return onerror();
         if(std::strlen(soundName) == 0){
-          pxr::log::log(log::WARN, msg_empty_sound_name, propName);
+          pxr::log::log(pxr::log::WARN, msg_empty_sound_name, propName);
+          continue;
+        }
+        if(std::strcmp(soundName, "NA")){
           continue;
         }
         sounds.push_back(pxr::sfx::loadSound(soundName));
@@ -235,10 +245,10 @@ bool GamePropFactory::loadGamePropDefinitions()
         ladderHeight,
         conveyorVelocity,
         killerDamage,
-        isSupport,
-        isLadder,
-        isConveyor,
-        isKiller
+        static_cast<bool>(isSupport),
+        static_cast<bool>(isLadder),
+        static_cast<bool>(isConveyor),
+        static_cast<bool>(isKiller)
       );
 
       xmlstate = xmlstate->NextSiblingElement("state");
@@ -247,12 +257,12 @@ bool GamePropFactory::loadGamePropDefinitions()
 
     //// STATE LOAD END /////////////////////////////////////////////////////////////////////////
 
-    std::shared_ptr<GameProp::Definition> def = std::make_shared<GameProp::Definition>(
+    std::shared_ptr<GameProp::Definition> def {new GameProp::Definition{
       std::string{propName},
       tmode,
-      states,
+      std::move(states),
       drawLayer
-    );
+    }};
 
     _defs.emplace(std::make_pair(
       std::string{propName},

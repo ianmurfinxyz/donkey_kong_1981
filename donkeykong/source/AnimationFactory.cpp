@@ -1,10 +1,14 @@
 #include <string.h>
+#include <cassert>
 #include "pixiretro/pxr_xml.h"
 #include "pixiretro/pxr_gfx.h"
+#include "pixiretro/pxr_log.h"
 #include "AnimationFactory.h"
 #include "Animation.h"
 
-std::unique_ptr<AnimationFactory> AnimationFactory::instance;
+using namespace tinyxml2;
+
+std::unique_ptr<AnimationFactory> AnimationFactory::instance {nullptr};
 
 //
 // log strings.
@@ -19,19 +23,22 @@ bool AnimationFactory::initialize()
   if(instance != nullptr)
     return true;
 
-  instance = std::make_unique<AnimationFactory>();
+  instance = std::unique_ptr<AnimationFactory>{new AnimationFactory()};
   assert(instance != nullptr);
   return instance->loadAnimationDefinitions();
 }
 
 void AnimationFactory::shutdown()
 {
-  for(auto& pair : _defs){
+  if(instance == nullptr)
+    return;
+
+  for(auto& pair : instance->_defs){
     pxr::gfx::unloadSpritesheet(pair.second->_spritesheetKey);
-    pxr.second.reset(nullptr);
+    pair.second.reset();
   }
 
-  instance.reset(nullptr); 
+  instance.reset(); 
 }
 
 Animation AnimationFactory::makeAnimation(const std::string& animationName)
@@ -54,7 +61,7 @@ bool AnimationFactory::loadAnimationDefinitions()
   pxr::log::log(pxr::log::INFO, msg_load_start, xmlpath);
 
   auto onerror = [](){
-    pxr::log::log(pxr::log::ERROR, msg_load_abort, xmlpath);
+    pxr::log::log(pxr::log::ERROR, msg_load_abort);
     return false;
   };
 
@@ -103,10 +110,10 @@ bool AnimationFactory::loadAnimationDefinitions()
     if(!pxr::io::extractChildElement(xmlanimation, &xmlframe, "frame")) 
       return onerror();
 
-    std::vector<pxr::gfx::SpriteID_t> frames {};
+    std::vector<pxr::gfx::SpriteId_t> frames {};
 
     do {
-      pxr::gfx::SpriteID_t spriteid {0};
+      pxr::gfx::SpriteId_t spriteid {0};
       if(!pxr::io::extractIntAttribute(xmlframe, "spriteid", &spriteid)) return onerror();
       frames.push_back(spriteid);
       xmlframe = xmlframe->NextSiblingElement("frame");

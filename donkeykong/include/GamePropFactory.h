@@ -8,6 +8,8 @@ class GamePropFactory final
 {
 public:
 
+  ~GamePropFactory() = default;
+
   //
   //
   //
@@ -36,12 +38,11 @@ public:
 
 private:
 
-  static std::unique_ptr<GamePropFactory> instance {nullptr};
+  static std::unique_ptr<GamePropFactory> instance;
 
 private:
 
   GamePropFactory() = default;
-  ~GamePropFactory = default;
 
   bool loadGamePropDefinitions();
 

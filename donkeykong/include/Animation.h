@@ -1,7 +1,9 @@
 #ifndef _PIXIRETRO_GAME_ANIMATION_H_
 #define _PIXIRETRO_GAME_ANIMATION_H_
 
+#include <memory>
 #include "pixiretro/pxr_gfx.h"
+#include "pixiretro/pxr_vec.h"
 
 class AnimationFactory;
 struct AnimationDefinition;
@@ -42,13 +44,13 @@ public:
   //
   // Call periodically during the update tick.
   //
-  void onUpdate(double now, float dt);
+  void onUpdate(float dt);
 
   //
   // Draws the currently active frame (a sprite) to a screen at a specified position. The
   // position is taken as the position of the sprite origin.
   //
-  void onDraw(Vector2i position, int screenid);
+  void onDraw(pxr::Vector2i position, int screenid);
 
   //
   // Resets the animation to start from frame 0.
@@ -74,14 +76,14 @@ public:
     Definition(std::string                       name,
                Mode                              mode,
                pxr::gfx::ResourceKey_t           spritesheetKey,
-               std::vector<pxr::gfx::SpriteID_t> frames,
+               std::vector<pxr::gfx::SpriteId_t> frames,
                float                             frequency
     );
                
     std::string _name;
     Mode _mode;
     pxr::gfx::ResourceKey_t _spritesheetKey;
-    std::vector<pxr::gfx::SpriteID_t> _frames;
+    std::vector<pxr::gfx::SpriteId_t> _frames;
     float _frequency;
     float _period;
   };

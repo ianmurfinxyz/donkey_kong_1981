@@ -2,12 +2,15 @@
 #define _PIXIRETRO_GAME_GAMEPROP_H_
 
 #include <vector>
+#include <string>
 #include "pixiretro/pxr_vec.h"
 #include "pixiretro/pxr_rect.h"
-#include "pixiretor/pxr_mathutil.h"
+#include "pixiretro/pxr_mathutil.h"
 #include "pixiretro/pxr_collision.h"
 #include "pixiretro/pxr_sfx.h"
+#include "pixiretro/pxr_log.h"
 #include "Transition.h"
+#include "Animation.h"
 
 class GameProp
 {
@@ -199,7 +202,7 @@ private:
     //    - name != the empty string ""
     //    - size of vector states >= 1
     //
-    Definition(std::string                  name
+    Definition(std::string                  name,
                StateTransitionMode          stateTransitionMode,
                std::vector<StateDefinition> states,
                int                          drawLayer);
@@ -231,7 +234,7 @@ private:
   //
   // Accesable only by the game prop factory.
   //
-  GameProp(pxr::Vector2f position, const Definition* def);
+  GameProp(pxr::Vector2f position, std::shared_ptr<const Definition> def);
 
   void transitionToState(int state);
 

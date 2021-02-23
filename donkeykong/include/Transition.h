@@ -87,7 +87,7 @@ public:
   {
     SpeedPoint() = default;
 
-    SpeedPonint(float value, float duration) :
+    SpeedPoint(float value, float duration) :
       _value{value},
       _duration{duration}
     {}
@@ -112,7 +112,7 @@ public:
 
   ~Transition() = default;
 
-  Transition(const Transition&&) = default;
+  Transition(const Transition&) = default;
   Transition& operator=(const Transition&) = default;
 
   Transition(Transition&&) = default;

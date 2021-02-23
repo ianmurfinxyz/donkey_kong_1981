@@ -12,16 +12,18 @@ class AnimationFactory final
 {
 public:
 
+  ~AnimationFactory() = default;
+
   //
   // The expected dir (w.r.t game root dir) in which the animations definitions
   // file is expected to be found.
   //
-  static constexpr ANIMATION_DEFINITIONS_FILE_PATH {"assets/animations/"};
+  static constexpr const char* ANIMATION_DEFINITIONS_FILE_PATH {"assets/animations/"};
 
   //
   // The name of the xml file which contains all the animation definitions.
   //
-  static constexpr ANIMATION_DEFINITIONS_FILE_NAME {"animations"};
+  static constexpr const char* ANIMATION_DEFINITIONS_FILE_NAME {"animations"};
 
   //
   // Attempts to load the animations definitions file. Returns true on a successful load
@@ -45,11 +47,10 @@ public:
   static Animation makeAnimation(const std::string& animationName);
 
 private:
-  static std::unique_ptr<AnimationFactory> instance {nullptr};
+  static std::unique_ptr<AnimationFactory> instance;
 
 private:
   AnimationFactory() = default;
-  ~AnimationFactory() = default;
 
   bool loadAnimationDefinitions();
 

@@ -1,7 +1,9 @@
+#include <cassert>
+#include "pixiretro/pxr_rand.h"
 #include "GameProp.h"
 #include "AnimationFactory.h"
 
-GameProp::GameProp(pxr:Vector2f position, std::shared_ptr<const Definition> def) :
+GameProp::GameProp(pxr::Vector2f position, std::shared_ptr<const Definition> def) :
   _def{def},
   _currentState{0},
   _stateClock{0.f},
@@ -10,12 +12,12 @@ GameProp::GameProp(pxr:Vector2f position, std::shared_ptr<const Definition> def)
   _transition{}
 {
   assert(_def != nullptr);
-  assert(_def._states.size() >= 1);
-  _isChangingStates = !(_def._states.size() == 1);
+  assert(_def->_states.size() >= 1);
+  _isChangingStates = !(_def->_states.size() == 1);
   transitionToState(0);
 }
 
-GameProp::StateDefinition(
+GameProp::StateDefinition::StateDefinition(
   std::shared_ptr<std::vector<pxr::Vector2f>>           positionPoints, 
   std::shared_ptr<std::vector<Transition::SpeedPoint>>  speedPoints,
   std::vector<pxr::sfx::ResourceKey_t>                  sounds,
@@ -48,12 +50,12 @@ GameProp::StateDefinition(
 {
   assert((*_positionPoints).size() >= 1);
   assert((*_speedPoints).size() >= 1);
-  assert(_interactionBox._w > 0 && _interactionBox._h > 0);
+  assert(_interactionBox._w >= 0 && _interactionBox._h >= 0);
   assert(_animationName.size() > 0);
 }
 
-GameProp::Definition::Defintion(
-  std::string                  name
+GameProp::Definition::Definition(
+  std::string                  name,
   StateTransitionMode          stateTransitionMode,
   std::vector<StateDefinition> states,
   int                          drawLayer)
@@ -70,14 +72,14 @@ GameProp::Definition::Defintion(
 
 void GameProp::onUpdate(double now, float dt)
 {
-  _animation.update(now, dt);
-  _transition.update(now, dt);
+  _animation.onUpdate(dt);
+  _transition.onUpdate(dt);
 
   if(!_isChangingStates)
     return;
 
   _stateClock += dt;
-  if(_stateClock < _def->states[_currentState]._duration)
+  if(_stateClock < _def->_states[_currentState]._duration)
     return;
 
   int newState {_currentState};
@@ -88,7 +90,7 @@ void GameProp::onUpdate(double now, float dt)
         newState = 0;
       break;
     case StateTransitionMode::RANDOM:
-      newState = pxr::random::uniformSignedInt(0, _def->_states.size());
+      newState = pxr::rand::uniformSignedInt(0, _def->_states.size());
       break;
   }
   transitionToState(newState);
@@ -96,56 +98,56 @@ void GameProp::onUpdate(double now, float dt)
 
 void GameProp::onDraw(int screenid)
 {
-  _animation.draw(_position, screenid);
+  _animation.onDraw(_position, screenid);
 }
 
 bool GameProp::isSupport() const
 {
-  return _def._states[_currentState]._isSupport;
+  return _def->_states[_currentState]._isSupport;
 }
 
 bool GameProp::isLadder() const
 {
-  return _def._states[_currentState]._isLadder;
+  return _def->_states[_currentState]._isLadder;
 }
 
 bool GameProp::isConveyor() const
 {
-  return _def._states[_currentState]._isConveyor;
+  return _def->_states[_currentState]._isConveyor;
 }
 
 bool GameProp::isKiller() const
 {
-  return _def._states[_currentState]._isKiller;
+  return _def->_states[_currentState]._isKiller;
 }
 
 float GameProp::getSupportPosition() const
 {
-  return _position._y + _def._states[_currentState]._supportHeight;
+  return _position._y + _def->_states[_currentState]._supportHeight;
 }
 
 pxr::Vector2f GameProp::getLadderRange() const
 {
   return pxr::Vector2f {
     _position._y,
-    _position._y + _def._states[_currentState]._ladderHeight
+    _position._y + _def->_states[_currentState]._ladderHeight
   };
 }
 
 pxr::Vector2f GameProp::getConveyorVelocity() const
 {
-  return _def._states[_currentState]._conveyorVelocity;
+  return _def->_states[_currentState]._conveyorVelocity;
 }
 
 int GameProp::getKillerDamage() const
 {
-  return _def._states[_currentState]._killerDamage;
+  return _def->_states[_currentState]._killerDamage;
 }
 
 pxr::AABB GameProp::getInteractionBox() const
 {
-  auto& rect = _def._states[_currentState]._interactionBox; 
-  pxr::AABB aabb {}
+  auto& rect = _def->_states[_currentState]._interactionBox; 
+  pxr::AABB aabb {};
   aabb._xmin = _position._x + rect._x;
   aabb._xmax = _position._x + rect._x + rect._w;
   aabb._ymin = _position._y + rect._y;
@@ -155,7 +157,7 @@ pxr::AABB GameProp::getInteractionBox() const
 
 int GameProp::getDrawLayer() const
 {
-  return _def._drawLayer;
+  return _def->_drawLayer;
 }
 
 void GameProp::transitionToState(int state)

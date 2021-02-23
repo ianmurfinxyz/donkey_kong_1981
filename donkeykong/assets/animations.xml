@@ -1,8 +1,39 @@
 <?xml version="1.0"?>
 <animations>
+  <!--
   <animation name="mario_running_right" spritesheet="mario" frequency="0.2" mode="forward">
     <frame spriteid="0"/>
     <frame spriteid="1"/>
     <frame spriteid="2"/>
   </animation>
+  -->
+
+  <animation name="anim_bottom_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_top_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static">
+    <frame spriteid="1"/>
+  </animation>
+
+  <animation name="anim_red_girder_short" spritesheet="red_girder_short" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_red_girder_bottom_flat" spritesheet="red_girder_bottom_flat" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_blue_single_ladder" spritesheet="blue_single_ladder" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_trap_door_open" spritesheet="trap_door" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_trap_door_closed" spritesheet="trap_door" frequency="0" mode="static">
+    <frame spriteid="1"/>
+  </animation>
+
 </animations>

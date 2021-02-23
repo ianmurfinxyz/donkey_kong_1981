@@ -1,4 +1,6 @@
 #include <cmath>
+#include <cassert>
+#include <algorithm>
 #include "Transition.h"
 #include "pixiretro/pxr_mathutil.h"
 
@@ -18,7 +20,7 @@ Transition::Transition() :
 {}
 
 Transition::Transition(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints,
-                       std::shared_ptr<const std::vector<SpeedPoints>> speedPoints)
+                       std::shared_ptr<const std::vector<SpeedPoint>> speedPoints)
   :
   _positionPoints{nullptr},
   _speedPoints{nullptr}
@@ -54,7 +56,7 @@ void Transition::reset()
 }
 
 void Transition::reset(std::shared_ptr<const std::vector<pxr::Vector2f>> positionPoints,
-                       std::shared_ptr<const std::vector<SpeedPoints>> speedPoints)
+                       std::shared_ptr<const std::vector<SpeedPoint>> speedPoints)
 {
   assert((*positionPoints).size() >= 1);
   assert((*speedPoints).size() >= 1);
@@ -67,18 +69,18 @@ void Transition::reset(std::shared_ptr<const std::vector<pxr::Vector2f>> positio
   reset();
 }
 
-pxr::Vector2f Transition::update(float dt)
+pxr::Vector2f Transition::onUpdate(float dt)
 {
   if(!_isMoving)
-    return;
+    return _position;
 
   if(_isAccelerating){
     _lerpClock += dt;
     float phase = _lerpClock / (*_speedPoints)[_fromSpeed]._duration;
 
-    _speed = pxr::flerp((*_speedPoints)[_fromSpeed]._value, 
-                        (*_speedPoints)[_toSpeed]._value,
-                        std::clamp(phase, 0.f, 1.f));
+    _speed = pxr::lerp<float>((*_speedPoints)[_fromSpeed]._value, 
+                              (*_speedPoints)[_toSpeed]._value,
+                              std::clamp(phase, 0.f, 1.f));
 
     if(phase >= 1.f){
       ++_fromSpeed;
@@ -94,13 +96,13 @@ pxr::Vector2f Transition::update(float dt)
   }
 
   float distance = _speed * dt;
-  Vector2f displacement = _direction * distance;
-  Vector2f remainder = (*_speedPoints)[_toSpeed]._value - _position;
+  pxr::Vector2f displacement = _direction * distance;
+  pxr::Vector2f remainder = (*_positionPoints)[_toPosition] - _position;
   float difference = remainder.lengthSquared() - (distance * distance);
 
   if(difference > 0.f){
     _position += displacement;
-    return;
+    return _position;
   }
 
   else {
@@ -116,8 +118,10 @@ pxr::Vector2f Transition::update(float dt)
     _direction = ((*_positionPoints)[_toPosition] - (*_positionPoints)[_fromPosition]).normalized();
 
     difference *= -1;
-    _position += std::sqrt(difference) * _direction;
+    _position += _direction * std::sqrt(difference);
   }
+
+  return _position;
 }
 
 pxr::Vector2f Transition::getPosition() const

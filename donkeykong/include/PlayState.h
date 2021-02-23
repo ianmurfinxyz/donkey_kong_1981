@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "pixiretro/app.h"
+#include "pixiretro/pxr_app.h"
 #include "GameLevel.h"
 
 class PlayState final : public pxr::AppState
@@ -11,15 +11,19 @@ class PlayState final : public pxr::AppState
 public:
   static constexpr const char* name {"play"};
 
+  PlayState(pxr::App* owner);
+
+  ~PlayState() = default;
+
   bool onInit();
   void onUpdate(double now, float dt);
-  void onDraw(double now, float dt);
+  void onDraw(double now, float dt, int screenid);
   void onReset();
 
   std::string getName() const {return name;}
 
 private:
-  std::unique_ptr<GameLevel> _level;
+  GameLevel _level;
 };
 
 #endif
