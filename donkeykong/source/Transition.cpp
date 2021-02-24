@@ -4,8 +4,6 @@
 #include "Transition.h"
 #include "pixiretro/pxr_mathutil.h"
 
-#include <iostream>
-
 Transition::Transition() :
   _positionPoints{nullptr},
   _speedPoints{nullptr},
@@ -76,10 +74,6 @@ pxr::Vector2f Transition::onUpdate(float dt)
   if(!_isMoving)
     return _position;
 
-  std::cout << "---------------------" << std::endl;
-
-  std::cout << "_position={" << _position._x << ", " << _position._y << "}" << std::endl;
-
   if(_isAccelerating){
     _lerpClock += dt;
     float phase = _lerpClock / (*_speedPoints)[_fromSpeed]._duration;
@@ -102,13 +96,9 @@ pxr::Vector2f Transition::onUpdate(float dt)
   }
 
   float distance = _speed * dt;
-  std::cout << "distance=" << distance << std::endl;
   pxr::Vector2f displacement = _direction * distance;
-  std::cout << "displacement={" << displacement._x << ", " << displacement._y << "}" << std::endl;
   pxr::Vector2f remainder = (*_positionPoints)[_toPosition] - _position;
-  std::cout << "remainder={" << remainder._x << ", " << remainder._y << "}" << std::endl;
   float difference = remainder.lengthSquared() - (distance * distance);
-  std::cout << "difference=" << difference << std::endl;
 
   if(difference > 0.f){
     _position += displacement;
@@ -123,6 +113,7 @@ pxr::Vector2f Transition::onUpdate(float dt)
     if(_toPosition >= (*_positionPoints).size()){
       _fromPosition = 0;
       _toPosition = 1;
+      _position = (*_positionPoints)[_fromPosition];
     }
 
     _direction = ((*_positionPoints)[_toPosition] - (*_positionPoints)[_fromPosition]).normalized();
@@ -130,7 +121,6 @@ pxr::Vector2f Transition::onUpdate(float dt)
     difference *= -1;
     _position += _direction * std::sqrt(difference);
   }
-
 
   return _position;
 }

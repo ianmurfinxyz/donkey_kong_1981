@@ -18,7 +18,7 @@ void PlayState::onUpdate(double now, float dt)
 
 void PlayState::onDraw(double now, float dt, int screenid)
 {
-  pxr::gfx::clearScreenShade(0, screenid);
+  pxr::gfx::clearScreenShade(1, screenid);
   _level.onDraw(screenid);
 }
 
