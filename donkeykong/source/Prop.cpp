@@ -1,9 +1,9 @@
 #include <cassert>
 #include "pixiretro/pxr_rand.h"
-#include "GameProp.h"
+#include "Prop.h"
 #include "AnimationFactory.h"
 
-GameProp::GameProp(pxr::Vector2f position, std::shared_ptr<const Definition> def) :
+Prop::Prop(pxr::Vector2f position, std::shared_ptr<const Definition> def) :
   _def{def},
   _currentState{0},
   _stateClock{0.f},
@@ -17,7 +17,7 @@ GameProp::GameProp(pxr::Vector2f position, std::shared_ptr<const Definition> def
   transitionToState(0);
 }
 
-GameProp::StateDefinition::StateDefinition(
+Prop::StateDefinition::StateDefinition(
   std::shared_ptr<std::vector<pxr::Vector2f>>           positionPoints, 
   std::shared_ptr<std::vector<Transition::SpeedPoint>>  speedPoints,
   std::vector<pxr::sfx::ResourceKey_t>                  sounds,
@@ -54,7 +54,7 @@ GameProp::StateDefinition::StateDefinition(
   assert(_animationName.size() > 0);
 }
 
-GameProp::Definition::Definition(
+Prop::Definition::Definition(
   std::string                  name,
   StateTransitionMode          stateTransitionMode,
   std::vector<StateDefinition> states,
@@ -70,7 +70,7 @@ GameProp::Definition::Definition(
 }
 
 
-void GameProp::onUpdate(double now, float dt)
+void Prop::onUpdate(double now, float dt)
 {
   _animation.onUpdate(dt);
   _transition.onUpdate(dt);
@@ -96,37 +96,43 @@ void GameProp::onUpdate(double now, float dt)
   transitionToState(newState);
 }
 
-void GameProp::onDraw(int screenid)
+void Prop::reset()
+{
+  _currentState = 0;
+  transitionToState(0);
+}
+
+void Prop::onDraw(int screenid)
 {
   _animation.onDraw(_position + _transition.getPosition(), screenid);
 }
 
-bool GameProp::isSupport() const
+bool Prop::isSupport() const
 {
   return _def->_states[_currentState]._isSupport;
 }
 
-bool GameProp::isLadder() const
+bool Prop::isLadder() const
 {
   return _def->_states[_currentState]._isLadder;
 }
 
-bool GameProp::isConveyor() const
+bool Prop::isConveyor() const
 {
   return _def->_states[_currentState]._isConveyor;
 }
 
-bool GameProp::isKiller() const
+bool Prop::isKiller() const
 {
   return _def->_states[_currentState]._isKiller;
 }
 
-float GameProp::getSupportPosition() const
+float Prop::getSupportPosition() const
 {
   return _position._y + _def->_states[_currentState]._supportHeight;
 }
 
-pxr::Vector2f GameProp::getLadderRange() const
+pxr::Vector2f Prop::getLadderRange() const
 {
   return pxr::Vector2f {
     _position._y,
@@ -134,17 +140,17 @@ pxr::Vector2f GameProp::getLadderRange() const
   };
 }
 
-pxr::Vector2f GameProp::getConveyorVelocity() const
+pxr::Vector2f Prop::getConveyorVelocity() const
 {
   return _def->_states[_currentState]._conveyorVelocity;
 }
 
-int GameProp::getKillerDamage() const
+int Prop::getKillerDamage() const
 {
   return _def->_states[_currentState]._killerDamage;
 }
 
-pxr::AABB GameProp::getInteractionBox() const
+pxr::AABB Prop::getInteractionBox() const
 {
   auto& rect = _def->_states[_currentState]._interactionBox; 
   pxr::AABB aabb {};
@@ -155,12 +161,12 @@ pxr::AABB GameProp::getInteractionBox() const
   return aabb;
 }
 
-int GameProp::getDrawLayer() const
+int Prop::getDrawLayer() const
 {
   return _def->_drawLayer;
 }
 
-void GameProp::transitionToState(int state)
+void Prop::transitionToState(int state)
 {
   assert(0 <= state && state < _def->_states.size());
   const auto& stateDef = _def->_states[state];

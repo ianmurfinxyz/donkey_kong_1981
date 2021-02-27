@@ -12,19 +12,19 @@
 #include "Transition.h"
 #include "Animation.h"
 
-class GameProp
+class Prop
 {
 private:
 
-  friend class GamePropFactory;
+  friend class PropFactory;
   
 public:
 
-  GameProp(const GameProp&) = default;
-  GameProp& operator=(const GameProp&) = default;
+  Prop(const Prop&) = default;
+  Prop& operator=(const Prop&) = default;
 
-  GameProp(GameProp&&) = default;
-  GameProp& operator=(GameProp&&) = default;
+  Prop(Prop&&) = default;
+  Prop& operator=(Prop&&) = default;
 
   //
   // Call periodically within the update tick.
@@ -35,6 +35,11 @@ public:
   // Draw the prop to a screen.
   //
   void onDraw(int screenid);
+
+  //
+  // Resets the prop to its initial state when first constructed.
+  //
+  void reset();
 
   //
   // Returns knowledge of what effects this prop has on actors.
@@ -92,7 +97,7 @@ private:
 
   //
   // A state definition encapsulates all type specific data of a game prop unique to a prop
-  // state. Instances of these definitions are constructed and managed by the GamePropFactory.
+  // state. Instances of these definitions are constructed and managed by the PropFactory.
   //
   struct StateDefinition
   {
@@ -234,7 +239,7 @@ private:
   //
   // Accesable only by the game prop factory.
   //
-  GameProp(pxr::Vector2f position, std::shared_ptr<const Definition> def);
+  Prop(pxr::Vector2f position, std::shared_ptr<const Definition> def);
 
   void transitionToState(int state);
 

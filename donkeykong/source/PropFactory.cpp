@@ -1,33 +1,34 @@
 
 #include <cstring>
 #include <cassert>
-#include "GamePropFactory.h"
+#include "PropFactory.h"
 #include "pixiretro/pxr_log.h"
 #include "pixiretro/pxr_xml.h"
 
 using namespace tinyxml2;
 
-std::unique_ptr<GamePropFactory> GamePropFactory::instance {nullptr};
+std::unique_ptr<PropFactory> PropFactory::instance {nullptr};
 
 //
 // log strings.
 //
 static constexpr const char* msg_load_start = "loading prop definitions file";
 static constexpr const char* msg_load_abort = "aborting prop definitions load due to error";
+static constexpr const char* msg_load_success = "success loading prop definitions file";
 static constexpr const char* msg_empty_prop_name = "read empty prop name";
 static constexpr const char* msg_empty_sound_name = "read empty sound name";
 
-bool GamePropFactory::initialize()
+bool PropFactory::initialize()
 {
   if(instance != nullptr)
     return true;
 
-  instance = std::unique_ptr<GamePropFactory>{new GamePropFactory()};
+  instance = std::unique_ptr<PropFactory>{new PropFactory()};
   assert(instance != nullptr);
-  return instance->loadGamePropDefinitions();
+  return instance->loadPropDefinitions();
 }
 
-void GamePropFactory::shutdown()
+void PropFactory::shutdown()
 {
   if(instance == nullptr)
     return;
@@ -40,15 +41,15 @@ void GamePropFactory::shutdown()
   instance.reset();
 }
 
-GameProp GamePropFactory::makeGameProp(pxr::Vector2f position, const std::string& propName)
+Prop PropFactory::makeProp(pxr::Vector2f position, const std::string& propName)
 {
   assert(instance != nullptr);
   auto search = instance->_defs.find(propName);
   assert(search != instance->_defs.end());
-  return GameProp{position, search->second};
+  return Prop{position, search->second};
 }
 
-bool GamePropFactory::loadGamePropDefinitions()
+bool PropFactory::loadPropDefinitions()
 {
   assert(_defs.size() == 0);
 
@@ -100,13 +101,13 @@ bool GamePropFactory::loadGamePropDefinitions()
       return onerror();
     };
 
-    GameProp::StateTransitionMode tmode;
+    Prop::StateTransitionMode tmode;
     const char* tsmode;
     if(!pxr::io::extractStringAttribute(xmlprop, "stateTransitionMode", &tsmode)) return onerror();
     if(std::strcmp(tsmode, "random") == 0)
-      tmode = GameProp::StateTransitionMode::RANDOM;
+      tmode = Prop::StateTransitionMode::RANDOM;
     else if(std::strcmp(tsmode, "forward") == 0)
-      tmode = GameProp::StateTransitionMode::FORWARD;
+      tmode = Prop::StateTransitionMode::FORWARD;
     else
       return onerror();
 
@@ -117,7 +118,7 @@ bool GamePropFactory::loadGamePropDefinitions()
     // LOAD EACH STATE DEFINITION IN THE PROP DEFINITION
     /////////////////////////////////////////////////////////////////////////////////////////////
     
-    std::vector<GameProp::StateDefinition> states;
+    std::vector<Prop::StateDefinition> states;
 
     if(!pxr::io::extractChildElement(xmlprop, &xmlstate, "state")) return onerror();
 
@@ -256,7 +257,7 @@ bool GamePropFactory::loadGamePropDefinitions()
 
     //// STATE LOAD END /////////////////////////////////////////////////////////////////////////
 
-    std::shared_ptr<GameProp::Definition> def {new GameProp::Definition{
+    std::shared_ptr<Prop::Definition> def {new Prop::Definition{
       std::string{propName},
       tmode,
       std::move(states),
@@ -273,6 +274,8 @@ bool GamePropFactory::loadGamePropDefinitions()
   while(xmlprop != 0);
 
   //// PROP LOAD END ////////////////////////////////////////////////////////////////////////////
+  
+  pxr::log::log(pxr::log::INFO, msg_load_success);
   
   return true;
 }

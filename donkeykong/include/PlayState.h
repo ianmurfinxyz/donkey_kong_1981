@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "pixiretro/pxr_app.h"
-#include "GameLevel.h"
+#include "Level.h"
 
 class PlayState final : public pxr::AppState
 {
@@ -23,7 +23,7 @@ public:
   std::string getName() const {return name;}
 
 private:
-  GameLevel _level;
+  Level _level;
 };
 
 #endif

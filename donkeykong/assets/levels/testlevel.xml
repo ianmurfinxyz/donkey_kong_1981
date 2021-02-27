@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <level>
+  <marioSpawn x="20.0" y="20.0"/>
   <props>
     <prop name="prop_red_girder_bottom_flat" x="0"  y="0"/>
     <prop name="prop_red_girder_short_vertical_move0" x="32" y="160"/>

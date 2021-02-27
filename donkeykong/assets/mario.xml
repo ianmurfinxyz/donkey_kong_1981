@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<mario moveSpeed="" climbSpeed="" fallSpeed="" jumpSpeed="" spawnHealth="">
+  <animations idle="" moveLeft="" moveRight="" climbUp="" climbDown="" jump="" fall="" die=""/>
+  <sounds idle="" idleLoop="" moveLeft="" moveLeftLoop="" moveRight="" moveRightLoop="" climbUp="" climbUpLoop="" climbDown="" climbDownLoop="" jump="" jumpLoop="" fall="" fallLoop="" die="" dieLoop=""/>
+</mario>
