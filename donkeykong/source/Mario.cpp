@@ -1,6 +1,7 @@
 #include <cassert>
 #include "Mario.h"
 #include "AnimationFactory.h"
+#include "Prop.h"
 
 Mario::Mario(pxr::Vector2f                        spawnPosition,
              std::shared_ptr<const ControlScheme> controlScheme,
@@ -12,31 +13,42 @@ Mario::Mario(pxr::Vector2f                        spawnPosition,
   _spawnPosition{spawnPosition},
   _position{0.f, 0.f},
   _direction{0.f, 0.f},
+  _fallStartY{0.f},
+  _fallEndY{0.f},
   _effectVelocity{0.f, 0.f},
   _controlVelocity{0.f, 0.f},
   _health{0},
   _jumpClock{0.f},
+  _spawnClock{0.f},
+  _dyingClock{0.f},
   _animation{}
 {}
 
 Mario::Definition::Definition(
   std::array<std::string, Mario::STATE_COUNT>                              animationNames,
   std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
+  pxr::fRect                                                               propInteractionBox,
   float                                                                    runSpeed,
   float                                                                    climbSpeed,
-  float                                                                    fallSpeed,
-  float                                                                    jumpSpeed,
+  float                                                                    jumpImpulse,
   float                                                                    jumpDuration,
-  int                                                                      spawnHealth)
+  float                                                                    gravity,
+  float                                                                    fallLimit,
+  int                                                                      spawnHealth,
+  float                                                                    spawnDuration,
+  float                                                                    dyingDuration)
   :
   _animationNames{std::move(animationNames)},
   _sounds{sounds},
+  _propInteractionBox{propInteractionBox},
   _runSpeed{runSpeed},
   _climbSpeed{climbSpeed},
-  _fallSpeed{fallSpeed},
-  _jumpSpeed{jumpSpeed},
+  _jumpImpulse{jumpImpulse},
   _jumpDuration{jumpDuration},
-  _spawnHealth{spawnHealth}
+  _gravity{gravity},
+  _spawnHealth{spawnHealth},
+  _spawnDuration{spawnDuration},
+  _dyingDuration{dyingDuration}
 {}
 
 void Mario::onInput()
@@ -93,24 +105,35 @@ void Mario::onUpdate(double now, float dt)
   if(_state == STATE_DEAD)
     return;
 
-  pxr::Vector2f velocity = _effectVelocity + _controlVelocity;
-  _position += velocity * dt;
+  if(_health <= 0)
+    changeState(STATE_DYING);
 
-  _animation.onUpdate(dt);
+  if(_state == STATE_DYING){
+    _dyingClock += dt;
+    if(_dyingClock > _def->_dyingDuration)
+      changeState(STATE_DEAD);
+  }
+
+  if(_state == STATE_JUMPING || _state == STATE_FALLING){
+    _controlVelocity._y += _def->_gravity * dt;  
+  }
 
   if(_state == STATE_JUMPING){
     _jumpClock += dt;
-    if(_jumpClock > _def->_jumpDuration){
+    if(_jumpClock > _def->_jumpDuration)
       changeState(STATE_FALLING);
-    }
   }
 
   else if(_state == STATE_SPAWNING){
     _spawnClock += dt;
-    if(_spawnClock > _def->_spawnDuration){
+    if(_spawnClock > _def->_spawnDuration)
       changeState(STATE_IDLE); 
-    }
   }
+
+  pxr::Vector2f velocity = _effectVelocity + _controlVelocity;
+  _position += velocity * dt;
+
+  _animation.onUpdate(dt);
 }
 
 void Mario::onDraw(int screenid)
@@ -119,6 +142,37 @@ void Mario::onDraw(int screenid)
     return;
 
   _animation.onDraw(_position, screenid);
+}
+
+void Mario::onPropCollisions(const std::vector<const Prop*>& props)
+{
+  bool isSupported {false};
+  for(const auto& prop : props){
+    if(prop->isSupport()){
+      isSupported = true;
+      float supportPosition = prop->getSupportPosition();
+      if(supportPosition > _position._y)
+        _position._y = supportPosition;
+    }
+  }
+
+  if(isSupported && _state == STATE_FALLING))
+    changeState(STATE_IDLE);
+
+  if(!isSupported && (_state != STATE_JUMPING || _state != STATE_FALLING))
+    changeState(STATE_FALLING);
+
+}
+
+void Mario::getPropInteractionBox() const
+{
+  auto& rect = _def->_propInteractionBox; 
+  pxr::AABB aabb {};
+  aabb._xmin = _position._x + rect._x;
+  aabb._xmax = _position._x + rect._x + rect._w;
+  aabb._ymin = _position._y + rect._y;
+  aabb._ymax = _position._y + rect._y + rect._h;
+  return aabb;
 }
 
 void Mario::changeState(State state)
@@ -249,7 +303,7 @@ void Mario::endClimbDown()
 
 void Mario::startJump()
 {
-  _controlVelocity._y = _def->_jumpSpeed;
+  _controlVelocity._y += _def->_jumpImpulse;
 }
 
 void Mario::endJump()
@@ -258,12 +312,17 @@ void Mario::endJump()
 
 void Mario::startFall()
 {
-  _controlVelocity._y = -(_def->_fallSpeed);
-  _jumpClock = 0.f;
+  _fallStartY = _position._y;
 }
 
 void Mario::endFall()
 {
+  _fallEndY = _position._y;
+
+  float fallDistance = _fallEndY - _fallStartY;
+  if(fallDistance > _def->_fallLimit)
+    _health = 0;
+
   _controlVelocity.zero();
 }
 
@@ -282,6 +341,7 @@ void Mario::endSpawning()
 
 void Mario::startDying()
 {
+  _dyingClock = 0.f;
 }
 
 void Mario::endDying()

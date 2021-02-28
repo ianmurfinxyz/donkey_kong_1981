@@ -12,6 +12,8 @@
 #include "ControlScheme.h"
 #include "Animation.h"
 
+class Prop;
+
 class Mario
 {
   friend class MarioFactory;
@@ -37,12 +39,16 @@ public:
 
     Definition(std::array<std::string, Mario::STATE_COUNT>                              animationNames,
                std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
+               pxr::fRect                                                               propInteractionBox,
                float                                                                    runSpeed,
                float                                                                    climbSpeed,
-               float                                                                    fallSpeed,
-               float                                                                    jumpSpeed,
+               float                                                                    jumpImpulse,
                float                                                                    jumpDuration,
-               int                                                                      spawnHealth);
+               float                                                                    gravity,
+               float                                                                    fallLimit,
+               int                                                                      spawnHealth,
+               float                                                                    spawnDuration,
+               float                                                                    dyingDuration);
 
     //
     // Animations to play during states (one for each state).
@@ -57,16 +63,33 @@ public:
     std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, STATE_COUNT> _sounds;
 
     //pxr::fRect _barrelBox;
-    //pxr::fRect _PropBox;
+    pxr::fRect _propInteractionBox;
     //pxr::fRect _pickupBox;
 
     float _runSpeed; 
     float _climbSpeed;
-    float _fallSpeed;
-    float _jumpSpeed;
+
+    //
+    // An instantaneous change in y-axis velocity (i.e. not a real impulse since mario has no mass)
+    // but the principle is the same.
+    //
+    float _jumpImpulse;
+
     float _jumpDuration;
+
+    //
+    // y-axis acceleration, unit: pixels per second squared.
+    //
+    float _gravity;
+
+    //
+    // Max fall distance before untimely doom.
+    //
+    float _fallLimit;
+
     int _spawnHealth;
     float _spawnDuration;
+    float _dyingDuration;
   };
 
   Mario(const Mario&) = default;
@@ -85,13 +108,13 @@ public:
   void onUpdate(double now, float dt);
   void onDraw(int screenid);
 
-  //void onPropCollisions(const std::vector<Prop>& props);
+  void onPropCollisions(const std::vector<const Prop*>& props);
   //void onBarrelCollisions(const std::vector<Barrel>& barrels);
   //void onPickupCollisions(const std::vector<Pickup>& pickups);
 
-  //pxr::AABB getBarrelBox() const;
-  //pxr::AABB getPropBox() const;
-  //pxr::AABB getPickupBox() const;
+  //pxr::AABB getBarrelInteractionBox() const;
+  pxr::AABB getPropInteractionBox() const;
+  //pxr::AABB getPickupInteractionBox() const;
 
 
   bool isDead() const {return _state == STATE_DEAD;}
@@ -139,8 +162,13 @@ private:
 
   pxr::Vector2f _spawnPosition;
   pxr::Vector2f _position;
-
   pxr::Vector2f _direction;
+
+  //
+  // Used to measure the distance fell and apply damage.
+  //
+  float _fallStartY;
+  float _fallEndY;
 
   pxr::Vector2f _effectVelocity;
   pxr::Vector2f _controlVelocity;
@@ -149,6 +177,7 @@ private:
 
   float _jumpClock;
   float _spawnClock;
+  float _dyingClock;
 
   Animation _animation;
 };

@@ -36,12 +36,18 @@
     <frame spriteid="1"/>
   </animation>
 
-  <animation name="anim_mario_run" spritesheet="mario_run" frequency="16.0" mode="forward">
-    <frame spriteid="0"/>
+  <animation name="anim_mario_run" spritesheet="mario_run" frequency="12.0" mode="forward">
+    <frame spriteid="2"/>
     <frame spriteid="1"/>
+    <frame spriteid="2"/>
+    <frame spriteid="0"/>
   </animation>
 
   <animation name="anim_mario_idle" spritesheet="mario_idle" frequency="0" mode="static">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_mario_jump" spritesheet="mario_run" frequency="0" mode="static">
     <frame spriteid="0"/>
   </animation>
 

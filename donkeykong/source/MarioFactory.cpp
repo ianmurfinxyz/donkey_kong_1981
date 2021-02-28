@@ -5,6 +5,7 @@
 
 #include "pixiretro/pxr_xml.h"
 #include "pixiretro/pxr_log.h"
+#include "pixiretro/pxr_rect.h"
 #include "MarioFactory.h"
 
 using namespace tinyxml2;
@@ -69,20 +70,22 @@ bool MarioFactory::loadMarioDefinition()
   XMLElement* xmlmario {nullptr};
   XMLElement* xmlanimations {nullptr};
   XMLElement* xmlsounds {nullptr};
+  XMLElement* xmlpropbox {nullptr};
 
   if(!pxr::io::extractChildElement(&doc, &xmlmario, "mario"))
     return onerror();
 
-  float runSpeed, climbSpeed, fallSpeed, jumpSpeed, jumpDuration, spawnDuration;
+  float runSpeed, climbSpeed, jumpImpulse, jumpDuration, gravity, spawnDuration, dyingDuration;
   int spawnHealth;
 
   if(!pxr::io::extractFloatAttribute(xmlmario, "runSpeed", &runSpeed)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "climbSpeed", &climbSpeed)) return onerror();
-  if(!pxr::io::extractFloatAttribute(xmlmario, "fallSpeed", &fallSpeed)) return onerror();
-  if(!pxr::io::extractFloatAttribute(xmlmario, "jumpSpeed", &jumpSpeed)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "jumpImpulse", &jumpImpulse)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpDuration", &jumpDuration)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "gravity", &gravity)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlmario, "spawnHealth", &spawnHealth)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "spawnDuration", &spawnDuration)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "dyingDuration", &dyingDuration)) return onerror();
 
   const char* cstr {nullptr};
 
@@ -170,15 +173,28 @@ bool MarioFactory::loadMarioDefinition()
     sounds[Mario::STATE_DYING].first = pxr::sfx::loadSound(cstr);
   sounds[Mario::STATE_DYING].second = static_cast<bool>(loop);
 
+  if(!pxr::io::extractChildElement(xmlmario, &xmlpropbox, "propBox"))
+    return onerror();
+
+  pxr::fRect propBox {};
+
+  if(!pxr::io::extractFloatAttribute(xmlpropbox, "x", &propBox._x)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlpropbox, "y", &propBox._y)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlpropbox, "width", &propBox._w)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlpropbox, "height", &propBox._h)) return onerror();
+
   _marioDefinition = std::shared_ptr<Mario::Definition>{new Mario::Definition(
     std::move(animationNames),
     std::move(sounds),
+    propBox,
     runSpeed,
     climbSpeed,
-    fallSpeed,
-    jumpSpeed,
+    jumpImpulse,
     jumpDuration,
-    spawnHealth
+    gravity,
+    spawnHealth,
+    spawnDuration,
+    dyingDuration
   )};
 
   pxr::log::log(pxr::log::INFO, msg_load_success);

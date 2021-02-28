@@ -27,4 +27,14 @@ defs into this in RAM representation - a struct seperate to the instances of the
  - need the level to load a level file - the level should reference prop defintions already
  loaded
 
+- finish the interaction boxes for mario and test the collision tests
 
+- compile and test and what not
+
+- a problem is down the road - at min when interacting with a support am setting marios y
+position to the support y position. The problem however is that marios position is the position
+of the center of mario not the bottom, thus I need to actually set the center position of mario
+based on the support height, but how do I know what this center position needs to be? I will
+need to the get the y-axis origin of the current animations sprite and adjust the support 
+position, add the origin to it or something. To do this will need to add the ability to get
+the origin from the pxr gfx module and the animation class.

@@ -5,7 +5,9 @@
 #include "pixiretro/pxr_vec.h"
 #include "pixiretro/pxr_xml.h"
 #include "pixiretro/pxr_log.h"
+#include "pixiretro/pxr_collision.h"
 #include "PropFactory.h"
+#include "Prop.h"
 #include "MarioFactory.h"
 #include "Level.h"
 
@@ -119,12 +121,22 @@ void Level::onUpdate(double now, float dt)
   for(auto& prop : _props)
     prop.onUpdate(now, dt);
 
+  //
+  // TODO: make more efficient by using a props vector as a member which maintains the memory
+  // allocated across calls so mem is not reallocated every call.
+  //
+
+  std::vector<const Prop*> props {};
+  for(auto& prop : _props){
+    if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox()))
+      props.push_back(&prop);
+  }
+  if(props.size() != 0);
+  _mario->onPropCollisions(props);
+
   _mario->onInput();
   _mario->onUpdate(now, dt);
 
-  //
-  // handle collisions/interactions.
-  //
 }
 
 void Level::onDraw(int screenid)

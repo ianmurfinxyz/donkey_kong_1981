@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <spritesheet>
-  <sprite x="0" y="0" w="15" h="16" ox="8" oy="8"/>
-  <sprite x="15" y="0" w="15" h="16" ox="8" oy="8"/>
+  <sprite x="0" y="0" w="15" h="16" ox="7" oy="8"/>
+  <sprite x="15" y="0" w="15" h="16" ox="7" oy="8"/>
+  <sprite x="30" y="0" w="12" h="16" ox="6" oy="8"/>
 </spritesheet>
