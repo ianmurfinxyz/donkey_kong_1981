@@ -36,12 +36,7 @@
     <frame spriteid="1"/>
   </animation>
 
-  <animation name="anim_mario_moving_left" spritesheet="mario_moving_left" frequency="4.0" mode="forward">
-    <frame spriteid="0"/>
-    <frame spriteid="1"/>
-  </animation>
-
-  <animation name="anim_mario_moving_right" spritesheet="mario_moving_right" frequency="4.0" mode="forward">
+  <animation name="anim_mario_run" spritesheet="mario_run" frequency="16.0" mode="forward">
     <frame spriteid="0"/>
     <frame spriteid="1"/>
   </animation>

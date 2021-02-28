@@ -5,8 +5,8 @@
 
 struct ControlScheme
 {
-  pxr::input::KeyCode _moveLeftKey;
-  pxr::input::KeyCode _moveRightKey;
+  pxr::input::KeyCode _runLeftKey;
+  pxr::input::KeyCode _runRightKey;
   pxr::input::KeyCode _jumpKey;
 };
 

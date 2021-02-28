@@ -9,8 +9,8 @@ PlayState::PlayState(pxr::App* owner) :
 bool PlayState::onInit()
 {
   _controlScheme = std::make_shared<ControlScheme>();
-  _controlScheme->_moveLeftKey = pxr::input::KEY_LEFT;
-  _controlScheme->_moveRightKey = pxr::input::KEY_RIGHT;
+  _controlScheme->_runLeftKey = pxr::input::KEY_LEFT;
+  _controlScheme->_runRightKey = pxr::input::KEY_RIGHT;
   _controlScheme->_jumpKey = pxr::input::KEY_SPACE;
 
   if(!_level.load("testlevel"))

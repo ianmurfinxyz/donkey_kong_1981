@@ -2,8 +2,6 @@
 #include "Mario.h"
 #include "AnimationFactory.h"
 
-#include <iostream>
-
 Mario::Mario(pxr::Vector2f                        spawnPosition,
              std::shared_ptr<const ControlScheme> controlScheme,
              std::shared_ptr<const Definition>    def)
@@ -13,6 +11,7 @@ Mario::Mario(pxr::Vector2f                        spawnPosition,
   _state{STATE_DEAD},
   _spawnPosition{spawnPosition},
   _position{0.f, 0.f},
+  _direction{0.f, 0.f},
   _effectVelocity{0.f, 0.f},
   _controlVelocity{0.f, 0.f},
   _health{0},
@@ -23,7 +22,7 @@ Mario::Mario(pxr::Vector2f                        spawnPosition,
 Mario::Definition::Definition(
   std::array<std::string, Mario::STATE_COUNT>                              animationNames,
   std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
-  float                                                                    moveSpeed,
+  float                                                                    runSpeed,
   float                                                                    climbSpeed,
   float                                                                    fallSpeed,
   float                                                                    jumpSpeed,
@@ -32,7 +31,7 @@ Mario::Definition::Definition(
   :
   _animationNames{std::move(animationNames)},
   _sounds{sounds},
-  _moveSpeed{moveSpeed},
+  _runSpeed{runSpeed},
   _climbSpeed{climbSpeed},
   _fallSpeed{fallSpeed},
   _jumpSpeed{jumpSpeed},
@@ -45,35 +44,30 @@ void Mario::onInput()
   if(_state == STATE_DEAD)
     return;
 
-  std::cout << "mario_state = " << (int)_state << std::endl;
-
   switch(_state){
     case STATE_IDLE:
 
-      if(pxr::input::isKeyDown(_controlScheme->_moveLeftKey))
-        changeState(STATE_MOVING_LEFT);
+      if(pxr::input::isKeyDown(_controlScheme->_runLeftKey)){
+        _direction._x = -1.f;
+        changeState(STATE_RUNNING);
+      }
 
-      else if(pxr::input::isKeyDown(_controlScheme->_moveRightKey))
-        changeState(STATE_MOVING_RIGHT);
+      else if(pxr::input::isKeyDown(_controlScheme->_runRightKey)){
+        _direction._x = 1.f;
+        changeState(STATE_RUNNING);
+      }
 
       else if(pxr::input::isKeyDown(_controlScheme->_jumpKey))
         changeState(STATE_JUMPING);
 
       break;
 
-    case STATE_MOVING_LEFT:
+    case STATE_RUNNING:
 
-      if(!pxr::input::isKeyDown(_controlScheme->_moveLeftKey))
+      if(_direction._x < 0 && !pxr::input::isKeyDown(_controlScheme->_runLeftKey))
         changeState(STATE_IDLE);
 
-      if(pxr::input::isKeyPressed(_controlScheme->_jumpKey))
-        changeState(STATE_JUMPING);
-
-      break;
-
-    case STATE_MOVING_RIGHT:
-
-      if(!pxr::input::isKeyDown(_controlScheme->_moveRightKey))
+      if(_direction._x > 0 && !pxr::input::isKeyDown(_controlScheme->_runRightKey))
         changeState(STATE_IDLE);
 
       if(pxr::input::isKeyPressed(_controlScheme->_jumpKey))
@@ -113,7 +107,6 @@ void Mario::onUpdate(double now, float dt)
 
   else if(_state == STATE_SPAWNING){
     _spawnClock += dt;
-    std::cout << "spawn clock = " << _spawnClock << "secs" << std::endl;
     if(_spawnClock > _def->_spawnDuration){
       changeState(STATE_IDLE); 
     }
@@ -136,11 +129,8 @@ void Mario::changeState(State state)
     case STATE_IDLE:
       endIdle();
       break;
-    case STATE_MOVING_LEFT:
-      endMoveLeft();
-      break;
-    case STATE_MOVING_RIGHT:
-      endMoveRight();
+    case STATE_RUNNING:
+      endRunning();
       break;
     case STATE_CLIMBING_UP:
       endClimbUp();
@@ -153,6 +143,9 @@ void Mario::changeState(State state)
       break;
     case STATE_FALLING:
       endFall();
+      break;
+    case STATE_SPAWNING:
+      endSpawning();
       break;
     case STATE_DYING:
       endDying();
@@ -172,11 +165,8 @@ void Mario::changeState(State state)
     case STATE_IDLE:
       startIdle();
       break;
-    case STATE_MOVING_LEFT:
-      startMoveLeft();
-      break;
-    case STATE_MOVING_RIGHT:
-      startMoveRight();
+    case STATE_RUNNING:
+      startRunning();
       break;
     case STATE_CLIMBING_UP:
       startClimbUp();
@@ -190,6 +180,9 @@ void Mario::changeState(State state)
     case STATE_FALLING:
       startFall();
       break;
+    case STATE_SPAWNING:
+      startSpawning();
+      break;
     case STATE_DYING:
       startDying();
       break;
@@ -198,6 +191,12 @@ void Mario::changeState(State state)
   }
 
   _animation = AnimationFactory::makeAnimation(_def->_animationNames[_state]);
+
+  //
+  // Expects the animation (and thus the spritesheet) to be of mario running left, thus
+  // mirror if running right.
+  //
+  _animation.setMirrorX(_direction._x > 0.f);
 
   auto& sound = _def->_sounds[_state];
   if(sound.first != -1){
@@ -219,21 +218,12 @@ void Mario::endIdle()
 {
 }
 
-void Mario::startMoveLeft()
+void Mario::startRunning()
 {
-  _controlVelocity = pxr::Vector2f(-1.f, 0.f) * _def->_moveSpeed;
+  _controlVelocity = _direction * _def->_runSpeed;
 }
 
-void Mario::endMoveLeft()
-{
-}
-
-void Mario::startMoveRight()
-{
-  _controlVelocity = pxr::Vector2f(1.f, 0.f) * _def->_moveSpeed;
-}
-
-void Mario::endMoveRight()
+void Mario::endRunning()
 {
 }
 
@@ -264,7 +254,6 @@ void Mario::startJump()
 
 void Mario::endJump()
 {
-  _controlVelocity.zero();
 }
 
 void Mario::startFall()
@@ -275,7 +264,7 @@ void Mario::startFall()
 
 void Mario::endFall()
 {
-  _controlVelocity._y = 0.f;
+  _controlVelocity.zero();
 }
 
 void Mario::startSpawning()

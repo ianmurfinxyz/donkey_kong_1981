@@ -57,6 +57,11 @@ public:
   //
   void reset();
 
+  bool isMirroringX() const {return _mirrorX;}
+  bool isMirroringY() const {return _mirrorY;} 
+  void setMirrorX(bool mirror) {_mirrorX = mirror;}
+  void setMirrorY(bool mirror) {_mirrorY = mirror;}
+
 public:
 
   //
@@ -100,7 +105,8 @@ private:
   std::shared_ptr<const Definition> _def;
   int _frameNo;
   float _clock;
-  
+  bool _mirrorX;
+  bool _mirrorY;
 };
 
 #endif

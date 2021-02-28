@@ -7,13 +7,17 @@
 Animation::Animation() :
   _def{nullptr},
   _frameNo{0},
-  _clock{0.f}
+  _clock{0.f},
+  _mirrorX{false},
+  _mirrorY{false}
 {}
 
 Animation::Animation(std::shared_ptr<const Definition> def) :
   _def{def},
   _frameNo{0},
-  _clock{0.f}
+  _clock{0.f},
+  _mirrorX{false},
+  _mirrorY{false}
 {
   assert(_def != nullptr);
 }
@@ -69,7 +73,8 @@ void Animation::onUpdate(float dt)
 void Animation::onDraw(pxr::Vector2i position, int screenid)
 {
   assert(_def != nullptr); 
-  pxr::gfx::drawSprite(position, _def->_spritesheetKey, _def->_frames[_frameNo], screenid);
+  pxr::gfx::drawSprite(position, _def->_spritesheetKey, _def->_frames[_frameNo], screenid, 
+                       _mirrorX, _mirrorY);
 }
 
 void Animation::reset()

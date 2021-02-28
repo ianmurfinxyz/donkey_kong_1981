@@ -22,8 +22,7 @@ public:
   {
     STATE_DEAD = -1,
     STATE_IDLE = 0, 
-    STATE_MOVING_LEFT,
-    STATE_MOVING_RIGHT,
+    STATE_RUNNING,
     STATE_CLIMBING_UP,
     STATE_CLIMBING_DOWN,
     STATE_JUMPING,
@@ -38,7 +37,7 @@ public:
 
     Definition(std::array<std::string, Mario::STATE_COUNT>                              animationNames,
                std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
-               float                                                                    moveSpeed,
+               float                                                                    runSpeed,
                float                                                                    climbSpeed,
                float                                                                    fallSpeed,
                float                                                                    jumpSpeed,
@@ -61,7 +60,7 @@ public:
     //pxr::fRect _PropBox;
     //pxr::fRect _pickupBox;
 
-    float _moveSpeed; 
+    float _runSpeed; 
     float _climbSpeed;
     float _fallSpeed;
     float _jumpSpeed;
@@ -115,10 +114,8 @@ private:
 
   void startIdle();
   void endIdle();
-  void startMoveLeft();
-  void endMoveLeft();
-  void startMoveRight();
-  void endMoveRight();
+  void startRunning();
+  void endRunning();
   void startClimbUp();
   void endClimbUp();
   void startClimbDown();
@@ -142,6 +139,8 @@ private:
 
   pxr::Vector2f _spawnPosition;
   pxr::Vector2f _position;
+
+  pxr::Vector2f _direction;
 
   pxr::Vector2f _effectVelocity;
   pxr::Vector2f _controlVelocity;
