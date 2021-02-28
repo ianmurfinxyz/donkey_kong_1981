@@ -17,6 +17,7 @@ static constexpr const char* msg_load_start = "loading animation definitions fil
 static constexpr const char* msg_load_abort = "aborting animation definitions file load due to error";
 static constexpr const char* msg_invalid_animation_mode = "invalid animation mode";
 static constexpr const char* msg_use_animation_mode_default = "using default animation mode";
+static constexpr const char* msg_missing_animation = "missing animation";
 
 bool AnimationFactory::initialize()
 {
@@ -45,7 +46,10 @@ Animation AnimationFactory::makeAnimation(const std::string& animationName)
 {
   assert(instance != nullptr);
   auto search = instance->_defs.find(animationName);
-  assert(search != instance->_defs.end());
+  if(search == instance->_defs.end()){
+    pxr::log::log(pxr::log::ERROR, msg_missing_animation, animationName);
+    assert(0);
+  }
   return Animation{search->second};
 }
 

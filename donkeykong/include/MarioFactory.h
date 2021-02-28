@@ -15,7 +15,7 @@ public:
 
   static void shutdown();
 
-  static Mario makeMario(pxr::Vector2f position, std::shared_ptr<const ControlScheme> controlScheme);
+  static Mario makeMario(pxr::Vector2f spawnPosition, std::shared_ptr<const ControlScheme> controlScheme);
 
 private:
 
@@ -28,7 +28,7 @@ private:
   bool loadMarioDefinition();
 
 private:
-  std::unique_ptr<Mario::Definition> _marioDefinition;
+  std::shared_ptr<Mario::Definition> _marioDefinition;
 };
 
 

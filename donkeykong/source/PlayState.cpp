@@ -8,7 +8,17 @@ PlayState::PlayState(pxr::App* owner) :
 
 bool PlayState::onInit()
 {
-  _level.load("testlevel"); 
+  _controlScheme = std::make_shared<ControlScheme>();
+  _controlScheme->_moveLeftKey = pxr::input::KEY_LEFT;
+  _controlScheme->_moveRightKey = pxr::input::KEY_RIGHT;
+  _controlScheme->_jumpKey = pxr::input::KEY_SPACE;
+
+  if(!_level.load("testlevel"))
+    return false;
+
+  _level.onInit(_controlScheme);
+
+  return true;
 }
 
 void PlayState::onUpdate(double now, float dt)
@@ -24,5 +34,5 @@ void PlayState::onDraw(double now, float dt, int screenid)
 
 void PlayState::onReset()
 {
-  _level.load("testlevel"); 
+  _level.reset();
 }

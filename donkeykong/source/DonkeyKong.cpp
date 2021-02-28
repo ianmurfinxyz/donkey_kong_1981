@@ -1,6 +1,7 @@
 #include "DonkeyKong.h"
 #include "AnimationFactory.h"
-#include "GamePropFactory.h"
+#include "PropFactory.h"
+#include "MarioFactory.h"
 #include "PlayState.h"
 #include "Defines.h"
 
@@ -9,11 +10,17 @@ bool DonkeyKong::onInit()
   if(!AnimationFactory::initialize())
     return false;
 
-  if(!GamePropFactory::initialize())
+  if(!PropFactory::initialize())
+    return false;
+
+  if(!MarioFactory::initialize())
     return false;
 
   _active = std::shared_ptr<pxr::AppState>(new PlayState(this));
-  _active->onInit();
+
+  if(!_active->onInit())
+    return false;
+
   _states.emplace(_active->getName(), _active);
 
   _activeScreenid = pxr::gfx::createScreen(worldSize);
@@ -23,6 +30,7 @@ bool DonkeyKong::onInit()
 
 void DonkeyKong::onShutdown()
 {
-  GamePropFactory::shutdown();
+  PropFactory::shutdown();
   AnimationFactory::shutdown();
+  MarioFactory::shutdown();
 }

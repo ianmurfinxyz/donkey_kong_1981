@@ -5,6 +5,7 @@
 
 #include "pixiretro/pxr_app.h"
 #include "Level.h"
+#include "ControlScheme.h"
 
 class PlayState final : public pxr::AppState
 {
@@ -24,6 +25,8 @@ public:
 
 private:
   Level _level;
+
+  std::shared_ptr<ControlScheme> _controlScheme;
 };
 
 #endif

@@ -7,6 +7,8 @@
 
 #include "pixiretro/pxr_collision.h"
 #include "pixiretro/pxr_sfx.h"
+#include "pixiretro/pxr_vec.h"
+#include "pixiretro/pxr_rect.h"
 #include "ControlScheme.h"
 #include "Animation.h"
 
@@ -18,7 +20,8 @@ public:
 
   enum State
   {
-    STATE_IDLE, 
+    STATE_DEAD = -1,
+    STATE_IDLE = 0, 
     STATE_MOVING_LEFT,
     STATE_MOVING_RIGHT,
     STATE_CLIMBING_UP,
@@ -33,13 +36,14 @@ public:
   struct Definition
   {
 
-    Definition(std::array<std::string, STATE_COUNT>                            animationNames,
-               std::array<std::pair<pxr::sfx::ResourceKey_t, bool> STATE_COUNT sounds,
-               float                                                           moveSpeed,
-               float                                                           climbSpeed,
-               float                                                           fallSpeed,
-               float                                                           jumpSpeed,
-               int                                                             spawnHealth);
+    Definition(std::array<std::string, Mario::STATE_COUNT>                              animationNames,
+               std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
+               float                                                                    moveSpeed,
+               float                                                                    climbSpeed,
+               float                                                                    fallSpeed,
+               float                                                                    jumpSpeed,
+               float                                                                    jumpDuration,
+               int                                                                      spawnHealth);
 
     //
     // Animations to play during states (one for each state).
@@ -53,31 +57,48 @@ public:
     //
     std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, STATE_COUNT> _sounds;
 
+    //pxr::fRect _barrelBox;
+    //pxr::fRect _PropBox;
+    //pxr::fRect _pickupBox;
+
     float _moveSpeed; 
     float _climbSpeed;
     float _fallSpeed;
     float _jumpSpeed;
     float _jumpDuration;
     int _spawnHealth;
+    float _spawnDuration;
   };
 
-  void onPropCollisions(const std::vector<Prop>& props);
-  void onBarrelCollisions(const std::vector<Barrel>& barrels);
-  void onPickupCollisions(const std::vector<Pickup>& pickups);
+  Mario(const Mario&) = default;
+  Mario& operator=(const Mario&) = default;
+
+  Mario(Mario&&) = default;
+  Mario& operator=(Mario&&) = default;
+
+  //
+  // Resets mario back to its initial spawn state. Must call respawn initially after
+  // contruction to put mario into a spawned/playing state (constructor creates a dead mario).
+  //
+  void respawn();
 
   void onInput();
   void onUpdate(double now, float dt);
   void onDraw(int screenid);
 
-  void changeState(State state);
+  //void onPropCollisions(const std::vector<Prop>& props);
+  //void onBarrelCollisions(const std::vector<Barrel>& barrels);
+  //void onPickupCollisions(const std::vector<Pickup>& pickups);
 
-  pxr::AABB getBarrelBox() const;
-  pxr::AABB getPropBox() const;
-  pxr::AABB getPickupBox() const;
+  //pxr::AABB getBarrelBox() const;
+  //pxr::AABB getPropBox() const;
+  //pxr::AABB getPickupBox() const;
 
-  void respawn();
 
-  bool isDead() const {return _isDead;}
+  bool isDead() const {return _state == STATE_DEAD;}
+
+  void setSpawnPosition(pxr::Vector2f spawnPosition) {_spawnPosition = spawnPosition;}
+  pxr::Vector2f getSpawnPosition() const {return _spawnPosition;}
 
 private:
 
@@ -86,9 +107,11 @@ private:
   //
   // Starts mario off in a dead state. Must call 'respawn()' to get mario setup.
   //
-  Mario(pxr::Vector2f                        position, 
+  Mario(pxr::Vector2f                        spawnPosition, 
         std::shared_ptr<const ControlScheme> controlScheme, 
         std::shared_ptr<const Definition>    def);
+
+  void changeState(State state);
 
   void startIdle();
   void endIdle();
@@ -104,6 +127,8 @@ private:
   void endJump();
   void startFall();
   void endFall();
+  void startSpawning();
+  void endSpawning();
   void startDying();
   void endDying();
 
@@ -115,22 +140,18 @@ private:
 
   State _state;
 
+  pxr::Vector2f _spawnPosition;
   pxr::Vector2f _position;
 
   pxr::Vector2f _effectVelocity;
   pxr::Vector2f _controlVelocity;
-  
-  pxr::fRect _barrelBox;
-  pxr::fRect _PropBox;
-  pxr::fRect _pickupBox;
 
   int _health;
 
   float _jumpClock;
+  float _spawnClock;
 
   Animation _animation;
-
-  bool _isDead;
 };
 
 #endif

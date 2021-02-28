@@ -12,12 +12,14 @@ donkeykong_src = [
   'source/Animation.cpp',
   'source/AnimationFactory.cpp',
   'source/DonkeyKong.cpp',
-  'source/GameLevel.cpp',
-  'source/GameProp.cpp',
-  'source/GamePropFactory.cpp',
+  'source/Level.cpp',
+  'source/Prop.cpp',
+  'source/PropFactory.cpp',
   'source/Main.cpp',
   'source/PlayState.cpp',
-  'source/Transition.cpp'
+  'source/Transition.cpp',
+  'source/MarioFactory.cpp',
+  'source/Mario.cpp'
 ]
 
 executable('donkeykong', 
