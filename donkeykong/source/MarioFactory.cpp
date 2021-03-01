@@ -75,14 +75,18 @@ bool MarioFactory::loadMarioDefinition()
   if(!pxr::io::extractChildElement(&doc, &xmlmario, "mario"))
     return onerror();
 
-  float runSpeed, climbSpeed, jumpImpulse, jumpDuration, gravity, spawnDuration, dyingDuration;
-  int spawnHealth;
+  float runSpeed, climbSpeed, jumpImpulse, jumpDuration, gravity, maxFall, spawnDuration, 
+        dyingDuration;
+  int marioW, marioH, spawnHealth;
 
+  if(!pxr::io::extractIntAttribute(xmlmario, "width", &marioW)) return onerror();
+  if(!pxr::io::extractIntAttribute(xmlmario, "height", &marioH)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "runSpeed", &runSpeed)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "climbSpeed", &climbSpeed)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpImpulse", &jumpImpulse)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpDuration", &jumpDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "gravity", &gravity)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "maxFall", &maxFall)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlmario, "spawnHealth", &spawnHealth)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "spawnDuration", &spawnDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "dyingDuration", &dyingDuration)) return onerror();
@@ -186,12 +190,14 @@ bool MarioFactory::loadMarioDefinition()
   _marioDefinition = std::shared_ptr<Mario::Definition>{new Mario::Definition(
     std::move(animationNames),
     std::move(sounds),
+    pxr::Vector2i{marioW, marioH},
     propBox,
     runSpeed,
     climbSpeed,
     jumpImpulse,
     jumpDuration,
     gravity,
+    maxFall,
     spawnHealth,
     spawnDuration,
     dyingDuration

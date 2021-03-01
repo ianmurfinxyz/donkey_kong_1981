@@ -11,6 +11,8 @@ class Level
 {
 public:
 
+  static constexpr const pxr::input::KeyCode debugDrawToggleKey {pxr::input::KEY_z};
+
   enum State
   {
     STATE_UNLOADED = -2,
@@ -67,6 +69,8 @@ private:
   void updatePlaying(double now, float dt);
   void updateExitCutscene(double now, float dt);
 
+  void debugDraw(int screenid);
+
 private:
 
   State _state;
@@ -77,6 +81,10 @@ private:
 
   pxr::Vector2f _marioSpawnPosition;
   std::unique_ptr<Mario> _mario;
+
+  std::vector<const Prop*> _propInteractions;
+
+  bool _isDebugDraw;
 };
 
 

@@ -39,13 +39,14 @@ public:
 
     Definition(std::array<std::string, Mario::STATE_COUNT>                              animationNames,
                std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
+               pxr::Vector2i                                                            size,
                pxr::fRect                                                               propInteractionBox,
                float                                                                    runSpeed,
                float                                                                    climbSpeed,
                float                                                                    jumpImpulse,
                float                                                                    jumpDuration,
                float                                                                    gravity,
-               float                                                                    fallLimit,
+               float                                                                    maxFall,
                int                                                                      spawnHealth,
                float                                                                    spawnDuration,
                float                                                                    dyingDuration);
@@ -61,6 +62,11 @@ public:
     // indicates if the sound should loop.
     //
     std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, STATE_COUNT> _sounds;
+
+    //
+    // x,y = width, height of mario in pixels.
+    //
+    pxr::Vector2i _size;   
 
     //pxr::fRect _barrelBox;
     pxr::fRect _propInteractionBox;
@@ -85,7 +91,7 @@ public:
     //
     // Max fall distance before untimely doom.
     //
-    float _fallLimit;
+    float _maxFall;
 
     int _spawnHealth;
     float _spawnDuration;
@@ -108,7 +114,7 @@ public:
   void onUpdate(double now, float dt);
   void onDraw(int screenid);
 
-  void onPropCollisions(const std::vector<const Prop*>& props);
+  void onPropInteractions(const std::vector<const Prop*>& props);
   //void onBarrelCollisions(const std::vector<Barrel>& barrels);
   //void onPickupCollisions(const std::vector<Pickup>& pickups);
 

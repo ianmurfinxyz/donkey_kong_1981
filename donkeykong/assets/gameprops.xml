@@ -10,7 +10,7 @@
         <point value="0" duration="0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="16" height="10"/>
+    <interactionBox x="0" y="0" width="16" height="9"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -55,7 +55,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="16" height="10"/>
+    <interactionBox x="0" y="0" width="16" height="9"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -79,7 +79,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="224" height="10"/>
+    <interactionBox x="0" y="0" width="224" height="9"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -104,7 +104,7 @@
         <point value="60.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="16" height="10"/>
+    <interactionBox x="0" y="0" width="16" height="9"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>

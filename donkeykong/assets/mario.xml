@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<mario runSpeed="40.0" climbSpeed="0" fallSpeed="20.0" jumpImpulse="30.0" jumpDuration="1.0" gravity="40.0" spawnHealth="100" spawnDuration="1.0">
+<mario width="12" height="16" runSpeed="40.0" climbSpeed="0" jumpImpulse="140.0" jumpDuration="0.1" gravity="-400.0" maxFall="60" spawnHealth="100" spawnDuration="1.0" dyingDuration="1.0">
   <animations idle="anim_mario_idle" run="anim_mario_run" climbUp="anim_mario_idle" climbDown="anim_mario_idle" jump="anim_mario_jump" fall="anim_mario_jump" spawn="anim_mario_idle" die="anim_mario_idle"/>
   <sounds idle="NA" idleLoop="0" run="NA" runLoop="0" climbUp="NA" climbUpLoop="0" climbDown="NA" climbDownLoop="0" jump="NA" jumpLoop="0" fall="NA" fallLoop="0" die="NA" dieLoop="0"/>
+  <propBox x="-4" y="-8" width="8" height="4"/>
 </mario>

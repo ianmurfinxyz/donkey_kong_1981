@@ -25,7 +25,9 @@ Level::Level() :
   _controlScheme{nullptr},
   _props{},
   _marioSpawnPosition{0.f, 0.f},
-  _mario{nullptr}
+  _mario{nullptr},
+  _propInteractions{},
+  _isDebugDraw{false}
 {}
 
 bool Level::load(const std::string& file)
@@ -126,16 +128,19 @@ void Level::onUpdate(double now, float dt)
   // allocated across calls so mem is not reallocated every call.
   //
 
-  std::vector<const Prop*> props {};
+  _propInteractions.clear();
   for(auto& prop : _props){
     if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox()))
-      props.push_back(&prop);
+      _propInteractions.push_back(&prop);
   }
-  if(props.size() != 0);
-  _mario->onPropCollisions(props);
+  if(_propInteractions.size() != 0)
+    _mario->onPropInteractions(_propInteractions);
 
   _mario->onInput();
   _mario->onUpdate(now, dt);
+
+  if(pxr::input::isKeyPressed(debugDrawToggleKey))
+    _isDebugDraw = !_isDebugDraw;
 
 }
 
@@ -147,6 +152,9 @@ void Level::onDraw(int screenid)
     prop.onDraw(screenid);
 
   _mario->onDraw(screenid);
+
+  if(_isDebugDraw)
+    debugDraw(screenid);
 }
 
 void Level::reset()
@@ -230,3 +238,22 @@ void Level::updateExitCutscene(double now, float dt)
 {
 }
 
+void Level::debugDraw(int screenid)
+{
+  pxr::iRect rect;
+  for(const auto& prop : _props){
+    const pxr::AABB& aabb = prop.getInteractionBox();
+    rect._x = aabb._xmin;
+    rect._y = aabb._ymin;
+    rect._w = aabb._xmax - aabb._xmin;
+    rect._h = aabb._ymax - aabb._ymin;
+    pxr::gfx::drawBorderRectangle(rect, pxr::gfx::colors::green, screenid);
+  }
+
+  const pxr::AABB& aabb = _mario->getPropInteractionBox();
+  rect._x = aabb._xmin;
+  rect._y = aabb._ymin;
+  rect._w = aabb._xmax - aabb._xmin;
+  rect._h = aabb._ymax - aabb._ymin;
+  pxr::gfx::drawBorderRectangle(rect, pxr::gfx::colors::yellow, screenid);
+}
