@@ -111,6 +111,10 @@ bool AnimationFactory::loadAnimationDefinitions()
       animationMode = Animation::Mode::FORWARD;
     }
 
+    int baseMirrorX{0}, baseMirrorY{0};
+    if(!pxr::io::extractIntAttribute(xmlanimation, "mirrorX", &baseMirrorX)) return onerror();
+    if(!pxr::io::extractIntAttribute(xmlanimation, "mirrorY", &baseMirrorY)) return onerror();
+
     if(!pxr::io::extractChildElement(xmlanimation, &xmlframe, "frame")) 
       return onerror();
 
@@ -129,7 +133,9 @@ bool AnimationFactory::loadAnimationDefinitions()
       animationMode,
       spritesheetKey,
       std::move(frames),
-      frequency
+      frequency,
+      static_cast<bool>(baseMirrorX),
+      static_cast<bool>(baseMirrorY)
     );
 
     _defs.emplace(std::make_pair(

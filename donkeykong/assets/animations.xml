@@ -8,46 +8,58 @@
   </animation>
   -->
 
-  <animation name="anim_bottom_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static">
+  <animation name="anim_bottom_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_top_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static">
+  <animation name="anim_top_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
   </animation>
 
-  <animation name="anim_red_girder_short" spritesheet="red_girder_short" frequency="0" mode="static">
+  <animation name="anim_red_girder_short" spritesheet="red_girder_short" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_red_girder_bottom_flat" spritesheet="red_girder_bottom_flat" frequency="0" mode="static">
+  <animation name="anim_red_girder_bottom_flat" spritesheet="red_girder_bottom_flat" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_blue_single_ladder" spritesheet="blue_single_ladder" frequency="0" mode="static">
+  <animation name="anim_blue_single_ladder" spritesheet="blue_single_ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_trap_door_open" spritesheet="trap_door" frequency="0" mode="static">
+  <animation name="anim_trap_door_open" spritesheet="trap_door" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_trap_door_closed" spritesheet="trap_door" frequency="0" mode="static">
+  <animation name="anim_trap_door_closed" spritesheet="trap_door" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
   </animation>
 
-  <animation name="anim_mario_run" spritesheet="mario_run" frequency="12.0" mode="forward">
+  <animation name="anim_mario_run" spritesheet="mario_run" frequency="12.0" mode="forward" mirrorX="0" mirrorY="0">
     <frame spriteid="2"/>
     <frame spriteid="1"/>
     <frame spriteid="2"/>
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_mario_idle" spritesheet="mario_idle" frequency="0" mode="static">
+  <animation name="anim_mario_idle" spritesheet="mario_idle" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
 
-  <animation name="anim_mario_jump" spritesheet="mario_run" frequency="0" mode="static">
+  <animation name="anim_mario_jump" spritesheet="mario_run" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_long_conveyor_right" spritesheet="long_conveyor" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="1"/>
+    <frame spriteid="2"/>
+    <frame spriteid="0"/>
+  </animation>
+
+  <animation name="anim_long_conveyor_left" spritesheet="long_conveyor" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="2"/>
+    <frame spriteid="1"/>
     <frame spriteid="0"/>
   </animation>
 

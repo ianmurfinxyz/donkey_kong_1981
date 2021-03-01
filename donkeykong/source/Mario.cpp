@@ -153,6 +153,7 @@ void Mario::onDraw(int screenid)
 
 void Mario::onPropInteractions(const std::vector<const Prop*>& props)
 {
+  _effectVelocity.zero();
   bool isSupported {false};
   float highestSupportPosition {0};
   for(const auto& prop : props){
@@ -163,6 +164,9 @@ void Mario::onPropInteractions(const std::vector<const Prop*>& props)
         highestSupportPosition = supportPosition;
         _position._y = supportPosition + (_def->_size._y / 2);
       }
+    }
+    if(prop->isConveyor()){
+      _effectVelocity += prop->getConveyorVelocity();
     }
   }
 

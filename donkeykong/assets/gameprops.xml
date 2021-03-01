@@ -190,3 +190,48 @@
   </state>
 </prop>
 
+<prop name="prop_random_long_conveyor" stateTransitionMode="random" drawLayer="0">
+  <state duration="4.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="4" width="220" height="5"/>
+    <effects>
+      <support active="1" height="9"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="1" velocityX="20" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_long_conveyor_right"/>
+  </state>
+  <state duration="4.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="4" width="220" height="5"/>
+    <effects>
+      <support active="1" height="9"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="1" velocityX="-20" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_long_conveyor_left"/>
+  </state>
+</prop>
+

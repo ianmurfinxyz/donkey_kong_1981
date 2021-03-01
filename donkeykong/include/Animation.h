@@ -59,8 +59,8 @@ public:
 
   bool isMirroringX() const {return _mirrorX;}
   bool isMirroringY() const {return _mirrorY;} 
-  void setMirrorX(bool mirror) {_mirrorX = mirror;}
-  void setMirrorY(bool mirror) {_mirrorY = mirror;}
+  void setMirrorX(bool mirror);
+  void setMirrorY(bool mirror);
 
 public:
 
@@ -82,7 +82,9 @@ public:
                Mode                              mode,
                pxr::gfx::ResourceKey_t           spritesheetKey,
                std::vector<pxr::gfx::SpriteId_t> frames,
-               float                             frequency
+               float                             frequency,
+               bool                              baseMirrorX,
+               bool                              baseMirrorY 
     );
                
     std::string _name;
@@ -91,6 +93,12 @@ public:
     std::vector<pxr::gfx::SpriteId_t> _frames;
     float _frequency;
     float _period;
+
+    //
+    // Should the sprites be mirrored when drawing.
+    //
+    bool _baseMirrorX;
+    bool _baseMirrorY;
   };
 
 private:
@@ -105,6 +113,11 @@ private:
   std::shared_ptr<const Definition> _def;
   int _frameNo;
   float _clock;
+
+  //
+  // If mirror == true, then baseMirror is inverted.
+  // if mirror == false, then baseMirror is not inverted, i.e. the base mirror is used.
+  //
   bool _mirrorX;
   bool _mirrorY;
 };

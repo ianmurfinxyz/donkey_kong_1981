@@ -90,7 +90,7 @@ void Prop::onUpdate(double now, float dt)
         newState = 0;
       break;
     case StateTransitionMode::RANDOM:
-      newState = pxr::rand::uniformSignedInt(0, _def->_states.size());
+      newState = pxr::rand::uniformSignedInt(0, _def->_states.size() - 1);
       break;
   }
   transitionToState(newState);

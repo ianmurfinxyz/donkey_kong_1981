@@ -9,5 +9,6 @@
     <prop name="prop_bottom_short_moving_platform_box" x="96" y="0"/>
     <prop name="prop_top_short_moving_platform_box" x="32" y="152"/>
     <prop name="prop_top_short_moving_platform_box" x="96" y="152"/>
+    <prop name="prop_random_long_conveyor" x="2" y="30"/>
   </props>
 </level>

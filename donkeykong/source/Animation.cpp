@@ -20,6 +20,8 @@ Animation::Animation(std::shared_ptr<const Definition> def) :
   _mirrorY{false}
 {
   assert(_def != nullptr);
+  _mirrorX = _def->_baseMirrorX;
+  _mirrorY = _def->_baseMirrorY;
 }
 
 Animation::Definition::Definition(
@@ -27,13 +29,17 @@ Animation::Definition::Definition(
   Mode                              mode,
   pxr::gfx::ResourceKey_t           spritesheetKey,
   std::vector<pxr::gfx::SpriteId_t> frames,
-  float                             frequency)
+  float                             frequency,
+  bool                              baseMirrorX,
+  bool                              baseMirrorY)
   :
   _name{name},
   _mode{mode},
   _spritesheetKey{spritesheetKey},
   _frames{std::move(frames)},
-  _frequency{frequency}
+  _frequency{frequency},
+  _baseMirrorX{baseMirrorX},
+  _baseMirrorY{baseMirrorY}
 {
   assert(_name.size() > 0);
   assert(_frequency >= 0.f);
@@ -83,3 +89,14 @@ void Animation::reset()
   _frameNo = 0;
   _clock = 0.f;
 }
+
+void Animation::setMirrorX(bool mirror)
+{
+   _mirrorX = mirror ? !(_def->_baseMirrorX) : _def->_baseMirrorX;
+}
+
+void Animation::setMirrorY(bool mirror)
+{
+   _mirrorY = mirror ? !(_def->_baseMirrorY) : _def->_baseMirrorY;
+}
+
