@@ -75,14 +75,15 @@ bool MarioFactory::loadMarioDefinition()
   if(!pxr::io::extractChildElement(&doc, &xmlmario, "mario"))
     return onerror();
 
-  float runSpeed, climbSpeed, jumpImpulse, jumpDuration, gravity, maxFall, spawnDuration, 
-        dyingDuration;
+  float runSpeed, climbSpeed, climbOffDuration, jumpImpulse, jumpDuration, gravity, maxFall, 
+        spawnDuration, dyingDuration;
   int marioW, marioH, spawnHealth;
 
   if(!pxr::io::extractIntAttribute(xmlmario, "width", &marioW)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlmario, "height", &marioH)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "runSpeed", &runSpeed)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "climbSpeed", &climbSpeed)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "climbOffDuration", &climbOffDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpImpulse", &jumpImpulse)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpDuration", &jumpDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "gravity", &gravity)) return onerror();
@@ -102,10 +103,14 @@ bool MarioFactory::loadMarioDefinition()
   animationNames[Mario::STATE_IDLE] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "run", &cstr)) return onerror();
   animationNames[Mario::STATE_RUNNING] = std::string{cstr};
+  if(!pxr::io::extractStringAttribute(xmlanimations, "climbIdle", &cstr)) return onerror();
+  animationNames[Mario::STATE_CLIMBING_IDLE] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "climbUp", &cstr)) return onerror();
   animationNames[Mario::STATE_CLIMBING_UP] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "climbDown", &cstr)) return onerror();
   animationNames[Mario::STATE_CLIMBING_DOWN] = std::string{cstr};
+  if(!pxr::io::extractStringAttribute(xmlanimations, "climbOff", &cstr)) return onerror();
+  animationNames[Mario::STATE_CLIMBING_OFF] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "jump", &cstr)) return onerror();
   animationNames[Mario::STATE_JUMPING] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "fall", &cstr)) return onerror();
@@ -137,6 +142,14 @@ bool MarioFactory::loadMarioDefinition()
     sounds[Mario::STATE_RUNNING].first = pxr::sfx::loadSound(cstr);
   sounds[Mario::STATE_RUNNING].second = static_cast<bool>(loop);
 
+  if(!pxr::io::extractStringAttribute(xmlsounds, "climbIdle", &cstr)) return onerror();
+  if(!pxr::io::extractIntAttribute(xmlsounds, "climbIdleLoop", &loop)) return onerror();
+  if(std::strcmp(cstr, "NA") == 0 || std::strlen(cstr) == 0)
+    sounds[Mario::STATE_CLIMBING_IDLE].first = -1;
+  else
+    sounds[Mario::STATE_CLIMBING_IDLE].first = pxr::sfx::loadSound(cstr);
+  sounds[Mario::STATE_CLIMBING_IDLE].second = static_cast<bool>(loop);
+
   if(!pxr::io::extractStringAttribute(xmlsounds, "climbUp", &cstr)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlsounds, "climbUpLoop", &loop)) return onerror();
   if(std::strcmp(cstr, "NA") == 0 || std::strlen(cstr) == 0)
@@ -152,6 +165,15 @@ bool MarioFactory::loadMarioDefinition()
   else
     sounds[Mario::STATE_CLIMBING_DOWN].first = pxr::sfx::loadSound(cstr);
   sounds[Mario::STATE_CLIMBING_DOWN].second = static_cast<bool>(loop);
+
+  if(!pxr::io::extractStringAttribute(xmlsounds, "climbOff", &cstr)) return onerror();
+  if(!pxr::io::extractIntAttribute(xmlsounds, "climbOffLoop", &loop)) return onerror();
+  if(std::strcmp(cstr, "NA") == 0 || std::strlen(cstr) == 0)
+    sounds[Mario::STATE_CLIMBING_OFF].first = -1;
+  else
+    sounds[Mario::STATE_CLIMBING_OFF].first = pxr::sfx::loadSound(cstr);
+  sounds[Mario::STATE_CLIMBING_OFF].second = static_cast<bool>(loop);
+
 
   if(!pxr::io::extractStringAttribute(xmlsounds, "jump", &cstr)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlsounds, "jumpLoop", &loop)) return onerror();
@@ -194,6 +216,7 @@ bool MarioFactory::loadMarioDefinition()
     propBox,
     runSpeed,
     climbSpeed,
+    climbOffDuration,
     jumpImpulse,
     jumpDuration,
     gravity,

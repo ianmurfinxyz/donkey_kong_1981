@@ -12,6 +12,8 @@ bool PlayState::onInit()
   _controlScheme->_runLeftKey = pxr::input::KEY_LEFT;
   _controlScheme->_runRightKey = pxr::input::KEY_RIGHT;
   _controlScheme->_jumpKey = pxr::input::KEY_SPACE;
+  _controlScheme->_climbUpKey = pxr::input::KEY_UP;
+  _controlScheme->_climbDownKey = pxr::input::KEY_DOWN;
 
   if(!_level.load("testlevel"))
     return false;

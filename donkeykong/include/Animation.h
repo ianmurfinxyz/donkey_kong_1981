@@ -62,6 +62,11 @@ public:
   void setMirrorX(bool mirror);
   void setMirrorY(bool mirror);
 
+  float getPeriod() const {return _def->_period;}
+  float getFrequency() const {return _def->_frequency;}
+  int getFrameCount() const {return _def->_frames.size();}
+  int getFrameNo() const {return _frameNo;}
+
 public:
 
   //

@@ -25,8 +25,10 @@ public:
     STATE_DEAD = -1,
     STATE_IDLE = 0, 
     STATE_RUNNING,
+    STATE_CLIMBING_IDLE,
     STATE_CLIMBING_UP,
     STATE_CLIMBING_DOWN,
+    STATE_CLIMBING_OFF,
     STATE_JUMPING,
     STATE_FALLING,
     STATE_SPAWNING,
@@ -43,6 +45,7 @@ public:
                pxr::fRect                                                               propInteractionBox,
                float                                                                    runSpeed,
                float                                                                    climbSpeed,
+               float                                                                    climbOffDuration,
                float                                                                    jumpImpulse,
                float                                                                    jumpDuration,
                float                                                                    gravity,
@@ -74,6 +77,11 @@ public:
 
     float _runSpeed; 
     float _climbSpeed;
+
+    //
+    // The time it takes to climb off the top of a ladder.
+    //
+    float _climbOffDuration;
 
     //
     // An instantaneous change in y-axis velocity (i.e. not a real impulse since mario has no mass)
@@ -141,21 +149,25 @@ private:
 
   void changeState(State state);
 
-  void startIdle();
+  void beginIdle();
   void endIdle();
-  void startRunning();
+  void beginRunning();
   void endRunning();
-  void startClimbUp();
+  void beginClimbIdle();
+  void endClimbIdle();
+  void beginClimbUp();
   void endClimbUp();
-  void startClimbDown();
+  void beginClimbDown();
   void endClimbDown();
-  void startJump();
+  void beginClimbOff();
+  void endClimbOff();
+  void beginJump();
   void endJump();
-  void startFall();
+  void beginFall();
   void endFall();
-  void startSpawning();
+  void beginSpawning();
   void endSpawning();
-  void startDying();
+  void beginDying();
   void endDying();
 
 private:
@@ -184,6 +196,10 @@ private:
   float _jumpClock;
   float _spawnClock;
   float _dyingClock;
+  float _climbClock;
+
+  bool _isNearLadder;
+  pxr::Vector2f _ladderRange;
 
   Animation _animation;
 };

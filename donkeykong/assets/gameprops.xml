@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<prop name="prop_trap_door" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_trap_door" stateTransitionMode="forward" drawLayer="1">
   <state duration="2.0">
     <transition>
       <positions>
@@ -45,7 +45,7 @@
   </state>
 </prop>
 
-<prop name="prop_red_girder_short" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_red_girder_short" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -55,7 +55,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="16" height="9"/>
+    <interactionBox x="0" y="7" width="16" height="2"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -69,7 +69,7 @@
   </state>
 </prop>
 
-<prop name="prop_red_girder_bottom_flat" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_red_girder_bottom_flat" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -79,7 +79,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="224" height="9"/>
+    <interactionBox x="0" y="7" width="224" height="2"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -93,7 +93,7 @@
   </state>
 </prop>
 
-<prop name="prop_red_girder_short_vertical_move0" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_red_girder_short_vertical_move0" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -104,7 +104,7 @@
         <point value="60.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="16" height="9"/>
+    <interactionBox x="0" y="7" width="16" height="2"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -118,7 +118,7 @@
   </state>
 </prop>
 
-<prop name="prop_top_short_moving_platform_box" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_top_short_moving_platform_box" stateTransitionMode="forward" drawLayer="2">
   <state duration="0.0">
     <transition>
       <positions>
@@ -142,7 +142,7 @@
   </state>
 </prop>
 
-<prop name="prop_bottom_short_moving_platform_box" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_bottom_short_moving_platform_box" stateTransitionMode="forward" drawLayer="2">
   <state duration="0.0">
     <transition>
       <positions>
@@ -176,7 +176,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="8" height="8"/>
+    <interactionBox x="3" y="-8" width="2" height="25"/>
     <effects>
       <support active="0" height="0"/>
       <ladder active="1" height="8"/>
@@ -190,7 +190,7 @@
   </state>
 </prop>
 
-<prop name="prop_random_long_conveyor" stateTransitionMode="random" drawLayer="0">
+<prop name="prop_random_long_conveyor" stateTransitionMode="random" drawLayer="1">
   <state duration="4.0">
     <transition>
       <positions>
@@ -200,7 +200,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="4" width="220" height="5"/>
+    <interactionBox x="0" y="7" width="220" height="2"/>
     <effects>
       <support active="1" height="9"/>
       <ladder active="0" height="0"/>
@@ -221,7 +221,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="4" width="220" height="5"/>
+    <interactionBox x="0" y="7" width="220" height="2"/>
     <effects>
       <support active="1" height="9"/>
       <ladder active="0" height="0"/>

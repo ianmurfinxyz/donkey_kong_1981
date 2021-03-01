@@ -8,6 +8,8 @@ struct ControlScheme
   pxr::input::KeyCode _runLeftKey;
   pxr::input::KeyCode _runRightKey;
   pxr::input::KeyCode _jumpKey;
+  pxr::input::KeyCode _climbUpKey;
+  pxr::input::KeyCode _climbDownKey;
 };
 
 #endif

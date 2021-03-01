@@ -51,6 +51,19 @@
     <frame spriteid="0"/>
   </animation>
 
+  <animation name="anim_mario_climb" spritesheet="mario_climb" frequency="4" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+    <frame spriteid="1"/>
+  </animation>
+
+  <animation name="anim_mario_climb_off" spritesheet="mario_climb_off" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+    <frame spriteid="1"/>
+    <frame spriteid="2"/>
+    <frame spriteid="2"/>
+    <frame spriteid="2"/>
+  </animation>
+
   <animation name="anim_long_conveyor_right" spritesheet="long_conveyor" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
     <frame spriteid="2"/>

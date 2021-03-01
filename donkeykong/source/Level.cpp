@@ -123,18 +123,12 @@ void Level::onUpdate(double now, float dt)
   for(auto& prop : _props)
     prop.onUpdate(now, dt);
 
-  //
-  // TODO: make more efficient by using a props vector as a member which maintains the memory
-  // allocated across calls so mem is not reallocated every call.
-  //
-
   _propInteractions.clear();
   for(auto& prop : _props){
     if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox()))
       _propInteractions.push_back(&prop);
   }
-  if(_propInteractions.size() != 0)
-    _mario->onPropInteractions(_propInteractions);
+  _mario->onPropInteractions(_propInteractions);
 
   _mario->onInput();
   _mario->onUpdate(now, dt);
