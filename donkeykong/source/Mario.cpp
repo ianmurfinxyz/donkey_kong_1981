@@ -36,7 +36,7 @@ Mario::Definition::Definition(
   pxr::fRect                                                               propInteractionBox,
   float                                                                    runSpeed,
   float                                                                    climbSpeed,
-  float                                                                    climbOffDuration,
+  float                                                                    climbOnOffDuration,
   float                                                                    jumpImpulse,
   float                                                                    jumpDuration,
   float                                                                    gravity,
@@ -51,7 +51,7 @@ Mario::Definition::Definition(
   _propInteractionBox{propInteractionBox},
   _runSpeed{runSpeed},
   _climbSpeed{climbSpeed},
-  _climbOffDuration{climbOffDuration},
+  _climbOnOffDuration{climbOnOffDuration},
   _jumpImpulse{jumpImpulse},
   _jumpDuration{jumpDuration},
   _gravity{gravity},
@@ -92,16 +92,24 @@ void Mario::onInput()
       changeState(STATE_JUMPING);
   }
 
-  if(_isNearLadder                  && 
-     !(_state == STATE_CLIMBING_UP   ||
-       _state == STATE_CLIMBING_DOWN ||
-       _state == STATE_CLIMBING_OFF))
-  {
+  if(_isNearLadder && (_state == STATE_IDLE || _state == STATE_RUNNING || _state == STATE_CLIMBING_IDLE)){
     if(pxr::input::isKeyDown(_controlScheme->_climbUpKey))
       changeState(STATE_CLIMBING_UP);
 
-    else if(pxr::input::isKeyDown(_controlScheme->_climbDownKey))
-      changeState(STATE_CLIMBING_DOWN);
+    else if(pxr::input::isKeyDown(_controlScheme->_climbDownKey)){
+      if(_state == STATE_CLIMBING_IDLE)
+        changeState(STATE_CLIMBING_DOWN);
+
+      //
+      // Prevents you climbing onto the ladder if you are at the bottom; can only climb
+      // onto the top of the ladder.
+      //
+      else {
+        float feetPosition = _position._y - (_def->_size._y / 2);
+        if(feetPosition > _ladderRange._x + 4)
+          changeState(STATE_CLIMBING_ON);
+      }
+    }
   }
 
   else if(_state == STATE_CLIMBING_UP && !pxr::input::isKeyDown(_controlScheme->_climbUpKey))
@@ -161,21 +169,28 @@ void Mario::onUpdate(double now, float dt)
   }
 
   else if(_state == STATE_CLIMBING_DOWN){
-    if(_position._y - (_def->_size._y / 2) < _ladderRange._x){
-      changeState(STATE_IDLE);
+    float feetPosition = _position._y - (_def->_size._y / 2);
+    if(feetPosition < _ladderRange._x){
+      changeState(STATE_FALLING);
 
       //
       // clamp to the bottom of the ladder in case of large frame spikes (large dt) so we
       // dont shoot off the bottom.
       //
-      _position._y = _ladderRange._y + (_def->_size._y / 2);
+      _position._y = _ladderRange._x + (_def->_size._y / 2);
     }
   }
 
   else if(_state == STATE_CLIMBING_OFF){
     _climbClock += dt;
-    if(_climbClock > _def->_climbOffDuration)
+    if(_climbClock > _def->_climbOnOffDuration)
       changeState(STATE_IDLE);
+  }
+
+  else if(_state == STATE_CLIMBING_ON){
+    _climbClock += dt;
+    if(_climbClock > _def->_climbOnOffDuration)
+      changeState(STATE_CLIMBING_IDLE);
   }
 }
 
@@ -224,13 +239,6 @@ void Mario::onPropInteractions(const std::vector<const Prop*>& props)
       if(range._y > _ladderRange._y || _ladderRange._y < 0) _ladderRange._y = range._y;
     }
   }
-
-  //if(isSupported && !(_state == STATE_JUMPING       || 
-  //                    _state == STATE_CLIMBING_DOWN ||
-  //                    _state == STATE_CLIMBING_UP   || 
-  //                    _state == STATE_CLIMBING_OFF))
-  //{
-  //}
 
   //
   // Handles landing on the floor.
@@ -293,6 +301,9 @@ void Mario::changeState(State state)
     case STATE_CLIMBING_OFF:
       endClimbOff();
       break;
+    case STATE_CLIMBING_ON:
+      endClimbOn();
+      break;
     case STATE_JUMPING:
       endJump();
       break;
@@ -334,6 +345,9 @@ void Mario::changeState(State state)
       break;
     case STATE_CLIMBING_OFF:
       beginClimbOff();
+      break;
+    case STATE_CLIMBING_ON:
+      beginClimbOn();
       break;
     case STATE_JUMPING:
       beginJump();
@@ -422,6 +436,17 @@ void Mario::beginClimbOff()
 void Mario::endClimbOff()
 {
   _position._y += _def->_size._y / 2;
+}
+
+void Mario::beginClimbOn()
+{
+  _controlVelocity._x = 0.f;
+  _climbClock = 0.f;
+  _position._y -= _def->_size._y / 2;
+}
+
+void Mario::endClimbOn()
+{
 }
 
 void Mario::beginJump()

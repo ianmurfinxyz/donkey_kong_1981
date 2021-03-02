@@ -29,6 +29,7 @@ public:
     STATE_CLIMBING_UP,
     STATE_CLIMBING_DOWN,
     STATE_CLIMBING_OFF,
+    STATE_CLIMBING_ON,
     STATE_JUMPING,
     STATE_FALLING,
     STATE_SPAWNING,
@@ -39,20 +40,20 @@ public:
   struct Definition
   {
 
-    Definition(std::array<std::string, Mario::STATE_COUNT>                              animationNames,
+    Definition(std::array<std::string, Mario::STATE_COUNT> animationNames,
                std::array<std::pair<pxr::sfx::ResourceKey_t, bool>, Mario::STATE_COUNT> sounds,
-               pxr::Vector2i                                                            size,
-               pxr::fRect                                                               propInteractionBox,
-               float                                                                    runSpeed,
-               float                                                                    climbSpeed,
-               float                                                                    climbOffDuration,
-               float                                                                    jumpImpulse,
-               float                                                                    jumpDuration,
-               float                                                                    gravity,
-               float                                                                    maxFall,
-               int                                                                      spawnHealth,
-               float                                                                    spawnDuration,
-               float                                                                    dyingDuration);
+               pxr::Vector2i size,
+               pxr::fRect propInteractionBox,
+               float runSpeed,
+               float climbSpeed,
+               float climbOffDuration,
+               float jumpImpulse,
+               float jumpDuration,
+               float gravity,
+               float maxFall,
+               int  spawnHealth,
+               float spawnDuration,
+               float dyingDuration);
 
     //
     // Animations to play during states (one for each state).
@@ -79,9 +80,9 @@ public:
     float _climbSpeed;
 
     //
-    // The time it takes to climb off the top of a ladder.
+    // The time it takes to climb on/off the top of a ladder.
     //
-    float _climbOffDuration;
+    float _climbOnOffDuration;
 
     //
     // An instantaneous change in y-axis velocity (i.e. not a real impulse since mario has no mass)
@@ -161,6 +162,8 @@ private:
   void endClimbDown();
   void beginClimbOff();
   void endClimbOff();
+  void beginClimbOn();
+  void endClimbOn();
   void beginJump();
   void endJump();
   void beginFall();

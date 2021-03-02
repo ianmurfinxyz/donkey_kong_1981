@@ -9,7 +9,7 @@
     <prop name="prop_bottom_short_moving_platform_box" x="96" y="0"/>
     <prop name="prop_top_short_moving_platform_box" x="32" y="152"/>
     <prop name="prop_top_short_moving_platform_box" x="96" y="152"/>
-    <prop name="prop_random_long_conveyor" x="20" y="74"/>
+    <prop name="prop_random_long_conveyor" x="-100" y="74"/>
     <prop name="prop_red_girder_bottom_flat" x="0"  y="31"/>
     <prop name="prop_blue_single_ladder" x="150" y="39"/>
     <prop name="prop_blue_single_ladder" x="150" y="47"/>

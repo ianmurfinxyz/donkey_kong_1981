@@ -75,7 +75,7 @@ bool MarioFactory::loadMarioDefinition()
   if(!pxr::io::extractChildElement(&doc, &xmlmario, "mario"))
     return onerror();
 
-  float runSpeed, climbSpeed, climbOffDuration, jumpImpulse, jumpDuration, gravity, maxFall, 
+  float runSpeed, climbSpeed, climbOnOffDuration, jumpImpulse, jumpDuration, gravity, maxFall, 
         spawnDuration, dyingDuration;
   int marioW, marioH, spawnHealth;
 
@@ -83,7 +83,7 @@ bool MarioFactory::loadMarioDefinition()
   if(!pxr::io::extractIntAttribute(xmlmario, "height", &marioH)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "runSpeed", &runSpeed)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "climbSpeed", &climbSpeed)) return onerror();
-  if(!pxr::io::extractFloatAttribute(xmlmario, "climbOffDuration", &climbOffDuration)) return onerror();
+  if(!pxr::io::extractFloatAttribute(xmlmario, "climbOnOffDuration", &climbOnOffDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpImpulse", &jumpImpulse)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "jumpDuration", &jumpDuration)) return onerror();
   if(!pxr::io::extractFloatAttribute(xmlmario, "gravity", &gravity)) return onerror();
@@ -111,6 +111,8 @@ bool MarioFactory::loadMarioDefinition()
   animationNames[Mario::STATE_CLIMBING_DOWN] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "climbOff", &cstr)) return onerror();
   animationNames[Mario::STATE_CLIMBING_OFF] = std::string{cstr};
+  if(!pxr::io::extractStringAttribute(xmlanimations, "climbOn", &cstr)) return onerror();
+  animationNames[Mario::STATE_CLIMBING_ON] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "jump", &cstr)) return onerror();
   animationNames[Mario::STATE_JUMPING] = std::string{cstr};
   if(!pxr::io::extractStringAttribute(xmlanimations, "fall", &cstr)) return onerror();
@@ -174,6 +176,13 @@ bool MarioFactory::loadMarioDefinition()
     sounds[Mario::STATE_CLIMBING_OFF].first = pxr::sfx::loadSound(cstr);
   sounds[Mario::STATE_CLIMBING_OFF].second = static_cast<bool>(loop);
 
+  if(!pxr::io::extractStringAttribute(xmlsounds, "climbOn", &cstr)) return onerror();
+  if(!pxr::io::extractIntAttribute(xmlsounds, "climbOnLoop", &loop)) return onerror();
+  if(std::strcmp(cstr, "NA") == 0 || std::strlen(cstr) == 0)
+    sounds[Mario::STATE_CLIMBING_ON].first = -1;
+  else
+    sounds[Mario::STATE_CLIMBING_ON].first = pxr::sfx::loadSound(cstr);
+  sounds[Mario::STATE_CLIMBING_ON].second = static_cast<bool>(loop);
 
   if(!pxr::io::extractStringAttribute(xmlsounds, "jump", &cstr)) return onerror();
   if(!pxr::io::extractIntAttribute(xmlsounds, "jumpLoop", &loop)) return onerror();
@@ -216,7 +225,7 @@ bool MarioFactory::loadMarioDefinition()
     propBox,
     runSpeed,
     climbSpeed,
-    climbOffDuration,
+    climbOnOffDuration,
     jumpImpulse,
     jumpDuration,
     gravity,

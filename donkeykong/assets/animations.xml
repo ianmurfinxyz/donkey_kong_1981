@@ -56,9 +56,21 @@
     <frame spriteid="1"/>
   </animation>
 
+  <animation name="anim_mario_climb_idle" spritesheet="mario_climb_idle" frequency="0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+  </animation>
+
   <animation name="anim_mario_climb_off" spritesheet="mario_climb_off" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
     <frame spriteid="1"/>
+    <frame spriteid="2"/>
+    <frame spriteid="2"/>
+    <frame spriteid="2"/>
+  </animation>
+
+  <animation name="anim_mario_climb_on" spritesheet="mario_climb_on" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="1"/>
+    <frame spriteid="0"/>
     <frame spriteid="2"/>
     <frame spriteid="2"/>
     <frame spriteid="2"/>

@@ -38,3 +38,7 @@ based on the support height, but how do I know what this center position needs t
 need to the get the y-axis origin of the current animations sprite and adjust the support 
 position, add the origin to it or something. To do this will need to add the ability to get
 the origin from the pxr gfx module and the animation class.
+
+- improve the ladder climbing - add a climb on animation which is the reverse of the climb off
+animation, add a ladder idle animation, and implement the climbing off the bottom of the ladder
+properly as at min it doesn't work.
