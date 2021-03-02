@@ -1,0 +1,7 @@
+windowWidth=500
+windowHeight=500
+fullscreen=false
+clearRed=10
+clearGreen=10
+clearBlue=10
+fpsLock=50

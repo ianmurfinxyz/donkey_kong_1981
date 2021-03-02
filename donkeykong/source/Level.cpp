@@ -9,6 +9,7 @@
 #include "PropFactory.h"
 #include "Prop.h"
 #include "MarioFactory.h"
+#include "PlayState.h"
 #include "Level.h"
 
 using namespace tinyxml2;
@@ -22,6 +23,7 @@ static constexpr const char* msg_load_abort = "aborting level load due to error"
 
 Level::Level() :
   _state{STATE_UNLOADED},
+  _owner{nullptr},
   _controlScheme{nullptr},
   _props{},
   _marioSpawnPosition{0.f, 0.f},
@@ -100,11 +102,26 @@ bool Level::load(const std::string& file)
   return true;
 }
 
-void Level::onInit(std::shared_ptr<const ControlScheme> controlScheme)
+void Level::unload()
+{
+  _owner = nullptr;
+  _controlScheme.reset();
+  _props.clear();
+  _propInteractions.clear();
+  _marioSpawnPosition.zero();
+  _mario.reset();
+  _isDebugDraw = false;
+  _state = STATE_UNLOADED;
+}
+
+void Level::onInit(const PlayState* owner)
 {
   assert(_state == STATE_UNINITIALIZED);
+  assert(owner != nullptr);
 
-  _controlScheme = std::move(controlScheme);
+  _owner = owner;
+
+  _controlScheme = _owner->getControlScheme();
 
   if(_mario == nullptr){
     _mario = std::unique_ptr<Mario>{new Mario{std::move(MarioFactory::makeMario(

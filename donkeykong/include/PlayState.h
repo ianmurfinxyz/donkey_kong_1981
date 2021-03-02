@@ -23,10 +23,31 @@ public:
 
   std::string getName() const {return name;}
 
+  void onLevelWin();
+  void onLevelLoss();
+
+  std::shared_ptr<const ControlScheme> getControlScheme() const {return _controlScheme;}
+
 private:
+
+  static constexpr const char* RESOURCE_PATH_DKCONFIG {"assets/"};
+  static constexpr const char* RESOURCE_NAME_DKCONFIG {"dkconfig"};
+
+  bool loadDKConfig();
+
+private:
+  
+  //
+  // An ordered set of levels to play through, starting with _levelNames[0] and incrementing.
+  //
+  std::vector<std::string> _levelNames;
+  int _currentLevel;
   Level _level;
 
   std::shared_ptr<ControlScheme> _controlScheme;
+
+  int _marioLives;
+  int _score;
 };
 
 #endif

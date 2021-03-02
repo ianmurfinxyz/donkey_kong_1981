@@ -7,6 +7,8 @@
 #include "Prop.h"
 #include "Mario.h"
 
+class PlayState;
+
 class Level
 {
 public:
@@ -41,9 +43,15 @@ public:
   bool load(const std::string& file);
 
   //
+  // Clears the level into a state ready to load another level, will also
+  // require reinitializing. Allows a level instance to be reused.
+  //
+  void unload();
+
+  //
   // Call post load to setup the level.
   //
-  void onInit(std::shared_ptr<const ControlScheme> controlScheme);
+  void onInit(const PlayState* owner);
 
   void onUpdate(double now, float dt);
 
@@ -74,6 +82,8 @@ private:
 private:
 
   State _state;
+
+  const PlayState* _owner;
 
   std::shared_ptr<const ControlScheme> _controlScheme;
 

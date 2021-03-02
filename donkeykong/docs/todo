@@ -42,3 +42,9 @@ the origin from the pxr gfx module and the animation class.
 - improve the ladder climbing - add a climb on animation which is the reverse of the climb off
 animation, add a ladder idle animation, and implement the climbing off the bottom of the ladder
 properly as at min it doesn't work.
+
+- make mario die! upon death need to:
+    - run the death animation sequence via the mario class
+    - have the level class detect the death and inform the owning play state the level is lost.
+    - the owning play state will then reset the level or end the game if no lives.
+    
