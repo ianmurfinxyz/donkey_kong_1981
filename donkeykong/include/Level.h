@@ -87,6 +87,8 @@ private:
 
   std::shared_ptr<const ControlScheme> _controlScheme;
 
+  std::unique_ptr<Prop> _tee;
+
   std::vector<Prop> _props;
 
   pxr::Vector2f _marioSpawnPosition;

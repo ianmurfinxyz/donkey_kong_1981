@@ -137,6 +137,21 @@ public:
   void setSpawnPosition(pxr::Vector2f spawnPosition) {_spawnPosition = spawnPosition;}
   pxr::Vector2f getSpawnPosition() const {return _spawnPosition;}
 
+  pxr::Vector2f getPosition() const {return _position;}
+
+  //
+  // Returns the key of the spritesheet which contains the sprite currently being drawn
+  // to represent the mario.
+  //
+  pxr::gfx::ResourceKey_t getSpritesheetKey() const;
+
+  //
+  // Returns the id of the sprite currently being draw to represent the mario. The context of
+  // this id is the spritesheet and only makes sense with the current spritesheet, if the
+  // spritesheet changes this id will also change.
+  //
+  pxr::gfx::SpriteId_t getSpriteId() const;
+
 private:
 
   //

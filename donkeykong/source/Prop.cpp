@@ -166,6 +166,21 @@ int Prop::getDrawLayer() const
   return _def->_drawLayer;
 }
 
+pxr::Vector2f Prop::getPosition() const
+{
+  return _position + _transition.getPosition();
+}
+
+pxr::gfx::ResourceKey_t Prop::getSpritesheetKey() const
+{
+  return _animation.getSpritesheetKey();
+}
+
+pxr::gfx::SpriteId_t Prop::getSpriteId() const
+{
+  return _animation.getSpriteId();
+}
+
 void Prop::transitionToState(int state)
 {
   assert(0 <= state && state < _def->_states.size());

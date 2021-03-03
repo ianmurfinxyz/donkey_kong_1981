@@ -82,6 +82,23 @@ public:
   //
   int getDrawLayer() const;
 
+  //
+  // Current position of the prop w.r.t the screen it is being drawn to.
+  //
+  pxr::Vector2f getPosition() const; 
+
+  //
+  // The key of the spritesheet which contains the sprite currently being used to represent
+  // the prop.
+  //
+  pxr::gfx::ResourceKey_t getSpritesheetKey() const;
+
+  //
+  // The id of the sprite currently being used to represent the prop. The context of this id
+  // is the current spritesheet; when the spritesheet changes this id changes.
+  //
+  pxr::gfx::SpriteId_t getSpriteId() const;
+
 private:
 
   //

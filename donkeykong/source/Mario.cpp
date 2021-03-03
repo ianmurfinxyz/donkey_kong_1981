@@ -278,6 +278,16 @@ pxr::AABB Mario::getPropInteractionBox() const
   return aabb;
 }
 
+pxr::gfx::ResourceKey_t Mario::getSpritesheetKey() const
+{
+  return _animation.getSpritesheetKey();
+}
+
+pxr::gfx::SpriteId_t Mario::getSpriteId() const
+{
+  return _animation.getSpriteId();
+}
+
 void Mario::changeState(State state)
 {
   assert(0 <= state && state < STATE_COUNT);

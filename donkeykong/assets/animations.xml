@@ -1,5 +1,27 @@
 <?xml version="1.0"?>
 <animations>
+
+
+
+
+
+
+
+
+
+
+  <animation name="anim_tee" spritesheet="tee" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+  </animation>
+
+
+
+
+
+
+
+
+
   <!--
   <animation name="mario_running_right" spritesheet="mario" frequency="0.2" mode="forward">
     <frame spriteid="0"/>
@@ -87,5 +109,6 @@
     <frame spriteid="1"/>
     <frame spriteid="0"/>
   </animation>
+
 
 </animations>

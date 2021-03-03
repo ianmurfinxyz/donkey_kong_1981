@@ -67,6 +67,9 @@ public:
   int getFrameCount() const {return _def->_frames.size();}
   int getFrameNo() const {return _frameNo;}
 
+  pxr::gfx::ResourceKey_t getSpritesheetKey() const {return _def->_spritesheetKey;}
+  pxr::gfx::SpriteId_t getSpriteId() const {return _def->_frames[_frameNo];}
+
 public:
 
   //

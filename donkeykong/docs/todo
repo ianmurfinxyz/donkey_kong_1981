@@ -48,3 +48,7 @@ properly as at min it doesn't work.
     - have the level class detect the death and inform the owning play state the level is lost.
     - the owning play state will then reset the level or end the game if no lives.
     
+- implement level win conditions (when mario reaches area of level, or when pickup count drops
+ to zero etc).
+
+- implement pixel perfect collision detection to test mario against killer props/enemies/barrels.
