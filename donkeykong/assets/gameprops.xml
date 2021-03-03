@@ -1,10 +1,8 @@
 <?xml version="1.0"?>
 
+<!-- GIRDERS drawLayer=1-->
 
-
-
-
-<prop name="prop_tee" stateTransitionMode="forward" drawLayer="1">
+<prop name="prop_orange_girder_1x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -14,37 +12,7 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="48" height="48"/>
-    <effects>
-      <support active="0" height="0"/>
-      <ladder active="0" height="0"/>
-      <conveyor active="0" velocityX="0" velocityY="0"/>
-      <killer active="0" damage="0"/>
-    </effects>
-    <sounds>
-      <sound name="NA"/> 
-    </sounds>
-    <animation name="anim_tee"/>
-  </state>
-</prop>
-
-
-
-
-
-
-
-<prop name="prop_trap_door" stateTransitionMode="forward" drawLayer="1">
-  <state duration="2.0">
-    <transition>
-      <positions>
-        <point x="0" y="0"/>
-      </positions>
-      <speeds>
-        <point value="0" duration="0"/>
-      </speeds>
-    </transition>
-    <interactionBox x="0" y="0" width="16" height="9"/>
+    <interactionBox x="0" y="7" width="8" height="2"/>
     <effects>
       <support active="1" height="8"/>
       <ladder active="0" height="0"/>
@@ -54,32 +22,10 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_trap_door_open"/>
-  </state>
-  <state duration="2.0">
-    <transition>
-      <positions>
-        <point x="0" y="0"/>
-      </positions>
-      <speeds>
-        <point value="0" duration="0"/>
-      </speeds>
-    </transition>
-    <interactionBox x="0" y="0" width="0" height="0"/>
-    <effects>
-      <support active="0" height="0"/>
-      <ladder active="0" height="0"/>
-      <conveyor active="0" velocityX="0" velocityY="0"/>
-      <killer active="0" damage="0"/>
-    </effects>
-    <sounds>
-      <sound name="NA"/> 
-    </sounds>
-    <animation name="anim_trap_door_closed"/>
+    <animation name="anim_orange_girder_1x1"/>
   </state>
 </prop>
-
-<prop name="prop_red_girder_short" stateTransitionMode="forward" drawLayer="1">
+<prop name="prop_orange_girder_2x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -99,11 +45,56 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_red_girder_short"/>
+    <animation name="anim_orange_girder_2x1"/>
   </state>
 </prop>
-
-<prop name="prop_red_girder_bottom_flat" stateTransitionMode="forward" drawLayer="1">
+<prop name="prop_orange_girder_4x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="32" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_orange_girder_4x1"/>
+  </state>
+</prop>
+<prop name="prop_orange_girder_8x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="64" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_orange_girder_8x1"/>
+  </state>
+</prop>
+<prop name="prop_orange_girder_28x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -123,19 +114,41 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_red_girder_bottom_flat"/>
+    <animation name="anim_orange_girder_28x1"/>
   </state>
 </prop>
 
-<prop name="prop_red_girder_short_vertical_move0" stateTransitionMode="forward" drawLayer="1">
+<prop name="prop_blue_girder_1x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
-        <point x="0" y="0.0"/>
-        <point x="0" y="-170.0"/>
+        <point x="0.0" y="0.0"/>
       </positions>
       <speeds>
-        <point value="60.0" duration="0.0"/>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="8" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_blue_girder_1x1"/>
+  </state>
+</prop>
+<prop name="prop_blue_girder_2x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
     <interactionBox x="0" y="7" width="16" height="2"/>
@@ -148,11 +161,10 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_red_girder_short"/>
+    <animation name="anim_blue_girder_2x1"/>
   </state>
 </prop>
-
-<prop name="prop_top_short_moving_platform_box" stateTransitionMode="forward" drawLayer="2">
+<prop name="prop_blue_girder_4x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -162,9 +174,9 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="0" height="0"/>
+    <interactionBox x="0" y="7" width="32" height="2"/>
     <effects>
-      <support active="0" height="0"/>
+      <support active="1" height="8"/>
       <ladder active="0" height="0"/>
       <conveyor active="0" velocityX="0" velocityY="0"/>
       <killer active="0" damage="0"/>
@@ -172,11 +184,10 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_top_short_moving_platform_box"/>
+    <animation name="anim_blue_girder_4x1"/>
   </state>
 </prop>
-
-<prop name="prop_bottom_short_moving_platform_box" stateTransitionMode="forward" drawLayer="2">
+<prop name="prop_blue_girder_8x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -186,9 +197,9 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="0" y="0" width="0" height="0"/>
+    <interactionBox x="0" y="7" width="64" height="2"/>
     <effects>
-      <support active="0" height="0"/>
+      <support active="1" height="8"/>
       <ladder active="0" height="0"/>
       <conveyor active="0" velocityX="0" velocityY="0"/>
       <killer active="0" damage="0"/>
@@ -196,11 +207,10 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_bottom_short_moving_platform_box"/>
+    <animation name="anim_blue_girder_8x1"/>
   </state>
 </prop>
-
-<prop name="prop_blue_single_ladder" stateTransitionMode="forward" drawLayer="0">
+<prop name="prop_blue_girder_28x1" stateTransitionMode="forward" drawLayer="1">
   <state duration="0.0">
     <transition>
       <positions>
@@ -210,21 +220,139 @@
         <point value="0.0" duration="0.0"/>
       </speeds>
     </transition>
-    <interactionBox x="3" y="-8" width="2" height="25"/>
+    <interactionBox x="0" y="7" width="224" height="2"/>
     <effects>
-      <support active="0" height="0"/>
-      <ladder active="1" height="8"/>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
       <conveyor active="0" velocityX="0" velocityY="0"/>
       <killer active="0" damage="0"/>
     </effects>
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_blue_single_ladder"/>
+    <animation name="anim_blue_girder_28x1"/>
   </state>
 </prop>
 
-<prop name="prop_random_long_conveyor" stateTransitionMode="random" drawLayer="1">
+<prop name="prop_red_girder_1x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="8" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_red_girder_1x1"/>
+  </state>
+</prop>
+<prop name="prop_red_girder_2x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="16" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_red_girder_2x1"/>
+  </state>
+</prop>
+<prop name="prop_red_girder_4x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="32" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_red_girder_4x1"/>
+  </state>
+</prop>
+<prop name="prop_red_girder_8x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="64" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_red_girder_8x1"/>
+  </state>
+</prop>
+<prop name="prop_red_girder_28x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="7" width="224" height="2"/>
+    <effects>
+      <support active="1" height="8"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_red_girder_28x1"/>
+  </state>
+</prop>
+
+<!-- BELTS  drawLayer=1-->
+
+<prop name="prop_full_belt_random" stateTransitionMode="random" drawLayer="1">
   <state duration="4.0">
     <transition>
       <positions>
@@ -244,7 +372,7 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_long_conveyor_right"/>
+    <animation name="anim_full_belt_right"/>
   </state>
   <state duration="4.0">
     <transition>
@@ -265,7 +393,287 @@
     <sounds>
       <sound name="NA"/> 
     </sounds>
-    <animation name="anim_long_conveyor_left"/>
+    <animation name="anim_full_belt_left"/>
   </state>
 </prop>
 
+<!-- LADDERS drawLayer=0-->
+
+<prop name="prop_white_ladder_1x1" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="25"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="8"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_white_ladder_1x1"/>
+  </state>
+</prop>
+<prop name="prop_white_ladder_1x2" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="33"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="16"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_white_ladder_1x2"/>
+  </state>
+</prop>
+<prop name="prop_white_ladder_1x4" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="49"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="32"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_white_ladder_1x4"/>
+  </state>
+</prop>
+<prop name="prop_white_ladder_1x8" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="81"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="64"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_white_ladder_1x8"/>
+  </state>
+</prop>
+
+<prop name="prop_gold_ladder_1x1" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="25"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="8"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_gold_ladder_1x1"/>
+  </state>
+</prop>
+<prop name="prop_gold_ladder_1x2" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="33"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="16"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_gold_ladder_1x2"/>
+  </state>
+</prop>
+<prop name="prop_gold_ladder_1x4" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="49"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="32"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_gold_ladder_1x4"/>
+  </state>
+</prop>
+<prop name="prop_gold_ladder_1x8" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="81"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="64"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_gold_ladder_1x8"/>
+  </state>
+</prop>
+
+<prop name="prop_blue_ladder_1x1" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="25"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="8"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_blue_ladder_1x1"/>
+  </state>
+</prop>
+<prop name="prop_blue_ladder_1x2" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="33"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="16"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_blue_ladder_1x2"/>
+  </state>
+</prop>
+<prop name="prop_blue_ladder_1x4" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="49"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="32"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_blue_ladder_1x4"/>
+  </state>
+</prop>
+<prop name="prop_blue_ladder_1x8" stateTransitionMode="forward" drawLayer="0">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="3" y="-8" width="2" height="81"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="1" height="64"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="0" damage="0"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_blue_ladder_1x8"/>
+  </state>
+</prop>

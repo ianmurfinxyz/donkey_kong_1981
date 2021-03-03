@@ -3,6 +3,6 @@
   <controls runLeft="KEY_LEFT" runRight="KEY_RIGHT" jump="KEY_SPACE" climbUp="KEY_UP" climbDown="KEY_DOWN"/>
   <mario lives="3"/>
   <levels>
-    <level name="barrels0"/>
+    <level name="classic_factory"/>
   </levels>
 </dkconfig>

@@ -123,8 +123,6 @@ void Level::onInit(const PlayState* owner)
 
   _controlScheme = _owner->getControlScheme();
 
-  _tee = std::unique_ptr<Prop>{new Prop(std::move(PropFactory::makeProp(pxr::Vector2f{30.f, 71.f}, "prop_tee")))};
-
   if(_mario == nullptr){
     _mario = std::unique_ptr<Mario>{new Mario{std::move(MarioFactory::makeMario(
       _marioSpawnPosition,
@@ -142,8 +140,6 @@ void Level::onUpdate(double now, float dt)
   for(auto& prop : _props)
     prop.onUpdate(now, dt);
 
-  _tee->onUpdate(now, dt);
-
   _propInteractions.clear();
   for(auto& prop : _props){
     if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox()))
@@ -151,18 +147,18 @@ void Level::onUpdate(double now, float dt)
   }
   _mario->onPropInteractions(_propInteractions);
 
-  pxr::CollisionSubject a, b;
-  a._position = _mario->getPosition();
-  a._spritesheetKey =_mario->getSpritesheetKey();
-  a._spriteid = _mario->getSpriteId();
-  b._position = _tee->getPosition();
-  b._spritesheetKey = _tee->getSpritesheetKey();
-  b._spriteid = _tee->getSpriteId();
+  //pxr::CollisionSubject a, b;
+  //a._position = _mario->getPosition();
+  //a._spritesheetKey =_mario->getSpritesheetKey();
+  //a._spriteid = _mario->getSpriteId();
+  //b._position = _tee->getPosition();
+  //b._spritesheetKey = _tee->getSpritesheetKey();
+  //b._spriteid = _tee->getSpriteId();
 
-  const pxr::CollisionResult& cr = pxr::isPixelIntersection(a, b, true);
-  if(cr._isCollision){
-    assert(0);
-  }
+  //const pxr::CollisionResult& cr = pxr::isPixelIntersection(a, b, true);
+  //if(cr._isCollision){
+  //  assert(0);
+  //}
 
   _mario->onInput();
   _mario->onUpdate(now, dt);
@@ -178,8 +174,6 @@ void Level::onDraw(int screenid)
 
   for(auto& prop : _props)
     prop.onDraw(screenid);
-
-  _tee->onDraw(screenid);
 
   _mario->onDraw(screenid);
 

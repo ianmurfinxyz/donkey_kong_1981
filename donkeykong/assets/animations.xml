@@ -1,62 +1,128 @@
 <?xml version="1.0"?>
 <animations>
 
+  <!-- GIRDERS -->
 
-
-
-
-
-
-
-
-
-  <animation name="anim_tee" spritesheet="tee" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+  <animation name="anim_orange_girder_1x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
-
-
-
-
-
-
-
-
-
-  <!--
-  <animation name="mario_running_right" spritesheet="mario" frequency="0.2" mode="forward">
-    <frame spriteid="0"/>
+  <animation name="anim_orange_girder_2x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
+  </animation>
+  <animation name="anim_orange_girder_4x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="2"/>
   </animation>
-  -->
-
-  <animation name="anim_bottom_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
+  <animation name="anim_orange_girder_8x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="3"/>
+  </animation>
+  <animation name="anim_orange_girder_28x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="4"/>
   </animation>
 
-  <animation name="anim_top_short_moving_platform_box" spritesheet="short_moving_platform_box" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+  <animation name="anim_blue_girder_1x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="5"/>
+  </animation>
+  <animation name="anim_blue_girder_2x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="6"/>
+  </animation>
+  <animation name="anim_blue_girder_4x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="7"/>
+  </animation>
+  <animation name="anim_blue_girder_8x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="8"/>
+  </animation>
+  <animation name="anim_blue_girder_28x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="9"/>
+  </animation>
+
+  <animation name="anim_red_girder_1x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="10"/>
+  </animation>
+  <animation name="anim_red_girder_2x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="11"/>
+  </animation>
+  <animation name="anim_red_girder_4x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="12"/>
+  </animation>
+  <animation name="anim_red_girder_8x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="13"/>
+  </animation>
+  <animation name="anim_red_girder_28x1" spritesheet="girder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="14"/>
+  </animation>
+
+  <!-- BELTS -->
+
+  <animation name="anim_full_belt_right" spritesheet="belt" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="1"/>
+    <frame spriteid="2"/>
+    <frame spriteid="0"/>
+  </animation>
+  <animation name="anim_full_belt_left" spritesheet="belt" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="2"/>
+    <frame spriteid="1"/>
+    <frame spriteid="0"/>
+  </animation>
+  <animation name="anim_half_belt_right" spritesheet="belt" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="4"/>
+    <frame spriteid="5"/>
+    <frame spriteid="3"/>
+  </animation>
+  <animation name="anim_half_belt_left" spritesheet="belt" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="5"/>
+    <frame spriteid="4"/>
+    <frame spriteid="3"/>
+  </animation>
+
+  <!-- LADDERS -->
+
+  <animation name="anim_white_ladder_1x1" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+  </animation>
+  <animation name="anim_white_ladder_1x2" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
   </animation>
-
-  <animation name="anim_red_girder_short" spritesheet="red_girder_short" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
+  <animation name="anim_white_ladder_1x4" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="2"/>
+  </animation>
+  <animation name="anim_white_ladder_1x8" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="3"/>
   </animation>
 
-  <animation name="anim_red_girder_bottom_flat" spritesheet="red_girder_bottom_flat" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
+  <animation name="anim_gold_ladder_1x1" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="4"/>
+  </animation>
+  <animation name="anim_gold_ladder_1x2" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="5"/>
+  </animation>
+  <animation name="anim_gold_ladder_1x4" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="6"/>
+  </animation>
+  <animation name="anim_gold_ladder_1x8" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="7"/>
   </animation>
 
-  <animation name="anim_blue_single_ladder" spritesheet="blue_single_ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
+  <animation name="anim_blue_ladder_1x1" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="8"/>
+  </animation>
+  <animation name="anim_blue_ladder_1x2" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="9"/>
+  </animation>
+  <animation name="anim_blue_ladder_1x4" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="10"/>
+  </animation>
+  <animation name="anim_blue_ladder_1x8" spritesheet="ladder" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="11"/>
   </animation>
 
-  <animation name="anim_trap_door_open" spritesheet="trap_door" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
-  </animation>
 
-  <animation name="anim_trap_door_closed" spritesheet="trap_door" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="1"/>
-  </animation>
+
+
+
+
+
+
+
 
   <animation name="anim_mario_run" spritesheet="mario_run" frequency="12.0" mode="forward" mirrorX="0" mirrorY="0">
     <frame spriteid="2"/>
@@ -98,17 +164,6 @@
     <frame spriteid="2"/>
   </animation>
 
-  <animation name="anim_long_conveyor_right" spritesheet="long_conveyor" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
-    <frame spriteid="1"/>
-    <frame spriteid="2"/>
-    <frame spriteid="0"/>
-  </animation>
-
-  <animation name="anim_long_conveyor_left" spritesheet="long_conveyor" frequency="3" mode="forward" mirrorX="0" mirrorY="0">
-    <frame spriteid="2"/>
-    <frame spriteid="1"/>
-    <frame spriteid="0"/>
-  </animation>
 
 
 </animations>

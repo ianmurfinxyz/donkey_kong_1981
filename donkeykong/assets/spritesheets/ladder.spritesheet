@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<spritesheet>
+
+  <!-- 
+    These smaller ladders can be stacked into larger ladders.
+
+    The sizes are given in units of tiles where each tile is 8x8 pixels.
+  -->
+
+  <!-- WHITE LADDERS -->
+
+  <!-- id=0  size=1x1 -->
+  <sprite x="0" y="0" w="8" h="8" ox="0" oy="0"/>
+
+  <!-- id=1  size=1x2 -->
+  <sprite x="0" y="0" w="8" h="16" ox="0" oy="0"/>
+
+  <!-- id=2  size=1x4 -->
+  <sprite x="0" y="0" w="8" h="32" ox="0" oy="0"/>
+
+  <!-- id=3  size=1x8 -->
+  <sprite x="0" y="0" w="8" h="64" ox="0" oy="0"/>
+
+  <!-- GOLD LADDERS -->
+
+  <!-- id=4  size=1x1 -->
+  <sprite x="8" y="0" w="8" h="8" ox="0" oy="0"/>
+
+  <!-- id=5  size=1x2 -->
+  <sprite x="8" y="0" w="8" h="16" ox="0" oy="0"/>
+
+  <!-- id=6  size=1x4 -->
+  <sprite x="8" y="0" w="8" h="32" ox="0" oy="0"/>
+
+  <!-- id=7  size=1x8 -->
+  <sprite x="8" y="0" w="8" h="64" ox="0" oy="0"/>
+
+  <!-- BLUE LADDERS -->
+
+  <!-- id=8  size=1x1 -->
+  <sprite x="16" y="0" w="8" h="8" ox="0" oy="0"/>
+
+  <!-- id=9  size=1x2 -->
+  <sprite x="16" y="0" w="8" h="16" ox="0" oy="0"/>
+
+  <!-- id=10  size=1x4 -->
+  <sprite x="16" y="0" w="8" h="32" ox="0" oy="0"/>
+
+  <!-- id=11  size=1x8 -->
+  <sprite x="16" y="0" w="8" h="64" ox="0" oy="0"/>
+
+</spritesheet>
