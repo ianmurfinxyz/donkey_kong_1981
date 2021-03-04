@@ -115,55 +115,55 @@
     <frame spriteid="11"/>
   </animation>
 
+  <!-- SPIKES -->
 
-
-
-
-
-
-
-
-
-  <animation name="anim_mario_run" spritesheet="mario_run" frequency="12.0" mode="forward" mirrorX="0" mirrorY="0">
-    <frame spriteid="2"/>
+  <animation name="anim_spikes_1x1" spritesheet="spikes" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="0"/>
+  </animation>
+  <animation name="anim_spikes_2x1" spritesheet="spikes" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
+  </animation>
+  <animation name="anim_spikes_4x1" spritesheet="spikes" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="2"/>
-    <frame spriteid="0"/>
+  </animation>
+  <animation name="anim_spikes_8x1" spritesheet="spikes" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="3"/>
   </animation>
 
-  <animation name="anim_mario_idle" spritesheet="mario_idle" frequency="0" mode="static" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
-  </animation>
+  <!-- MARIO -->
 
-  <animation name="anim_mario_jump" spritesheet="mario_run" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+  <animation name="anim_mario_run" spritesheet="mario" frequency="12.0" mode="forward" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
-  </animation>
-
-  <animation name="anim_mario_climb" spritesheet="mario_climb" frequency="4" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="2"/>
     <frame spriteid="0"/>
     <frame spriteid="1"/>
   </animation>
-
-  <animation name="anim_mario_climb_idle" spritesheet="mario_climb_idle" frequency="0" mode="forward" mirrorX="0" mirrorY="0">
+  <animation name="anim_mario_idle" spritesheet="mario" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="0"/>
   </animation>
-
-  <animation name="anim_mario_climb_off" spritesheet="mario_climb_off" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
-    <frame spriteid="0"/>
+  <animation name="anim_mario_jump" spritesheet="mario" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
-    <frame spriteid="2"/>
-    <frame spriteid="2"/>
-    <frame spriteid="2"/>
   </animation>
-
-  <animation name="anim_mario_climb_on" spritesheet="mario_climb_on" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
-    <frame spriteid="1"/>
-    <frame spriteid="0"/>
-    <frame spriteid="2"/>
-    <frame spriteid="2"/>
-    <frame spriteid="2"/>
+  <animation name="anim_mario_climb" spritesheet="mario" frequency="4" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="7"/>
+    <frame spriteid="8"/>
   </animation>
-
-
+  <animation name="anim_mario_climb_idle" spritesheet="mario" frequency="0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="5"/>
+  </animation>
+  <animation name="anim_mario_climb_off" spritesheet="mario" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="3"/>
+    <frame spriteid="4"/>
+    <frame spriteid="6"/>
+    <frame spriteid="6"/>
+    <frame spriteid="6"/>
+  </animation>
+  <animation name="anim_mario_climb_on" spritesheet="mario" frequency="5.0" mode="forward" mirrorX="0" mirrorY="0">
+    <frame spriteid="4"/>
+    <frame spriteid="3"/>
+    <frame spriteid="5"/>
+    <frame spriteid="5"/>
+    <frame spriteid="5"/>
+  </animation>
 
 </animations>

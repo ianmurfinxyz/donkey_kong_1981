@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "pixiretro/pxr_app.h"
+#include "pixiretro/pxr_input.h"
 #include "Level.h"
 #include "ControlScheme.h"
 
@@ -13,7 +14,6 @@ public:
   static constexpr const char* name {"play"};
 
   PlayState(pxr::App* owner);
-
   ~PlayState() = default;
 
   bool onInit();
@@ -23,15 +23,19 @@ public:
 
   std::string getName() const {return name;}
 
-  void onLevelWin();
-  void onLevelLoss();
-
-  std::shared_ptr<const ControlScheme> getControlScheme() const {return _controlScheme;}
-
 private:
 
   static constexpr const char* RESOURCE_PATH_DKCONFIG {"assets/"};
   static constexpr const char* RESOURCE_NAME_DKCONFIG {"dkconfig"};
+
+  static constexpr pxr::input::KeyCode nextLevelCheatKey {pxr::input::KEY_m};
+  static constexpr pxr::input::KeyCode prevLevelCheatKey {pxr::input::KEY_n};
+
+  void onCheatInput();
+  bool nextLevel(bool loop);
+  bool prevLevel(bool loop);
+  void handleLevelWin();
+  void handleLevelLoss();
 
   bool loadDKConfig();
 
@@ -48,6 +52,7 @@ private:
 
   int _marioLives;
   int _score;
+  bool _isCheating; // TODO load this from the dkconfig
 };
 
 #endif

@@ -52,3 +52,7 @@ properly as at min it doesn't work.
  to zero etc).
 
 - implement pixel perfect collision detection to test mario against killer props/enemies/barrels.
+
+- clean the mario assets up by combining the sprites sheets into a single bmp called mario, then
+ define all the sprites in the sheet and compose the animations from the frames. This will reduce
+ the total number of assets with messy names.

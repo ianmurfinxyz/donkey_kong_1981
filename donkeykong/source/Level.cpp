@@ -23,7 +23,7 @@ static constexpr const char* msg_load_abort = "aborting level load due to error"
 
 Level::Level() :
   _state{STATE_UNLOADED},
-  _owner{nullptr},
+  _ending{ENDING_NONE},
   _controlScheme{nullptr},
   _props{},
   _marioSpawnPosition{0.f, 0.f},
@@ -104,7 +104,6 @@ bool Level::load(const std::string& file)
 
 void Level::unload()
 {
-  _owner = nullptr;
   _controlScheme.reset();
   _props.clear();
   _propInteractions.clear();
@@ -112,16 +111,14 @@ void Level::unload()
   _mario.reset();
   _isDebugDraw = false;
   _state = STATE_UNLOADED;
+  _ending = ENDING_NONE;
 }
 
-void Level::onInit(const PlayState* owner)
+void Level::onInit(std::shared_ptr<const ControlScheme> controlScheme)
 {
   assert(_state == STATE_UNINITIALIZED);
-  assert(owner != nullptr);
 
-  _owner = owner;
-
-  _controlScheme = _owner->getControlScheme();
+  _controlScheme = controlScheme;
 
   if(_mario == nullptr){
     _mario = std::unique_ptr<Mario>{new Mario{std::move(MarioFactory::makeMario(
@@ -137,35 +134,25 @@ void Level::onUpdate(double now, float dt)
 {
   assert(0 <= _state && _state < STATE_COUNT);
 
-  for(auto& prop : _props)
-    prop.onUpdate(now, dt);
+  if(_state == STATE_OVER)
+    return;
 
-  _propInteractions.clear();
-  for(auto& prop : _props){
-    if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox()))
-      _propInteractions.push_back(&prop);
+  switch(_state){
+    case STATE_ENTRANCE_CUTSCENE:
+      updateEntranceCutscene(now, dt);
+      break;
+    case STATE_PLAYING:
+      updatePlaying(now, dt);
+      break;
+    case STATE_EXIT_CUTSCENE:
+      updateExitCutscene(now, dt);
+      break;
+    default:
+      break;
   }
-  _mario->onPropInteractions(_propInteractions);
-
-  //pxr::CollisionSubject a, b;
-  //a._position = _mario->getPosition();
-  //a._spritesheetKey =_mario->getSpritesheetKey();
-  //a._spriteid = _mario->getSpriteId();
-  //b._position = _tee->getPosition();
-  //b._spritesheetKey = _tee->getSpritesheetKey();
-  //b._spriteid = _tee->getSpriteId();
-
-  //const pxr::CollisionResult& cr = pxr::isPixelIntersection(a, b, true);
-  //if(cr._isCollision){
-  //  assert(0);
-  //}
-
-  _mario->onInput();
-  _mario->onUpdate(now, dt);
 
   if(pxr::input::isKeyPressed(debugDrawToggleKey))
     _isDebugDraw = !_isDebugDraw;
-
 }
 
 void Level::onDraw(int screenid)
@@ -189,6 +176,20 @@ void Level::reset()
     prop.reset();
 
   changeState(STATE_PLAYING); // TODO TEMP - implement cutscenes
+}
+
+bool Level::isOver()
+{
+  if(_state == STATE_OVER){
+    assert(_ending != ENDING_NONE);
+    return true;
+  }
+  return false;
+}
+
+Level::Ending Level::getEnding()
+{
+  return _ending;
 }
 
 void Level::changeState(State state)
@@ -218,6 +219,9 @@ void Level::changeState(State state)
       break;
     case STATE_EXIT_CUTSCENE:
       startExitCutscene();
+      break;
+    case STATE_OVER:
+      startOverState();
       break;
     default:
       assert(0);
@@ -250,12 +254,52 @@ void Level::endExitCutscene()
 {
 }
 
+void Level::startOverState()
+{
+  _ending = _mario->isDead() ? ENDING_LOSS : ENDING_WIN;
+}
+
 void Level::updateEntranceCutscene(double now, float dt)
 {
 }
 
 void Level::updatePlaying(double now, float dt)
 {
+  static pxr::CollisionSubject subjectA, subjectB;
+
+  if(_mario->isDying() && _isMusicPlaying)
+    stopMusic();
+
+  if(_mario->isDead()){
+    changeState(STATE_OVER);
+    return;
+  }
+
+  for(auto& prop : _props)
+    prop.onUpdate(now, dt);
+
+  _propInteractions.clear();
+  for(auto& prop : _props){
+    if(pxr::isAABBIntersection(prop.getInteractionBox(), _mario->getPropInteractionBox())){
+      if(prop.isKiller()){
+        subjectA._position = _mario->getPosition();
+        subjectA._spritesheetKey = _mario->getSpritesheetKey();
+        subjectA._spriteid = _mario->getSpriteId();
+        subjectB._position = prop.getPosition();
+        subjectB._spritesheetKey = prop.getSpritesheetKey();
+        subjectB._spriteid = prop.getSpriteId();
+        const pxr::CollisionResult& result = pxr::isPixelIntersection(subjectA, subjectB);
+        if(!result._isCollision)
+          continue;
+      }
+      _propInteractions.push_back(&prop);
+    }
+  }
+  _mario->onPropInteractions(_propInteractions);
+
+  _mario->onInput();
+  _mario->onUpdate(now, dt);
+
 }
 
 void Level::updateExitCutscene(double now, float dt)
@@ -281,3 +325,14 @@ void Level::debugDraw(int screenid)
   rect._h = aabb._ymax - aabb._ymin;
   pxr::gfx::drawBorderRectangle(rect, pxr::gfx::colors::yellow, screenid);
 }
+
+void Level::startMusic()
+{
+
+}
+
+void Level::stopMusic()
+{
+
+}
+

@@ -1,8 +1,11 @@
 #include <cassert>
+#include <cstdlib>
 #include "pixiretro/pxr_gfx.h"
 #include "pixiretro/pxr_xml.h"
 #include "pixiretro/pxr_log.h"
 #include "PlayState.h"
+
+#include <iostream>
 
 using namespace tinyxml2;
 
@@ -18,7 +21,8 @@ PlayState::PlayState(pxr::App* owner) :
   _level{},
   _controlScheme{nullptr},
   _marioLives{0},
-  _score{0}
+  _score{0},
+  _isCheating{true}
 {
   assert(owner != nullptr);
 }
@@ -34,14 +38,30 @@ bool PlayState::onInit()
   if(!_level.load(_levelNames[_currentLevel]))
     return false;
 
-  _level.onInit(this);
+  _level.onInit(_controlScheme);
 
   return true;
 }
 
 void PlayState::onUpdate(double now, float dt)
 {
+  if(_isCheating)
+    onCheatInput();
+
   _level.onUpdate(now, dt);
+
+
+
+  //
+  // note: this MUST be done last since it potentially replaces the level with a different one.
+  //
+  if(_level.isOver()){
+    Level::Ending ending = _level.getEnding();
+    if(ending == Level::ENDING_LOSS)
+      handleLevelLoss();
+    else if(ending == Level::ENDING_WIN)
+      handleLevelWin();
+  }
 }
 
 void PlayState::onDraw(double now, float dt, int screenid)
@@ -54,30 +74,74 @@ void PlayState::onReset()
 {
 }
 
-void PlayState::onLevelWin()
+void PlayState::onCheatInput()
+{
+  if(pxr::input::isKeyPressed(nextLevelCheatKey))
+    nextLevel(true);
+
+  else if(pxr::input::isKeyPressed(prevLevelCheatKey))
+    prevLevel(true);
+}
+
+bool PlayState::nextLevel(bool loop)
 {
   ++_currentLevel;
   if(_currentLevel >= _levelNames.size()){
-    // TODO switch back to menu state or a game complete state or something
-    _currentLevel = 0; // TEMP
-    // may need to return after calling switch function.
+    if(loop)
+      _currentLevel = 0;
+    else
+      return false;
   }
 
   _level.unload();
-  if(!_level.load(_levelNames[_currentLevel])){
-    // TODO switch back to menu state or a game complete state or something
-    assert(0); // temp  
-  }
 
-  _level.onInit(this);
+  if(!_level.load(_levelNames[_currentLevel]))
+    std::exit(EXIT_FAILURE);
+
+  _level.onInit(_controlScheme);
+
+  return true;
 }
 
-void PlayState::onLevelLoss()
+bool PlayState::prevLevel(bool loop)
+{
+  --_currentLevel;
+  if(_currentLevel < 0){
+    if(loop)
+      _currentLevel = _levelNames.size() - 1;
+    else
+      return false;
+  }
+
+  _level.unload();
+
+  if(!_level.load(_levelNames[_currentLevel]))
+    std::exit(EXIT_FAILURE);
+
+  _level.onInit(_controlScheme);
+
+  return true;
+}
+
+void PlayState::handleLevelWin()
+{
+  if(!nextLevel(false)){
+    // TODO switch back to menu state or a game complete state or something
+    std::cout << "won level" << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
+}
+
+void PlayState::handleLevelLoss()
 {
   --_marioLives;
+
+  std::cout << "lost level" << std::endl;
+  std::cout << "mario lives = " << _marioLives << std::endl;
+
   if(_marioLives <= 0){
     // TODO switch back to menu state or game over state or something.
-    _level.reset();
+    std::exit(EXIT_FAILURE);
   }
   _level.reset();
 }

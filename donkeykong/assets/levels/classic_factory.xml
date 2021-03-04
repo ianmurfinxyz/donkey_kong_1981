@@ -28,5 +28,9 @@
     <prop name="prop_white_ladder_1x4" x="64"  y="48"/>
     <prop name="prop_white_ladder_1x1" x="64"  y="80"/>
 
+    <!-- SPIKES -->
+
+    <prop name="prop_spikes_1x1" x="160"  y="8"/>
+
   </props>
 </level>

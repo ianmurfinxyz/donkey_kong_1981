@@ -22,7 +22,15 @@ public:
     STATE_ENTRANCE_CUTSCENE = 0,
     STATE_PLAYING,
     STATE_EXIT_CUTSCENE,
+    STATE_OVER,
     STATE_COUNT
+  };
+
+  enum Ending
+  {
+    ENDING_NONE,
+    ENDING_LOSS,
+    ENDING_WIN
   };
 
   static constexpr const char* RESOURCE_PATH_LEVEL {"assets/levels/"};
@@ -51,7 +59,7 @@ public:
   //
   // Call post load to setup the level.
   //
-  void onInit(const PlayState* owner);
+  void onInit(std::shared_ptr<const ControlScheme> controlScheme);
 
   void onUpdate(double now, float dt);
 
@@ -61,6 +69,9 @@ public:
   // Resets the level to its 'fresh' post load and initialize state.
   //
   void reset();
+
+  bool isOver();
+  Ending getEnding();
 
 private:
 
@@ -72,6 +83,7 @@ private:
   void endPlaying();
   void startExitCutscene();
   void endExitCutscene();
+  void startOverState();
 
   void updateEntranceCutscene(double now, float dt);
   void updatePlaying(double now, float dt);
@@ -79,11 +91,13 @@ private:
 
   void debugDraw(int screenid);
 
+  void startMusic();
+  void stopMusic();
+
 private:
 
   State _state;
-
-  const PlayState* _owner;
+  Ending _ending;
 
   std::shared_ptr<const ControlScheme> _controlScheme;
 
@@ -94,6 +108,7 @@ private:
 
   std::vector<const Prop*> _propInteractions;
 
+  bool _isMusicPlaying;
   bool _isDebugDraw;
 };
 

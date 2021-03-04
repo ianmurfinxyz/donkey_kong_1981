@@ -677,3 +677,102 @@
     <animation name="anim_blue_ladder_1x8"/>
   </state>
 </prop>
+
+<!-- SPIKES drawLayer=1-->
+
+<prop name="prop_spikes_1x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="0" width="8" height="8"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="1" damage="100"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_spikes_1x1"/>
+  </state>
+</prop>
+<prop name="prop_spikes_2x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="0" width="16" height="8"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="1" damage="100"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_spikes_2x1"/>
+  </state>
+</prop>
+<prop name="prop_spikes_4x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="0" width="32" height="8"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="1" damage="100"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_spikes_4x1"/>
+  </state>
+</prop>
+<prop name="prop_spikes_8x1" stateTransitionMode="forward" drawLayer="1">
+  <state duration="0.0">
+    <transition>
+      <positions>
+        <point x="0.0" y="0.0"/>
+      </positions>
+      <speeds>
+        <point value="0.0" duration="0.0"/>
+      </speeds>
+    </transition>
+    <interactionBox x="0" y="0" width="64" height="8"/>
+    <effects>
+      <support active="0" height="0"/>
+      <ladder active="0" height="0"/>
+      <conveyor active="0" velocityX="0" velocityY="0"/>
+      <killer active="1" damage="100"/>
+    </effects>
+    <sounds>
+      <sound name="NA"/> 
+    </sounds>
+    <animation name="anim_spikes_8x1"/>
+  </state>
+</prop>
+
+
+
+

@@ -131,8 +131,9 @@ public:
   pxr::AABB getPropInteractionBox() const;
   //pxr::AABB getPickupInteractionBox() const;
 
-
+  bool isDying() const {return _state == STATE_DYING;}
   bool isDead() const {return _state == STATE_DEAD;}
+  bool isAlive() const {return _state != STATE_DEAD;}
 
   void setSpawnPosition(pxr::Vector2f spawnPosition) {_spawnPosition = spawnPosition;}
   pxr::Vector2f getSpawnPosition() const {return _spawnPosition;}

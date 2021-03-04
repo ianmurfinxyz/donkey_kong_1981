@@ -63,7 +63,7 @@ Mario::Definition::Definition(
 
 void Mario::onInput()
 {
-  if(_state == STATE_DEAD)
+  if(_state == STATE_DEAD || _state == STATE_DYING)
     return;
 
   if(_state == STATE_IDLE){
@@ -204,6 +204,9 @@ void Mario::onDraw(int screenid)
 
 void Mario::onPropInteractions(const std::vector<const Prop*>& props)
 {
+  if(_state == STATE_DEAD || _state == STATE_DYING)
+    return;
+
   _effectVelocity.zero();
   _ladderRange._x = -1.f;
   _ladderRange._y = -1.f;
@@ -237,6 +240,10 @@ void Mario::onPropInteractions(const std::vector<const Prop*>& props)
       //
       if(range._x < _ladderRange._x || _ladderRange._x < 0) _ladderRange._x = range._x;
       if(range._y > _ladderRange._y || _ladderRange._y < 0) _ladderRange._y = range._y;
+    }
+
+    if(prop->isKiller()){
+      _health -= prop->getKillerDamage();
     }
   }
 
@@ -499,6 +506,7 @@ void Mario::endSpawning()
 
 void Mario::beginDying()
 {
+  _controlVelocity.zero();
   _dyingClock = 0.f;
 }
 
