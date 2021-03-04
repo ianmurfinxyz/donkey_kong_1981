@@ -142,6 +142,9 @@
     <frame spriteid="0"/>
   </animation>
   <animation name="anim_mario_jump" spritesheet="mario" frequency="0" mode="static" mirrorX="0" mirrorY="0">
+    <frame spriteid="9"/>
+  </animation>
+  <animation name="anim_mario_fall" spritesheet="mario" frequency="0" mode="static" mirrorX="0" mirrorY="0">
     <frame spriteid="1"/>
   </animation>
   <animation name="anim_mario_climb" spritesheet="mario" frequency="4" mode="forward" mirrorX="0" mirrorY="0">

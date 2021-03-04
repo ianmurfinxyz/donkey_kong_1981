@@ -5,8 +5,6 @@
 #include "pixiretro/pxr_log.h"
 #include "PlayState.h"
 
-#include <iostream>
-
 using namespace tinyxml2;
 
 static constexpr const char* msg_load_start {"loading dkconfig file"};
@@ -49,8 +47,6 @@ void PlayState::onUpdate(double now, float dt)
     onCheatInput();
 
   _level.onUpdate(now, dt);
-
-
 
   //
   // note: this MUST be done last since it potentially replaces the level with a different one.
@@ -127,7 +123,6 @@ void PlayState::handleLevelWin()
 {
   if(!nextLevel(false)){
     // TODO switch back to menu state or a game complete state or something
-    std::cout << "won level" << std::endl;
     std::exit(EXIT_FAILURE);
   }
 }
@@ -135,9 +130,6 @@ void PlayState::handleLevelWin()
 void PlayState::handleLevelLoss()
 {
   --_marioLives;
-
-  std::cout << "lost level" << std::endl;
-  std::cout << "mario lives = " << _marioLives << std::endl;
 
   if(_marioLives <= 0){
     // TODO switch back to menu state or game over state or something.

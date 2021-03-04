@@ -44,6 +44,7 @@ void AnimationFactory::shutdown()
 
 Animation AnimationFactory::makeAnimation(const std::string& animationName)
 {
+  assert(animationName.size() > 0);
   assert(instance != nullptr);
   auto search = instance->_defs.find(animationName);
   if(search == instance->_defs.end()){

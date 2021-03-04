@@ -126,13 +126,15 @@ void Mario::onUpdate(double now, float dt)
   if(_state == STATE_DEAD)
     return;
 
-  if(_health <= 0)
+  if(_health <= 0 && _state != STATE_DYING)
     changeState(STATE_DYING);
 
   if(_state == STATE_DYING){
     _dyingClock += dt;
-    if(_dyingClock > _def->_dyingDuration)
-      changeState(STATE_DEAD);
+    if(_dyingClock > _def->_dyingDuration){
+      _state = STATE_DEAD;
+      return;
+    }
   }
 
   if(_state == STATE_JUMPING || _state == STATE_FALLING){
@@ -204,7 +206,7 @@ void Mario::onDraw(int screenid)
 
 void Mario::onPropInteractions(const std::vector<const Prop*>& props)
 {
-  if(_state == STATE_DEAD || _state == STATE_DYING)
+  if(_state == STATE_DEAD)
     return;
 
   _effectVelocity.zero();
@@ -242,7 +244,7 @@ void Mario::onPropInteractions(const std::vector<const Prop*>& props)
       if(range._y > _ladderRange._y || _ladderRange._y < 0) _ladderRange._y = range._y;
     }
 
-    if(prop->isKiller()){
+    if(prop->isKiller() && _state != STATE_DYING){
       _health -= prop->getKillerDamage();
     }
   }
@@ -468,6 +470,7 @@ void Mario::endClimbOn()
 
 void Mario::beginJump()
 {
+  _jumpClock = 0.f;
   _controlVelocity._y += _def->_jumpImpulse;
 }
 

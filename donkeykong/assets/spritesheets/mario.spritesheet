@@ -27,5 +27,8 @@
 
   <!-- id=8 - CLIMB LEFT LEG DOWN -->
   <sprite x="116" y="0" w="13" h="16" ox="6" oy="8"/>
+
+  <!-- id=9 - JUMP -->
+  <sprite x="129" y="0" w="15" h="16" ox="7" oy="8"/>
   
 </spritesheet>
